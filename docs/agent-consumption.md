@@ -58,14 +58,15 @@ flowchart TD
   Near --> Pat
   Inv --> Pat
   Pat --> Con[constraints.always / never]
-  Con --> Stack[Project styling system]
+  Con --> Craft[CRAFT.md defaults where silent]
+  Craft --> Stack[Project styling system]
   Stack --> Shad{integrations.shadcn.enabled?}
   Shad -->|yes| Pref[Prefer shadcn + write CSS vars]
   Shad -->|no| Done[Implement]
   Pref --> Done
 ```
 
-Detailed trees: [skills/design/references/APPLY.md](../skills/design/references/APPLY.md).
+After Follow, agents apply [skills/design/references/CRAFT.md](../skills/design/references/CRAFT.md) for hierarchy, surfaces, motion, and a11y **only where `.design` does not already decide**. Detailed trees: [skills/design/references/APPLY.md](../skills/design/references/APPLY.md).
 
 ## Update
 

@@ -40,7 +40,7 @@ Normative detail: [SPEC.md](../../SPEC.md). Schema: [schema/design.v1.schema.jso
 
 Property bags MUST support: `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width` (aliases: `background`, `foreground`, `radius`). Variants MAY be nested under `tokens` or flat sibling keys (`button-primary-hover`). Bind every listed property when implementing.
 
-See [docs/design-md-mapping.md](../../docs/design-md-mapping.md).
+Craft defaults when silent: [CRAFT.md](CRAFT.md). See [docs/design-md-mapping.md](../../docs/design-md-mapping.md).
 
 ## Not in the format
 

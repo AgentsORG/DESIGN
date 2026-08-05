@@ -58,10 +58,26 @@ flowchart TB
 | --- | --- | --- |
 | Figma | Visual exploration, variable primitives | Agent when/when_not, git history |
 | `.design` | Normative tokens, components, policy, rationale, themes | Binary fonts, full page trees |
+| `design` skill + CRAFT | Procedure + craft bar when contract is silent | Brand-specific tokens (those live in `.design`) |
 | DTCG | Typed interchange (`$type` / `$value`) | Product taste / CTA rules |
 | Style Dictionary | Multi-platform transforms | Brand judgment |
 | shadcn | React primitives + CSS var theming | Brand system of record |
-| AGENTS.md + skill | Procedure | Token values |
+| AGENTS.md | Repo pointer / install hint | Token values |
+
+## Skill layers
+
+```mermaid
+flowchart TB
+  DES[".design contract — normative"]
+  SK[design skill procedure]
+  CR[CRAFT.md defaults]
+  GEN[Generic taste skills]
+  DES --> SK
+  SK --> CR
+  CR --> GEN
+```
+
+Precedence: user prompt → nearest `.design` → design skill (procedure + CRAFT) → generic taste skills → model defaults.
 
 ## Recommended team pipeline
 

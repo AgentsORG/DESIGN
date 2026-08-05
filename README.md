@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Schema](https://img.shields.io/badge/schema-design.v1-0B57D0.svg)](SPEC.md)
-[![Skill](https://img.shields.io/badge/skills.sh-design-111111.svg)](skills/design/)
+[![skills.sh](https://skills.sh/b/AgentsORG/DESIGN)](https://skills.sh/AgentsORG/DESIGN)
 
 **OpenAPI for product UI.** A single YAML file you drop into any repository. Agents **read** it before generating UI, **follow** it as the normative contract, and **update** it in place as design progresses.
 

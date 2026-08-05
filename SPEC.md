@@ -774,6 +774,24 @@ policy:
 | --- | --- | --- |
 | `if_missing` | `ask` | `ask` \| `nearest` \| `invent_with_note` |
 
+### 15.1.1 Craft defaults (informative)
+
+When the file is silent on a craft detail (nested radius, motion duration, tap target size, line measure, …), agents following the portable `design` skill SHOULD apply the skill’s [CRAFT.md](skills/design/references/CRAFT.md) defaults. Those defaults are **non-normative soft rules**: any explicit `tokens`, `constraints`, `rationale`, `components`, or `decisions` entry in this file **overrides** them.
+
+Recommended `constraints` starters that encode common craft laws:
+
+```yaml
+constraints:
+  always:
+    - one filled primary action per view
+    - use semantic tokens; never hardcode hex when a token exists
+    - honor focus-visible and prefers-reduced-motion
+  never:
+    - transition: all
+    - hover-only access to core actions
+    - animating layout properties when transform/opacity suffice
+```
+
 ### 15.2 Decisions
 
 ```yaml

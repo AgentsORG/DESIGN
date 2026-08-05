@@ -1,6 +1,6 @@
 ---
 name: design
-description: Discover, read, follow, update, and verify AgentsORG .design living visual contracts. Use when generating or reviewing UI; restyling; extracting or remixing a design system; fixing design drift; locking tokens; or when a .design / *.design file exists. Triggers on: .design, design system, brand, tokens, components, DESIGN.md, restyle, visual identity, UI generation, design drift, remix, bootstrap design, verify design, landing page, dashboard, shadcn theme, design progress.
+description: Discover, read, follow, update, and verify AgentsORG .design living visual contracts. Use when generating or reviewing UI; restyling; extracting or remixing a design system; fixing design drift; locking tokens; or when a .design / *.design file exists. Triggers on: .design, design system, brand, tokens, components, DESIGN.md, restyle, visual identity, UI generation, design drift, remix, bootstrap design, verify design, landing page, dashboard, shadcn theme, design progress, UI review, polish, craft, accessibility.
 license: MIT
 metadata:
   author: AgentsORG
@@ -75,9 +75,11 @@ Need UI change?
 
 Preserve `policy.hierarchy` when trading off (default: typography → spacing → contrast → color).
 
+Then apply craft defaults from [references/CRAFT.md](references/CRAFT.md) wherever `.design` is silent (hierarchy, surfaces, motion, a11y, copy). **`.design` wins** on conflict.
+
 After generating, cite which tokens and components you used.
 
-Detailed trees: [references/APPLY.md](references/APPLY.md). shadcn: [docs/shadcn.md](../../docs/shadcn.md).
+Detailed trees: [references/APPLY.md](references/APPLY.md). Craft: [references/CRAFT.md](references/CRAFT.md). shadcn: [docs/shadcn.md](../../docs/shadcn.md).
 
 ## 4. Update (design progress)
 
@@ -105,13 +107,13 @@ When asked to sync/verify, or after large UI refactors:
 4. Flag hardcoded hex/spacing that should be tokens
 5. Report findings; update `.design` only when asked
 
-Checklist: [references/REVIEW.md](references/REVIEW.md).
+Checklist: [references/REVIEW.md](references/REVIEW.md) (includes CRAFT escalation triggers and Before/After/Why table).
 
 ## 6. Precedence conflicts
 
 1. Explicit user prompt (this task)  
 2. Nearest `.design`  
-3. This skill  
+3. This skill (procedure + [CRAFT.md](references/CRAFT.md))  
 4. Generic design/taste skills  
 5. Model defaults  
 
@@ -127,3 +129,13 @@ Checklist: [references/REVIEW.md](references/REVIEW.md).
 ## Quick field map
 
 See [references/SPEC-SUMMARY.md](references/SPEC-SUMMARY.md).
+
+## References
+
+| File | Role |
+| --- | --- |
+| [APPLY.md](references/APPLY.md) | Decision trees for follow |
+| [CRAFT.md](references/CRAFT.md) | Design-engineering bar when contract is silent |
+| [REVIEW.md](references/REVIEW.md) | Verify / critique |
+| [UPDATE.md](references/UPDATE.md) | In-place edit rules |
+| [ATTRIBUTION.md](references/ATTRIBUTION.md) | Craft source credits |

@@ -1,5 +1,7 @@
 # design skill
 
+[![skills.sh](https://skills.sh/b/AgentsORG/DESIGN)](https://skills.sh/AgentsORG/DESIGN)
+
 Agent Skill for the AgentsORG [`.design`](https://github.com/AgentsORG/DESIGN) living visual contract.
 
 ## Install
@@ -24,4 +26,13 @@ See [docs/drop-in.md](../../docs/drop-in.md) and [docs/shadcn.md](../../docs/sha
 
 ## What it does
 
-Teaches agents to **discover → read → follow → update → verify** the contract so UI stays on-brand and the file evolves with design progress. When `integrations.shadcn` is enabled, agents apply CSS variables and prefer shadcn components.
+Teaches agents to **discover → read → follow → update → verify** the contract so UI stays on-brand and the file evolves with design progress.
+
+When the contract is silent, agents apply the craft bar in [references/CRAFT.md](references/CRAFT.md) (hierarchy, surfaces, motion, a11y). When `integrations.shadcn` is enabled, agents apply CSS variables and prefer shadcn components.
+
+| Reference | Role |
+| --- | --- |
+| [SKILL.md](SKILL.md) | Procedure |
+| [references/CRAFT.md](references/CRAFT.md) | Design-engineering defaults |
+| [references/REVIEW.md](references/REVIEW.md) | Critique / verify |
+| [references/ATTRIBUTION.md](references/ATTRIBUTION.md) | Craft source credits |

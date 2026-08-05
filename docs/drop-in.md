@@ -84,6 +84,6 @@ Full guide: [shadcn.md](shadcn.md).
 - [ ] `intent.reference` is a specific sentence  
 - [ ] `tokens` cover color + type at minimum  
 - [ ] `AGENTS.md` points at the file  
-- [ ] Skill installed (optional but recommended)  
+- [ ] Skill installed (optional but recommended) — includes CRAFT defaults when contract is silent  
 - [ ] shadcn CSS vars synced (if using shadcn)  
 - [ ] Sensitive brand paths listed in `locked` when ready  

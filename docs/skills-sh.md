@@ -11,9 +11,11 @@ skills/design/
   examples/minimal.design  # Tiny valid stub
   references/
     APPLY.md               # Decision trees
+    CRAFT.md               # Design-engineering bar when contract is silent
     UPDATE.md
-    REVIEW.md
+    REVIEW.md              # Critique triage (ui-review style)
     SPEC-SUMMARY.md
+    ATTRIBUTION.md         # Craft source credits
 ```
 
 ## Install

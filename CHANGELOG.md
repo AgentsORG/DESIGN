@@ -7,6 +7,13 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 
 ## [Unreleased]
 
+### Added
+
+- Design-engineering **CRAFT** bar in `skills/design/references/CRAFT.md` (distilled from aiforui-style foundations / ui-review / motion / surfaces)
+- Expanded `REVIEW.md` triage + Before/After/Why findings table
+- Craft gates in `APPLY.md`; SPEC §15.1.1 craft-defaults note
+- Official [skills.sh](https://skills.sh/AgentsORG/DESIGN) badge on README + skill README
+
 ## [1.0.0] — 2026-08-05
 
 ### Added

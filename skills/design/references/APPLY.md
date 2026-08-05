@@ -77,6 +77,31 @@ If `policy.responsive.if_mobile` says `reduce_padding_before_font_size`, shrink 
 
 Apply `policy.hierarchy` in order (default: typography → spacing → contrast → color). When two rules conflict, preserve earlier items first.
 
+## Craft gates (when `.design` is silent)
+
+Before finishing UI generation, apply [CRAFT.md](CRAFT.md):
+
+```
+After binding tokens + components
+├── One clear primary CTA?
+├── States covered (hover/focus/disabled/loading/empty/error)?
+├── Nested radii computed (inner = outer − padding)?
+├── Motion: transform/opacity only, <300ms, reduced-motion honored?
+├── Tap targets ≥ 44×44; focus visible; inputs ≥ 16px on mobile?
+├── Body measure ~65ch; gap on parents; no hover-only core actions?
+└── Marketing hero restrained unless patterns.* say otherwise?
+```
+
+If a CRAFT rule conflicts with tokens / constraints / rationale / when_when_not → **`.design` wins**.
+
+## Component API (invent path)
+
+When `policy.if_missing` allows inventing:
+
+- Prefer composition (slots/children) over boolean-prop piles
+- Prefer existing catalog / shadcn primitives over a new parallel Button
+- After user accepts the control, UPDATE `.design` `components` in the same task when asked to persist design progress
+
 ## Pattern surfaces
 
 ```
