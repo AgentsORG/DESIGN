@@ -1,6 +1,14 @@
 ---
 name: design
-description: Discover, read, follow, update, and verify AgentsORG .design living visual contracts. Use when generating or reviewing UI; restyling; extracting or remixing a design system; fixing design drift; locking tokens; or when a .design / *.design file exists. Triggers on: .design, design system, brand, tokens, components, DESIGN.md, restyle, visual identity, UI generation, design drift, remix, bootstrap design, verify design, landing page, dashboard, shadcn theme, design progress, UI review, polish, craft, accessibility.
+description: >
+  Discover, read, follow, update, and verify AgentsORG .design living visual
+  contracts. Use when generating or reviewing UI, restyling, extracting or
+  remixing a design system, fixing design drift, locking tokens, or when a
+  .design / *.design file exists. Triggers on .design, design system, brand,
+  tokens, components, DESIGN.md, restyle, visual identity, UI generation,
+  design drift, remix, bootstrap design, verify design, landing page,
+  dashboard, shadcn theme, design progress, UI review, polish, craft,
+  accessibility.
 license: MIT
 metadata:
   author: AgentsORG
