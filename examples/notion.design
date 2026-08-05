@@ -9,12 +9,38 @@ $schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v
 agent:
   skill: design
   instructions: |
-    READ this file before UI work. Source: getdesign.md / DESIGN.md analysis.
-    FOLLOW tokens, components (property bags), rationale.*, and constraints.
-    Component props use DESIGN.md names (backgroundColor, textColor, rounded, …).
-    If integrations.shadcn is present, map tokens into CSS variables.
-    UPDATE in place; ask before changing locked paths.
-    Not affiliated with the brand; independent visual analysis.
+    You are holding a .design living visual contract (schema design.v1).
+    If the AgentsORG `design` skill is installed, activate it - then still obey THIS file as source of truth.
+    If the skill is absent, follow these instructions exactly.
+    
+    READ
+    - Load this entire file before any UI generation or restyle.
+    - Order: overview/intent -> constraints -> policy/decisions -> tokens -> rationale -> components/patterns -> integrations -> locked.
+    - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
+    
+    FOLLOW (generate or edit UI)
+    - Prefer catalog components; obey when / when_not and decisions.* (first match wins).
+    - Bind every listed component property (backgroundColor, textColor, typography, rounded, padding, size, height, width).
+    - Never invent raw hex/spacing/radius when a token exists.
+    - Apply patterns.*; enforce constraints.always / never.
+    - Match the project's existing styling stack - do not switch stacks.
+    - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
+    
+    UPDATE
+    - Edit this file in place when design changes. Git is history.
+    - Ask before changing any path in locked. Bump version (SemVer).
+    
+    VERIFY
+    - Compare tokens <-> CSS/Tailwind; components <-> imports; report drift before fixing.
+    
+    PRECEDENCE
+    1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
+    
+    DISCLAIMER
+    Independent visual analysis - not affiliated with the named brand. Adapt before production use.
+
+
 
 overview: |
   Notion presents itself as the all-in-one workspace through a confident, illustration-rich brand voice. The homepage opens with **"Meet the night shift."** rendered centered over a deep navy hero band ({colors.brand-navy}), decorated with brand-colored sticky-note dots and mesh wire illustrations scattered around the headline. The signature **purple pill primary CTA** ({colors.primary}) "Get Notion free" sits at the visual center, paired with an outlined "Request a demo" secondary. Below the buttons, a real Notion workspace UI mockup card (the "Ramp HQ" kanban board) breaks out of the hero band with a deep diffuse drop shadow.

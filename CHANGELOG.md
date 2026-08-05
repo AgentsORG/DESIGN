@@ -9,7 +9,9 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 
 ### Added
 
-- Design-engineering **CRAFT** bar in `skills/design/references/CRAFT.md` (distilled from aiforui-style foundations / ui-review / motion / surfaces)
+- **Self-contained files:** `agent.instructions` is required (schema + SPEC §8); drag-drop / @-mention works without the skill
+- Canonical template: [docs/self-contained.md](docs/self-contained.md); examples patched via `scripts/patch_agent_instructions.py`
+- Design-engineering **CRAFT** bar in `skills/design/references/CRAFT.md`
 - Expanded `REVIEW.md` triage + Before/After/Why findings table
 - Craft gates in `APPLY.md`; SPEC §15.1.1 craft-defaults note
 - Official [skills.sh](https://skills.sh/AgentsORG/DESIGN) badge on README + skill README

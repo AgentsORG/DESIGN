@@ -4,7 +4,7 @@
   "title": "AgentsORG .design file — design.v1",
   "description": "Living visual contract for AI design: tokens, components, intent, policy, and constraints.",
   "type": "object",
-  "required": ["schema", "name", "version"],
+  "required": ["schema", "name", "version", "agent"],
   "additionalProperties": true,
   "properties": {
     "$schema": {
@@ -50,13 +50,16 @@
     },
     "agent": {
       "type": "object",
+      "required": ["instructions"],
       "additionalProperties": true,
       "properties": {
         "skill": {
           "type": "string"
         },
         "instructions": {
-          "type": "string"
+          "type": "string",
+          "minLength": 80,
+          "description": "Self-contained procedure so drag-drop / @-mention works without the portable skill."
         }
       }
     },

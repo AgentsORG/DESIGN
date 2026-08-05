@@ -370,22 +370,49 @@ Paths only — never embed binaries. Clear-space / misuse rules belong in `ratio
 
 ## 8. Agent bootstrap
 
+A `.design` file MUST be **self-contained**. When an agent is pointed at the file, or the file is dragged into a chat, `agent.instructions` alone MUST be enough to use it correctly — even if the portable `design` skill is not installed.
+
 ```yaml
 agent:
   skill: design
   instructions: |
-    READ this file before any UI work.
-    FOLLOW tokens, components, constraints, decisions.
-    UPDATE by editing this file in place; ask before changing locked paths.
-    VERIFY against code when asked to sync or after large UI changes.
+    You are holding a .design living visual contract (schema design.v1).
+    If the AgentsORG `design` skill is installed, activate it — then still obey THIS file as source of truth.
+    If the skill is absent, follow these instructions exactly.
+
+    READ
+    - Load this entire file before any UI generation or restyle.
+    - Order: overview/intent → constraints → policy/decisions → tokens → rationale → components/patterns → integrations → locked.
+    - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
+
+    FOLLOW (generate or edit UI)
+    - Prefer catalog components; obey when / when_not and decisions.* (first match wins).
+    - Bind every listed component property (backgroundColor, textColor, typography, rounded, padding, size, height, width).
+    - Never invent raw hex/spacing/radius when a token exists.
+    - Apply patterns.*; enforce constraints.always / never.
+    - Match the project's existing styling stack — do not switch stacks.
+    - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - Craft defaults when this file is silent: one primary CTA; nested radius = outer − padding; transform/opacity only (<300ms); 44×44 targets; focus visible; prefers-reduced-motion; no transition:all.
+
+    UPDATE
+    - Edit this file in place when design changes. Git is history.
+    - Ask before changing any path in locked. Bump version (SemVer).
+
+    VERIFY
+    - Compare tokens ↔ CSS/Tailwind; components ↔ imports; report drift before fixing.
+
+    PRECEDENCE
+    1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
 ```
 
 | Field | Required | Description |
 | --- | --- | --- |
 | `skill` | no | Agent Skills name to activate if installed (`design`) |
-| `instructions` | recommended | Short process stub when the skill is absent |
+| `instructions` | **MUST** | Full procedure for drop-in / drag-drop use without the skill |
 
-Files SHOULD include `agent.instructions` so a bare drop-in remains self-contained.
+Authors MAY shorten `instructions` only if every READ / FOLLOW / UPDATE / VERIFY / PRECEDENCE duty above remains covered. Full template: [docs/self-contained.md](docs/self-contained.md).
+
+Consumers that encounter a file **without** `agent.instructions` SHOULD warn and apply the portable skill (if present) or the template in docs/self-contained.md.
 
 ---
 
@@ -878,7 +905,7 @@ Consumers and linters SHOULD check:
 | `intent` without `reference` | error |
 | Edit to `locked` path without user ask | error |
 | Unknown top-level key | warning |
-| Missing `agent.instructions` | info |
+| Missing `agent.instructions` | error |
 | Orphan color tokens never referenced | warning |
 | Contrast failures on component fg/bg pairs | warning |
 
@@ -919,7 +946,7 @@ The following MUST NOT be required in a `.design` file:
 | DTCG JSON (`exports.dtcg`) | Interchange for Style Dictionary |
 | CSS / Tailwind / iOS / Android | Runtime consumption |
 | shadcn `components.json` + CSS vars | Common React codegen path |
-| `AGENTS.md` + `skills/design` | How agents discover and apply the contract |
+| `AGENTS.md` + `skills/design` | Discovery + enriched CRAFT procedure (optional; file must still self-teach) |
 | DESIGN.md / getdesign.md | Bootstrap / analysis sources |
 
 ---
@@ -935,8 +962,13 @@ status: refine
 agent:
   skill: design
   instructions: |
-    READ before UI. FOLLOW tokens and constraints.
-    UPDATE by editing this file; ask before changing locked paths.
+    You are holding a .design living visual contract (schema design.v1).
+    If the design skill is installed, activate it - still obey THIS file.
+    If absent, follow these instructions exactly.
+    READ this file before UI. FOLLOW tokens, components, constraints.
+    Bind component properties; never invent hex when a token exists.
+    UPDATE in place; ask before locked paths. VERIFY tokens vs CSS when asked.
+    Precedence: user prompt > this file > design skill > generic taste.
 
 overview: |
   A minimal product UI: calm ops surface, one accent, no decoration theater.

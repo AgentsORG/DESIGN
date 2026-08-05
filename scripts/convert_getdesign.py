@@ -13,6 +13,37 @@ import re
 
 ROOT = pathlib.Path(r"C:\PROJECTS\AgentsORG\DESIGN")
 
+SELF_CONTAINED_INSTRUCTIONS = """You are holding a .design living visual contract (schema design.v1).
+If the AgentsORG `design` skill is installed, activate it - then still obey THIS file as source of truth.
+If the skill is absent, follow these instructions exactly.
+
+READ
+- Load this entire file before any UI generation or restyle.
+- Order: overview/intent -> constraints -> policy/decisions -> tokens -> rationale -> components/patterns -> integrations -> locked.
+- Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
+
+FOLLOW (generate or edit UI)
+- Prefer catalog components; obey when / when_not and decisions.* (first match wins).
+- Bind every listed component property (backgroundColor, textColor, typography, rounded, padding, size, height, width).
+- Never invent raw hex/spacing/radius when a token exists.
+- Apply patterns.*; enforce constraints.always / never.
+- Match the project's existing styling stack - do not switch stacks.
+- If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+- Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
+
+UPDATE
+- Edit this file in place when design changes. Git is history.
+- Ask before changing any path in locked. Bump version (SemVer).
+
+VERIFY
+- Compare tokens <-> CSS/Tailwind; components <-> imports; report drift before fixing.
+
+PRECEDENCE
+1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
+
+DISCLAIMER
+Independent visual analysis - not affiliated with the named brand. Adapt before production use."""
+
 PROP_ALIASES = {
     "backgroundColor": "backgroundColor",
     "textColor": "textColor",
@@ -382,12 +413,8 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     lines.append("agent:")
     lines.append("  skill: design")
     lines.append("  instructions: |")
-    lines.append("    READ this file before UI work. Source: getdesign.md / DESIGN.md analysis.")
-    lines.append("    FOLLOW tokens, components (property bags), rationale.*, and constraints.")
-    lines.append("    Component props use DESIGN.md names (backgroundColor, textColor, rounded, …).")
-    lines.append("    If integrations.shadcn is present, map tokens into CSS variables.")
-    lines.append("    UPDATE in place; ask before changing locked paths.")
-    lines.append("    Not affiliated with the brand; independent visual analysis.")
+    for line in SELF_CONTAINED_INSTRUCTIONS.splitlines():
+        lines.append(f"    {line}" if line else "    ")
     lines.append("")
     lines.extend(emit_literal_block("overview", overview, indent=0))
     lines.append("")

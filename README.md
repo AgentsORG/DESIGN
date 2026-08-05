@@ -3,21 +3,32 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Schema](https://img.shields.io/badge/schema-design.v1-0B57D0.svg)](SPEC.md)
 [![skills.sh](https://skills.sh/b/AgentsORG/DESIGN)](https://skills.sh/AgentsORG/DESIGN)
+[![Release](https://img.shields.io/github/v/release/AgentsORG/DESIGN)](https://github.com/AgentsORG/DESIGN/releases)
 
-**OpenAPI for product UI.** A single YAML file you drop into any repository. Agents **read** it before generating UI, **follow** it as the normative contract, and **update** it in place as design progresses.
+**A self-contained visual contract you can drop into any repo — or drag into any agent.**  
+YAML file + portable skill. Agents read it, follow it, and update it as design progresses. No skill install required for basic use: every file carries its own `agent.instructions`.
 
-Maintained by [AgentsORG](https://www.agents.org.in/) · Spec: [SPEC.md](SPEC.md) · Docs: [docs/INDEX.md](docs/INDEX.md) · Philosophy: [PHILOSOPHY.md](PHILOSOPHY.md)
+Maintained by [AgentsORG](https://www.agents.org.in/) · Spec: [SPEC.md](SPEC.md) · Docs: [docs/INDEX.md](docs/INDEX.md)
 
 ```bash
 npx skills add AgentsORG/DESIGN --skill design
 cp examples/vercel.design ./.design
+# or: drag any *.design into your agent — it teaches itself via agent.instructions
 ```
 
-## Why
+## About
 
-AI agents invent tokens, drift between sessions, and rebuild components you already have. A static style guide goes stale. `.design` is a **living contract in git** plus a portable **Agent Skill** so every [skills.sh](https://www.skills.sh/agent/) agent shares one procedure: discover → read → follow → update → verify.
+`.design` is the **OpenAPI of product UI**: one machine-readable file that is also human-auditable in git. It unifies what agents otherwise invent session-to-session — tokens, components, taste rationale, and decision rules — into a living contract.
 
-It is a **superset** of [Google DESIGN.md](https://github.com/google-labs-code/design.md), orchestrates [shadcn/ui](https://ui.shadcn.com/), bridges Figma → DTCG → CSS/Tailwind, and bootstraps from [getdesign.md](https://getdesign.md/) analyses.
+| Problem | What `.design` does |
+| --- | --- |
+| Agents invent off-brand hex and rebuild Button | Normative `tokens` + `components` with when/when_not |
+| Style guides go stale | Edit the file in place; git is history |
+| DESIGN.md prose lost on import | Full `rationale.*` + property bags |
+| Skill not installed | Required `agent.instructions` — drag-drop still works |
+| shadcn / Figma / DTCG drift | `integrations` + `exports` + `themes` |
+
+Superset of [Google DESIGN.md](https://github.com/google-labs-code/design.md). Orchestrates [shadcn/ui](https://ui.shadcn.com/). Bootstraps from [getdesign.md](https://getdesign.md/). Works with every [skills.sh](https://www.skills.sh/agent/) agent.
 
 ## Ecosystem
 
@@ -35,13 +46,14 @@ flowchart LR
   CSS --> APP
 ```
 
-Full map: [docs/ecosystem.md](docs/ecosystem.md).
+Full map: [docs/ecosystem.md](docs/ecosystem.md) · Self-contained drop-in: [docs/self-contained.md](docs/self-contained.md).
 
 ## Architecture
 
 ```mermaid
 flowchart TB
   subgraph contract [".design — design.v1"]
+    AG[agent.instructions — self-teach]
     ID[identity / intent / status / themes]
     TOK[tokens + elevation + breakpoints]
     COMP[components / patterns]
@@ -52,7 +64,8 @@ flowchart TB
   end
 
   subgraph agents ["Agents"]
-    SKILL[design skill]
+    SKILL[design skill + CRAFT]
+    DROP[drag-drop / @file only]
   end
 
   subgraph runtime ["Runtime"]
@@ -60,8 +73,10 @@ flowchart TB
     UI[UI components]
   end
 
+  DROP -->|agent.instructions| contract
   SKILL -->|discover + read| contract
   SKILL -->|follow| UI
+  DROP -->|follow| UI
   INT --> CSS
   TOK --> CSS
   CSS --> UI
@@ -76,19 +91,19 @@ flowchart TB
 cp examples/vercel.design ./.design
 ```
 
-Examples are independent visual analyses — **not affiliated** with those brands ([NOTICE.md](NOTICE.md)). Adapt to your product.
+Examples are independent visual analyses — **not affiliated** with those brands ([NOTICE.md](NOTICE.md)). Adapt to your product. Every example includes full `agent.instructions`.
 
-### 2. Point agents at it
+### 2. Point agents at it (or drag the file)
+
+Add to `AGENTS.md`:
 
 ```markdown
 ## Design
-Before UI work, activate the `design` skill and read `./.design`.
-Follow tokens, components, rationale, and constraints.
-If `integrations.shadcn` is enabled, apply CSS vars and prefer shadcn components.
-Ask before changing `locked` paths.
+Before UI work, read `./.design` (or activate the `design` skill).
+Obey `agent.instructions` in that file. Ask before changing `locked` paths.
 ```
 
-### 3. Install the skill
+### 3. Optional — install the skill (enriched CRAFT + review)
 
 ```bash
 npx skills add AgentsORG/DESIGN --skill design
@@ -102,6 +117,7 @@ See [docs/shadcn.md](docs/shadcn.md), [docs/ecosystem.md](docs/ecosystem.md), an
 
 | Layer | Contents |
 | --- | --- |
+| **Agent** | `agent.instructions` (required) — self-teach on drop-in |
 | **Identity** | `name`, `version`, `status`, `overview`, `intent`, `themes` |
 | **System** | `tokens`, `components`, `patterns`, `locked`, `assets` |
 | **Rationale** | DESIGN.md body prose (`rationale.*`) |
@@ -116,16 +132,12 @@ Lifecycle: `bootstrap` → `refine` → `lock` → `evolve`. History lives in **
 | Doc | Topic |
 | --- | --- |
 | [docs/INDEX.md](docs/INDEX.md) | Full docs hub |
+| [docs/self-contained.md](docs/self-contained.md) | In-file agent instructions |
 | [docs/overview.md](docs/overview.md) | System map + diagrams |
 | [docs/ecosystem.md](docs/ecosystem.md) | Figma → DTCG → CSS / agents |
 | [docs/design-md-mapping.md](docs/design-md-mapping.md) | DESIGN.md field parity |
 | [docs/shadcn.md](docs/shadcn.md) | shadcn/ui integration |
 | [docs/getdesign.md](docs/getdesign.md) | getdesign.md pipeline |
-| [docs/drop-in.md](docs/drop-in.md) | Install in any repo |
-| [docs/agent-consumption.md](docs/agent-consumption.md) | Agent loop |
-| [docs/human-authoring.md](docs/human-authoring.md) | Authoring guide |
-| [docs/lifecycle.md](docs/lifecycle.md) | Status + locked |
-| [docs/comparison.md](docs/comparison.md) | vs adjacent formats |
 | [SPEC.md](SPEC.md) | Normative design.v1 |
 
 ## Examples
@@ -139,25 +151,13 @@ Lifecycle: `bootstrap` → `refine` → `lock` → `evolve`. History lives in **
 | [linear.design](examples/linear.design) | getdesign.md/linear.app |
 | [supabase.design](examples/supabase.design) | getdesign.md/supabase |
 
-## Repository layout
-
-```
-SPEC.md                 # Normative design.v1
-PHILOSOPHY.md
-schema/design.v1.schema.json
-skills/design/          # Agent Skill (agentskills.io)
-examples/               # getdesign.md-sourced systems
-docs/                   # Guides + Mermaid diagrams
-scripts/convert_getdesign.py
-```
-
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Security: [SECURITY.md](SECURITY.md).
 
 ## Status
 
-**design.v1** — format, schema, skill, integrations, examples, docs. CLI (`lint`, `diff`, `verify`, `export`) planned.
+**design.v1** — released. Format, schema, self-contained files, skill + CRAFT, integrations, examples, docs. CLI (`lint`, `diff`, `verify`, `export`) planned.
 
 ## License
 

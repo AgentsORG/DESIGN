@@ -46,6 +46,8 @@ Load order once found:
 
 Treat tokens and structured rules as **normative**. Use `intent.reference` and `overview` for taste. Adjective-only intent without a specific reference is weak — prefer the reference sentence.
 
+**Self-contained:** every valid file MUST include `agent.instructions`. If you were given only this file (drag-drop / @-mention) and the skill package is missing, obey `agent.instructions` in the file — it duplicates the essential READ → FOLLOW → UPDATE → VERIFY loop.
+
 If `agent.skill` is `design`, you are on the correct procedure.
 
 ## 3. Follow (generate / edit UI)
