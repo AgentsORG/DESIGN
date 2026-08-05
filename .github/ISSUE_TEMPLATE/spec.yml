@@ -1,0 +1,32 @@
+name: Spec or format change
+description: Propose a change to design.v1
+title: "[spec]: "
+labels: ["spec"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What should change?
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: SPEC.md updated (or explained why not)
+        - label: schema synced if needed
+        - label: skill / docs considered

@@ -1,0 +1,39 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Node (future CLI)
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+dist/
+build/
+coverage/
+.turbo/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# Cursor local
+.cursor/
+
+# OS junk
+Desktop.ini
+
+# Temp DESIGN.md downloads for convert_getdesign.py
+.tmp-*-DESIGN.md
+.tmp-*
+*.log

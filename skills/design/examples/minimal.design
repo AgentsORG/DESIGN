@@ -1,0 +1,132 @@
+schema: design.v1
+name: minimal
+version: 1.0.0
+status: bootstrap
+description: Tiny valid stub for skill packaging demos.
+
+agent:
+  skill: design
+  instructions: |
+    READ before UI. FOLLOW tokens and constraints.
+    If integrations.shadcn is present, map tokens into CSS variables.
+    UPDATE by editing this file; ask before changing locked paths.
+
+overview: |
+  A minimal product UI: calm ops surface, one accent, no decoration theater.
+
+intent:
+  reference: "A precise internal tool — Stripe Dashboard density without coldness"
+  density: comfortable
+  trust: high
+
+tokens:
+  color:
+    primary: "#0B57D0"
+    on-primary: "#FFFFFF"
+    surface: "#F8FAFC"
+    text: "#0F172A"
+  spacing:
+    unit: 4
+    sm: 8
+    md: 16
+    lg: 24
+  radius:
+    sm: 6
+    md: 10
+  typography:
+    body:
+      fontFamily: IBM Plex Sans
+      fontSize: 16
+      fontWeight: 400
+    heading:
+      fontFamily: IBM Plex Sans
+      fontSize: 24
+      fontWeight: 600
+
+components:
+  button:
+    when: ["primary actions"]
+    when_not: ["more than one filled primary per view"]
+    variants: [filled, ghost, danger]
+    states: [default, hover, disabled]
+    tokens:
+      filled:
+        backgroundColor: "{tokens.color.primary}"
+        textColor: "{tokens.color.on-primary}"
+        typography: "{tokens.typography.body}"
+        rounded: "{tokens.radius.md}"
+        padding: "12px 16px"
+      ghost:
+        backgroundColor: transparent
+        textColor: "{tokens.color.primary}"
+        rounded: "{tokens.radius.md}"
+        padding: "12px 16px"
+      danger:
+        backgroundColor: "#DC2626"
+        textColor: "#FFFFFF"
+        rounded: "{tokens.radius.md}"
+        padding: "12px 16px"
+
+integrations:
+  shadcn:
+    enabled: true
+    style: new-york
+    css_variables: true
+    base_color: neutral
+    css: app/globals.css
+    components_json: ./components.json
+    aliases:
+      components: "@/components"
+      utils: "@/lib/utils"
+      ui: "@/components/ui"
+    radius: "0.625rem"
+    css_vars:
+      light:
+        background: "#F8FAFC"
+        foreground: "#0F172A"
+        primary: "#0B57D0"
+        primary-foreground: "#FFFFFF"
+        secondary: "#E2E8F0"
+        secondary-foreground: "#0F172A"
+        muted: "#F1F5F9"
+        muted-foreground: "#64748B"
+        accent: "#F1F5F9"
+        accent-foreground: "#0F172A"
+        destructive: "#DC2626"
+        border: "#E2E8F0"
+        input: "#E2E8F0"
+        ring: "#0B57D0"
+        card: "#FFFFFF"
+        card-foreground: "#0F172A"
+        popover: "#FFFFFF"
+        popover-foreground: "#0F172A"
+    map_from_tokens:
+      background: tokens.color.surface
+      foreground: tokens.color.text
+      primary: tokens.color.primary
+      primary-foreground: tokens.color.on-primary
+
+rationale:
+  overview: |
+    A minimal product UI: calm ops surface, one accent, no decoration theater.
+  dos:
+    - Use semantic tokens for all chrome
+    - One filled primary per view
+  donts:
+    - Gradients
+    - Glassmorphism
+    - Off-system fonts
+
+policy:
+  if_missing: ask
+  hierarchy: [typography, spacing, contrast, color]
+
+constraints:
+  always:
+    - use semantic tokens
+    - one filled primary per view
+    - bind every listed component property
+  never:
+    - gradients
+    - glassmorphism
+    - off-system fonts

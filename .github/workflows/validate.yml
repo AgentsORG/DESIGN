@@ -1,0 +1,21 @@
+name: design
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate design.v1.schema.json parses
+        run: python -c "import json; json.load(open('schema/design.v1.schema.json')); print('schema ok')"
+      - name: Spot-check examples exist
+        run: |
+          test -f examples/vercel.design
+          test -f examples/stripe.design
+          test -f SPEC.md
+          test -f skills/design/SKILL.md
+          echo examples ok

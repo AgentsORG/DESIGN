@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: AgentsORG
+    url: https://www.agents.org.in/
+    about: Organization site
+  - name: Spec discussion
+    url: https://github.com/AgentsORG/DESIGN/discussions
+    about: Ask questions about design.v1 (enable Discussions in repo settings if needed)

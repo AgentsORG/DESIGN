@@ -1,0 +1,546 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v1.schema.json",
+  "title": "AgentsORG .design file — design.v1",
+  "description": "Living visual contract for AI design: tokens, components, intent, policy, and constraints.",
+  "type": "object",
+  "required": ["schema", "name", "version"],
+  "additionalProperties": true,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional JSON Schema URL for editor validation."
+    },
+    "schema": {
+      "type": "string",
+      "const": "design.v1"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+([.-].+)?$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["bootstrap", "refine", "lock", "evolve"]
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "overview": {
+      "type": "string"
+    },
+    "targets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "extends": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "skill": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "string"
+        }
+      }
+    },
+    "intent": {
+      "type": "object",
+      "required": ["reference"],
+      "additionalProperties": true,
+      "properties": {
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "density": {
+          "type": "string",
+          "enum": ["compact", "comfortable", "spacious"]
+        },
+        "trust": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "energy": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "playfulness": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "emotion": {
+          "type": "string"
+        },
+        "tone": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["repo", "figma", "url", "file", "components_json", "other"]
+          },
+          "path": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "file_key": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "color": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "object"]
+          }
+        },
+        "typography": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "fontFamily": { "type": "string" },
+                  "fontSize": { "type": ["string", "number"] },
+                  "fontWeight": { "type": ["string", "number"] },
+                  "lineHeight": { "type": ["string", "number"] },
+                  "letterSpacing": { "type": ["string", "number"] },
+                  "fontFeature": { "type": "string" },
+                  "fontVariation": { "type": "string" }
+                }
+              }
+            ]
+          }
+        },
+        "spacing": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number"]
+          }
+        },
+        "radius": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number"]
+          }
+        },
+        "motion": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "elevation": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Shadow / blur / depth treatments (DESIGN.md Elevation & Depth)."
+        },
+        "border": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "locked": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Catalog components and/or DESIGN.md flat property bags.",
+      "additionalProperties": {
+        "oneOf": [
+          { "$ref": "#/$defs/component" },
+          { "$ref": "#/$defs/componentPropertyBag" }
+        ]
+      }
+    },
+    "rationale": {
+      "type": "object",
+      "description": "DESIGN.md markdown-body sections as structured prose.",
+      "additionalProperties": true,
+      "properties": {
+        "overview": { "type": "string" },
+        "colors": { "type": "string" },
+        "typography": { "type": "string" },
+        "layout": { "type": "string" },
+        "elevation": { "type": "string" },
+        "shapes": { "type": "string" },
+        "components": { "type": "string" },
+        "dos": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "donts": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "omitted": {
+      "type": "array",
+      "description": "Intentionally absent sections (DESIGN.md omitted).",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["section"],
+            "additionalProperties": true,
+            "properties": {
+              "section": { "type": "string" },
+              "reason": { "type": "string" }
+            }
+          }
+        ]
+      }
+    },
+    "themes": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "default": { "type": "string" },
+        "modes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "tokens": { "type": "object", "additionalProperties": true }
+            }
+          }
+        }
+      }
+    },
+    "exports": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "dtcg": { "type": "object", "additionalProperties": true },
+        "css": { "type": "object", "additionalProperties": true },
+        "tailwind": { "type": "object", "additionalProperties": true },
+        "style_dictionary": { "type": "object", "additionalProperties": true },
+        "ios": { "type": "object", "additionalProperties": true },
+        "android": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "logo": { "type": "object", "additionalProperties": true },
+        "wordmark": { "type": "string" },
+        "favicon": { "type": "string" },
+        "og_image": { "type": "string" },
+        "font_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "patterns": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "allowed": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "forbidden": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "prioritize": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "hierarchy": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "reuse": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "prefer_existing_components": { "type": "boolean" },
+            "invent_threshold": { "type": "string" }
+          }
+        },
+        "fallback_order": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "if_missing": {
+          "type": "string",
+          "enum": ["ask", "nearest", "invent_with_note"]
+        },
+        "accessibility": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "responsive": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "decisions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["if", "then"],
+          "additionalProperties": true,
+          "properties": {
+            "if": {
+              "type": ["string", "object"]
+            },
+            "then": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "always": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "never": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "examples": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "good": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/exampleRef" }
+        },
+        "bad": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/exampleRef" }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "owner": { "type": "string" },
+        "last_reviewed": { "type": "string" },
+        "source_material": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "integrations": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "shadcn": {
+          "$ref": "#/$defs/shadcnIntegration"
+        },
+        "figma": {
+          "$ref": "#/$defs/figmaIntegration"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "shadcnIntegration": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "style": { "type": "string" },
+        "css_variables": { "type": "boolean" },
+        "base_color": { "type": "string" },
+        "css": { "type": "string" },
+        "components_json": { "type": "string" },
+        "rsc": { "type": "boolean" },
+        "tsx": { "type": "boolean" },
+        "radius": { "type": ["string", "number"] },
+        "aliases": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "css_vars": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": { "type": ["string", "number"] }
+          }
+        },
+        "map_from_tokens": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "figmaIntegration": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "file_key": { "type": "string" },
+        "file_url": { "type": "string" },
+        "variable_collections": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "modes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sync": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "direction": {
+              "type": "string",
+              "enum": ["figma_to_design", "design_to_figma", "bidirectional"]
+            },
+            "tokens_path": { "type": "string" }
+          }
+        },
+        "code_connect": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "description": { "type": "string" },
+        "import": { "type": "string" },
+        "when": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "when_not": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "variants": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "states": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "anatomy": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["stable", "experimental", "deprecated"]
+        },
+        "tokens": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/componentPropertyBag"
+          }
+        }
+      }
+    },
+    "componentPropertyBag": {
+      "type": "object",
+      "description": "DESIGN.md component property tokens (plus aliases).",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      },
+      "properties": {
+        "backgroundColor": { "type": ["string", "number"] },
+        "textColor": { "type": ["string", "number"] },
+        "typography": { "type": ["string", "number"] },
+        "rounded": { "type": ["string", "number"] },
+        "padding": { "type": ["string", "number"] },
+        "size": { "type": ["string", "number"] },
+        "height": { "type": ["string", "number"] },
+        "width": { "type": ["string", "number"] },
+        "background": { "type": ["string", "number"] },
+        "foreground": { "type": ["string", "number"] },
+        "radius": { "type": ["string", "number"] },
+        "borderColor": { "type": ["string", "number"] },
+        "borderWidth": { "type": ["string", "number"] },
+        "shadow": { "type": ["string", "number"] },
+        "gap": { "type": ["string", "number"] },
+        "opacity": { "type": ["string", "number"] }
+      }
+    },
+    "exampleRef": {
+      "type": "object",
+      "required": ["ref"],
+      "additionalProperties": true,
+      "properties": {
+        "ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}
