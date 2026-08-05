@@ -7,25 +7,16 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 
 ## [Unreleased]
 
-### Added
-
-- **Self-contained files:** `agent.instructions` is required (schema + SPEC §8); drag-drop / @-mention works without the skill
-- Canonical template: [docs/self-contained.md](docs/self-contained.md); examples patched via `scripts/patch_agent_instructions.py`
-- Design-engineering **CRAFT** bar in `skills/design/references/CRAFT.md`
-- Expanded `REVIEW.md` triage + Before/After/Why findings table
-- Craft gates in `APPLY.md`; SPEC §15.1.1 craft-defaults note
-- Official [skills.sh](https://skills.sh/AgentsORG/DESIGN) badge on README + skill README
-
 ## [1.0.0] — 2026-08-05
 
 ### Added
 
 - Normative **design.v1** specification ([SPEC.md](SPEC.md))
-- JSON Schema ([schema/design.v1.schema.json](schema/design.v1.schema.json))
-- Portable Agent Skill (`skills/design/`) for discover → read → follow → update → verify
-- Google DESIGN.md parity: component property bags, `rationale`, `omitted`
-- Integrations: `shadcn`, `figma`
-- `themes`, `exports` (DTCG/CSS/Tailwind/…), `assets`
+- JSON Schema ([schema/design.v1.schema.json](schema/design.v1.schema.json)) — requires `agent.instructions`
+- **Self-contained files** — every `.design` teaches READ → FOLLOW → UPDATE → VERIFY on drag-drop ([docs/self-contained.md](docs/self-contained.md))
+- Portable Agent Skill (`skills/design/`) with CRAFT bar + ui-review-style REVIEW
+- Google DESIGN.md parity: tokens, component property bags, full `rationale.*`, `omitted`
+- Integrations: `shadcn`, `figma`; `themes`, `exports`, `assets`
 - Token groups: color, typography, spacing, radius, elevation, motion, breakpoint, opacity, zIndex, iconography
-- Examples converted from [getdesign.md](https://getdesign.md/) analyses (independent — not affiliated)
+- Examples from [getdesign.md](https://getdesign.md/) (independent — not affiliated; [NOTICE.md](NOTICE.md))
 - Documentation hub with Mermaid diagrams ([docs/INDEX.md](docs/INDEX.md))
