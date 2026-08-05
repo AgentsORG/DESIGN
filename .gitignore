@@ -14,6 +14,9 @@ dist/
 build/
 coverage/
 .turbo/
+__pycache__/
+*.py[cod]
+*.egg-info/
 
 # Env / secrets
 .env
