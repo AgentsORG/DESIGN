@@ -16,10 +16,11 @@ Compatible with agents listed on [skills.sh/agent](https://www.skills.sh/agent/)
 
 ## Pair with a file
 
-Drop `.design` (or `product.design`) at your repo root. Start from a [getdesign.md](https://getdesign.md/)-sourced example:
+Drop `.design` (or `product.design`) at your repo root. Start from the annotated template or a [getdesign.md](https://getdesign.md/)-sourced example:
 
 ```bash
-cp examples/vercel.design ./.design
+cp templates/starter.design ./.design
+# or: cp examples/vercel.design ./.design
 ```
 
 See [docs/drop-in.md](../../docs/drop-in.md) and [docs/shadcn.md](../../docs/shadcn.md).

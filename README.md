@@ -12,7 +12,8 @@ Maintained by [AgentsORG](https://www.agents.org.in/) · Spec: [SPEC.md](SPEC.md
 
 ```bash
 npx skills add AgentsORG/DESIGN --skill design
-cp examples/vercel.design ./.design
+cp templates/starter.design ./.design   # annotated blank slate — every section explained
+# or start from a brand analysis: cp examples/vercel.design ./.design
 # or: drag any *.design into your agent — it teaches itself via agent.instructions
 ```
 
@@ -90,10 +91,10 @@ flowchart TB
 ### 1. Drop a file in your repo
 
 ```bash
-cp examples/vercel.design ./.design
+cp templates/starter.design ./.design
 ```
 
-Examples are independent visual analyses — **not affiliated** with those brands ([NOTICE.md](NOTICE.md)). Adapt to your product. Every example includes full `agent.instructions`.
+[templates/starter.design](templates/starter.design) is a fully annotated kitchen-sink contract — copy, replace values, delete what you don't need. Or start from a converted brand analysis in [examples/](examples/) (independent analyses — **not affiliated** with those brands, [NOTICE.md](NOTICE.md)). Every file includes full `agent.instructions`.
 
 ### 2. Point agents at it (or drag the file)
 
@@ -160,7 +161,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.
 
 ## Status
 
-**design.v1** — released. Format, schema, self-contained files, skill + CRAFT, integrations, examples, docs. CLI (`lint`, `diff`, `verify`, `export`) planned.
+**design.v1** — released; current contract **1.1** ([CHANGELOG](CHANGELOG.md)): voice, committed intent (direction / signature / treatment), nested tokens, current shadcn model + registry export, annotated starter template, CI-enforced validation ([scripts/lint_design.py](scripts/lint_design.py)). Standalone CLI (`diff`, `export`) planned.
 
 ## License
 

@@ -24,6 +24,8 @@ The durable fix is a **living contract in git** plus a **loop**: read → follow
 
 Tokens are normative. `overview` and `intent.reference` carry judgment. Adjective lists (“modern, clean, premium”) describe a region; a specific reference (“Linear density with marketplace clarity”) describes a point.
 
+Two more things belong in the contract because agents lose them between sessions: **words** (`voice` — register, casing, terminology, error style, applied with the same force as tokens) and **the committed aesthetic** (`intent.direction` names the direction, `intent.signature` names the one element where boldness concentrates). A recorded choice reads as intent; an unrecorded one decays into the model's default look.
+
 ## Process plus data
 
 A `.design` file alone is data. Agents also need a **procedure**. This repository ships an Agent Skill (`skills/design/`) that encodes how to discover, load, apply, update, and verify the file. Every valid file may also include a short `agent.instructions` stub so a bare drop-in still works when the skill is not installed.

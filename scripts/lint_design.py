@@ -216,8 +216,10 @@ def main() -> int:
     Draft202012Validator.check_schema(schema)
     validator = Draft202012Validator(schema)
 
-    files = sorted(ROOT.glob("examples/*.design")) + sorted(
-        ROOT.glob("skills/design/examples/*.design")
+    files = (
+        sorted(ROOT.glob("examples/*.design"))
+        + sorted(ROOT.glob("templates/*.design"))
+        + sorted(ROOT.glob("skills/design/examples/*.design"))
     )
     if not files:
         print("no .design files found")

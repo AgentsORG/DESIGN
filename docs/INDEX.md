@@ -17,6 +17,7 @@ Complete guide to the AgentsORG **`.design`** format (design.v1).
 
 | Doc | Description |
 | --- | --- |
+| [../templates/starter.design](../templates/starter.design) | Annotated kitchen-sink template — copy as `.design` and adapt |
 | [self-contained.md](self-contained.md) | Drag-drop / in-file agent.instructions |
 | [drop-in.md](drop-in.md) | Install `.design` in a product repo |
 | [shadcn.md](shadcn.md) | Integrate [shadcn/ui](https://ui.shadcn.com/) |
@@ -43,9 +44,10 @@ Key mermaid diagrams live in:
 - **agent-consumption.md** — follow trees  
 - **lifecycle.md** — status + locked paths  
 
-## Examples
+## Examples & templates
 
-See [../examples/](../examples/) — Vercel, Stripe, Notion, Apple, Linear, Supabase (from getdesign.md).
+- [../templates/starter.design](../templates/starter.design) — annotated blank slate exercising every major section
+- [../examples/](../examples/) — Vercel, Stripe, Notion, Apple, Linear, Supabase (from getdesign.md)
 
 ## Schema & skill
 

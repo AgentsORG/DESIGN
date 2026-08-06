@@ -27,6 +27,7 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 - Verify reports added/removed/modified per token group plus a regression flag
 - Canonical `agent.instructions` template covers voice, treatment, signature, and tiered reading (SPEC §8, docs, converter, examples)
 - Examples now carry `intent.direction`/`signature`, `voice`, sidebar/chart CSS variables, and `css_vars.theme`
+- `templates/starter.design` — annotated kitchen-sink template exercising every major section (linted in CI)
 - Linter: WCAG contrast checks (component bags + shadcn fg/bg pairs), alias-collision detection, orphan-token summary, instruction-duty coverage
 - CI: schema validation of all examples + format lint rules + banned-reference leak guard; `.gitattributes` line-ending normalization
 

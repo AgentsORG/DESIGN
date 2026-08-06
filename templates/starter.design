@@ -1,0 +1,324 @@
+# starter.design — annotated template exercising every major design.v1 section.
+# Copy to your repo root as `.design`, replace values, delete comments you don't need.
+# Spec: https://github.com/AgentsORG/DESIGN/blob/main/SPEC.md
+
+schema: design.v1
+name: starter
+version: 0.1.0
+status: bootstrap            # bootstrap → refine → lock → evolve
+updated_at: "2026-08-06"
+description: "Annotated starter contract — every major section, ready to adapt."
+
+$schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v1.schema.json
+
+# ── Agent bootstrap (REQUIRED) ─────────────────────────────────────────────
+# The file must teach an agent to use it even when no skill is installed.
+agent:
+  skill: design
+  instructions: |
+    You are holding a .design living visual contract (schema design.v1).
+    If the AgentsORG `design` skill is installed, activate it - then still obey THIS file as source of truth.
+    If the skill is absent, follow these instructions exactly.
+
+    READ
+    - Load this file before any UI generation or restyle. Large file? Normative core first
+      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+    - Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
+    - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
+
+    FOLLOW (generate or edit UI)
+    - Calibrate treatment per surface: patterns.<name>.treatment > intent.treatment
+      (utilitarian = restrained product craft; editorial = distinctive identity).
+    - Prefer catalog components; obey when / when_not and decisions.* (first match wins).
+    - Bind every listed component property (backgroundColor, textColor, typography, rounded, padding, size, height, width).
+    - Never invent raw hex/spacing/radius when a token exists.
+    - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
+    - Concentrate boldness in intent.signature; keep everything around it quiet.
+    - Match the project's existing styling stack - do not switch stacks.
+    - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
+
+    UPDATE
+    - Edit this file in place when design changes. Git is history.
+    - Ask before changing any path in locked. Bump version (SemVer).
+
+    VERIFY
+    - Compare tokens <-> CSS/Tailwind; components <-> imports; report drift
+      per token group as added/removed/modified plus a regression flag before fixing.
+
+    PRECEDENCE
+    1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
+
+# ── Identity & intent ──────────────────────────────────────────────────────
+overview: |
+  Describe the product surface in concrete cultural terms — what it is,
+  who reads it, and the one visual idea that carries it. Specific beats
+  generic: name real products, eras, or materials the design descends from.
+
+intent:
+  reference: "A precise internal tool — dashboard density without coldness"
+  direction: calm-utilitarian          # the COMMITTED aesthetic, named
+  signature: "One saturated blue reserved for the single primary action"
+  treatment: utilitarian               # default register: utilitarian | editorial
+  density: comfortable                 # compact | comfortable | spacious
+  trust: high
+  energy: medium
+  playfulness: low
+
+# ── Voice — the UI copy contract ───────────────────────────────────────────
+voice:
+  register: "Plain, direct, technical-friendly. Confident, never cute."
+  casing: sentence
+  terminology:
+    webhook_endpoint: "notification URL"   # system term → user term
+  action_naming: "Button labels name the exact action; the same verb carries through the flow (Publish → Published)."
+  errors: "State what happened, why, and the next step. Never blame the user."
+
+# ── Targets (object form declares environment constraints) ─────────────────
+targets:
+  - web
+  - name: web-artifact
+    external_assets: false     # CSP-locked target: inline everything
+    single_file: true
+
+# ── Tokens (normative; groups may nest; refs use full dot paths) ───────────
+tokens:
+  color:
+    primary: "#0B57D0"
+    on-primary: "#FFFFFF"
+    surface:                   # nested group → {tokens.color.surface.raised}
+      base: "#F8FAFC"
+      raised: "#FFFFFF"
+    text: "#0F172A"
+    text-muted: "#475569"
+    hairline: "#E2E8F0"
+    error: "#DC2626"
+    accent-warm: "#B45309"     # decorative accents rotate via policy.color.accent_cycle
+    accent-cool: "#0E7490"
+  typography:
+    body:
+      fontFamily: ["Inter", "system-ui", "sans-serif"]   # stack: brand face + fallbacks
+      fontSize: 16
+      fontWeight: 400
+      lineHeight: 1.5
+    heading:
+      fontFamily: ["Inter", "system-ui", "sans-serif"]
+      fontSize: 24
+      fontWeight: 600
+      lineHeight: 1.2
+      letterSpacing: "-0.015em"
+    mono-data:
+      fontFamily: ["IBM Plex Mono", "monospace"]
+      fontSize: 13
+      fontWeight: 400
+  spacing:
+    unit: 4                    # snap all spacing to multiples of this
+    sm: 8
+    md: 16
+    lg: 24
+    section: 64
+  radius:
+    sm: 6
+    md: 10
+    pill: 9999
+  elevation:
+    card: "0 0 0 1px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.06), 0 8px 24px rgba(15,23,42,0.05)"
+  motion:
+    duration: { fast: 150ms, base: 250ms }
+    easing:
+      enter: cubic-bezier(0.32, 0.72, 0, 1)
+      move: ease-in-out
+    spring: { duration: 0.5s, bounce: 0 }
+  breakpoint:
+    md: 768px
+    lg: 1024px
+    content-max: 1280px
+  background:
+    section-wash: "linear-gradient(180deg, {tokens.color.surface.raised} 0%, {tokens.color.surface.base} 100%)"
+
+# ── Locked paths (agents must ask before editing) ──────────────────────────
+locked:
+  - tokens.color.primary
+  - tokens.typography.heading.fontFamily
+
+# ── Components (catalog form; flat DESIGN.md bags are also valid) ──────────
+components:
+  button:
+    description: "Single primary action per view; everything else demotes"
+    when: ["page primary action", "form submit"]
+    when_not: ["navigation links", "more than one filled primary per view"]
+    variants: [filled, ghost, danger]
+    states: [default, hover, disabled]
+    tokens:
+      filled:
+        backgroundColor: "{tokens.color.primary}"
+        textColor: "{tokens.color.on-primary}"
+        typography: "{tokens.typography.body}"
+        rounded: "{tokens.radius.md}"
+        padding: "10px 16px"
+      ghost:
+        backgroundColor: transparent
+        textColor: "{tokens.color.primary}"
+        rounded: "{tokens.radius.md}"
+        padding: "10px 16px"
+      danger:
+        backgroundColor: "{tokens.color.error}"
+        textColor: "{tokens.color.on-primary}"
+        rounded: "{tokens.radius.md}"
+        padding: "10px 16px"
+
+# ── Patterns (composition recipes; treatment overrides per surface) ────────
+patterns:
+  landing_hero:
+    treatment: editorial
+    allowed: [headline, subhead, primary_cta, supporting_visual]
+    forbidden: [stat_strip, floating_promo_chips]
+  settings_page:
+    treatment: utilitarian
+    allowed: [section_nav, field_groups, save_bar]
+    forbidden: [decorative_illustration]
+
+# ── Policy & decisions ─────────────────────────────────────────────────────
+policy:
+  if_missing: ask              # ask | nearest | invent_with_note
+  hierarchy: [typography, spacing, contrast, color]
+  reuse:
+    prefer_existing_components: true
+  accessibility:
+    contrast: AA
+    focus_visible: required
+    reduced_motion: honor
+  color:
+    accent_cycle: [accent-warm, accent-cool]   # decorative elements rotate; text by contrast
+
+decisions:
+  button:
+    - if: destructive
+      then: { variant: danger }
+    - if: page_primary
+      then: { variant: filled }
+  typography:
+    - if: "text >= 24px"
+      then: { role: heading }
+    - if: "numeric data column"
+      then: { role: mono-data }
+
+# ── Constraints (absolute or numeric laws — no hedged prose) ───────────────
+constraints:
+  always:
+    - use semantic tokens; never hardcode hex when a token exists
+    - one filled primary action per view
+    - honor focus-visible and prefers-reduced-motion
+  never:
+    - "transition: all"
+    - hover-only access to core actions
+    - gradients outside tokens.background
+
+# ── Themes (modes overlay tokens; design dark, never invert) ───────────────
+themes:
+  default: light
+  modes:
+    light:
+      tokens:
+        color:
+          text: "#0F172A"
+    dark:
+      tokens:
+        color:
+          surface: { base: "#0B1220", raised: "#111A2C" }
+          text: "#E2E8F0"
+          text-muted: "#94A3B8"
+          hairline: "#1E293B"
+# Single-theme product instead? Replace modes with:
+#   single: true
+#   reason: "Print-first brand; no dark surface exists"
+
+# ── Integrations ───────────────────────────────────────────────────────────
+integrations:
+  shadcn:
+    enabled: true
+    style: new-york            # legacy; current styles: vega, nova, maia, lyra, mira, luma, rhea, sera
+    base: radix                # primitive library: base | radix | react-aria — never mix
+    icon_library: lucide
+    css_variables: true
+    base_color: neutral        # init-only; immutable after init
+    css: app/globals.css
+    components_json: ./components.json
+    aliases:
+      components: "@/components"
+      utils: "@/lib/utils"
+      ui: "@/components/ui"
+      lib: "@/lib"
+      hooks: "@/hooks"
+    registries: {}             # "@acme": "https://registry.acme.com/{name}.json" — never guess namespaces
+    radius: "0.625rem"
+    css_vars:
+      theme:
+        radius: "0.625rem"
+      light:
+        background: "#F8FAFC"
+        foreground: "#0F172A"
+        primary: "#0B57D0"
+        primary-foreground: "#FFFFFF"
+        muted: "#F1F5F9"
+        muted-foreground: "#475569"
+        destructive: "#DC2626"
+        border: "#E2E8F0"
+        input: "#E2E8F0"
+        ring: "#0B57D0"
+      dark:
+        background: "#0B1220"
+        foreground: "#E2E8F0"
+        primary: "#3B82F6"
+        primary-foreground: "#0B1220"
+    map_from_tokens:
+      background: tokens.color.surface.base
+      foreground: tokens.color.text
+      primary: tokens.color.primary
+      primary-foreground: tokens.color.on-primary
+      border: tokens.color.hairline
+      ring: tokens.color.primary
+
+# ── Exports (generated artifacts; this file stays normative) ───────────────
+exports:
+  css:
+    path: "./src/styles/tokens.css"
+    selector: ":root"
+    mode_strategy: both        # media-query | data-attribute | both
+    attribute: data-theme
+  tailwind:
+    path: "./tailwind.theme.css"
+    version: 4
+  shadcn_registry:
+    path: "./registry/brand-theme.json"
+    type: registry:theme
+  dtcg:
+    path: "./tokens/tokens.json"
+
+# ── Provenance & sources ───────────────────────────────────────────────────
+sources:
+  - type: repo
+    path: "src/styles"
+provenance:
+  owner: design-system
+  last_reviewed: "2026-08-06"
+
+# ── Omitted (intentionally absent; suppresses warnings) ────────────────────
+omitted:
+  - section: tokens.opacity
+    reason: "No translucency system yet"
+
+# ── Rationale (the why; prose judgment when tokens under-specify) ──────────
+rationale:
+  colors: |
+    One blue. It appears exactly once per view, on the primary action.
+    Everything else is slate neutrals biased slightly toward the blue.
+  layout: |
+    Content maxes at {tokens.breakpoint.content-max}; parent gap over
+    per-child margins; whitespace does the grouping, hairlines only in tables.
+  dos:
+    - Use tabular numbers in data columns
+    - Design both themes; dark is remapped, never inverted
+  donts:
+    - Mix rounded and sharp corners in the same view
+    - Introduce a second accent outside policy.color.accent_cycle
