@@ -16,9 +16,14 @@ Brand-inspired `.design` contracts for teaching and bootstrap.
 Each file includes:
 
 - Full `tokens.*` from DESIGN.md frontmatter  
+- `intent` with `direction` (committed aesthetic) and `signature` (the one bold element)  
+- `voice` — the UI copy contract (register, casing, terminology)  
 - All component property bags (`backgroundColor`, `textColor`, …)  
 - `rationale.*` from DESIGN.md body sections  
 - `integrations.shadcn` theme mapping  
+- Self-contained `agent.instructions`  
+
+CI validates every example against the design.v1 schema and lint rules (`scripts/lint_design.py`).
 
 ```bash
 cp examples/stripe.design ./.design

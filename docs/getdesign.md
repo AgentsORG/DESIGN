@@ -79,7 +79,16 @@ flowchart TB
 | `spacing.*` | `tokens.spacing.*` |
 | `components.*` (+ all props) | `components.*.tokens` with DESIGN.md property names |
 | Overview…Do’s/Don’ts (+ Responsive, Iteration, Known Gaps) | `rationale.*` + `constraints` |
+| `omitted` | `omitted` (converter also records the intentionally absent `tokens.elevation` with a reason) |
+| `version` | **not inherited** — the `.design` `version` is the contract's own SemVer, starting at `1.0.0` |
 | — | `integrations.shadcn` |
+
+Converter details:
+
+- **Reference rewriting everywhere** — legacy refs (`{colors.x}`, `{typography.x}`, `{spacing.x}`, `{rounded.x}`) are rewritten to `{tokens.color.x}` etc. not only in token positions but inside **prose** too: `rationale.*` bodies, `constraints`, and dos/donts.
+- **Typed `url` sources** — each example carries `sources` entries of `type: url` for the getdesign.md analysis page, the live brand site, and the upstream DESIGN.md, plus a non-affiliation note.
+- **Real brand names** — upstream analyses that obfuscate names (e.g. "Stripi", "Supabaze") are corrected to the real brand; non-affiliation is covered by [NOTICE.md](../NOTICE.md) and `sources` notes.
+- **Nothing dropped** — unknown `##` body sections are slugified into `rationale.*` rather than discarded; every DESIGN.md component variant key is preserved.
 
 Import checklist and property whitelist: [design-md-mapping.md](design-md-mapping.md).
 
@@ -93,7 +102,7 @@ Import checklist and property whitelist: [design-md-mapping.md](design-md-mappin
 python scripts/convert_getdesign.py
 ```
 
-The script removes previous `examples/*.design` files and writes the six brand systems above.
+The script removes previous `examples/*.design` files and writes the six brand systems above. CI validates every example against the schema and lint rules via `scripts/lint_design.py` on each push and pull request.
 
 ## Using a brand as your drop-in
 
@@ -103,7 +112,7 @@ cp examples/stripe.design ./.design
 
 Then:
 
-1. Change `name`, `overview`, and `intent.reference` to **your** product (keep the reference sentence specific).
+1. Change `name`, `overview`, `intent` (`reference`, `direction`, `signature`), and `voice` to **your** product (keep the reference sentence specific).
 2. Lock paths you care about under `locked`.
 3. If you use shadcn, apply `integrations.shadcn` → `globals.css` ([shadcn.md](shadcn.md)).
 4. Trim unused components; add your real `import` paths.

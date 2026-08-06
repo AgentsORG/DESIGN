@@ -20,7 +20,8 @@ Normative detail: [SPEC.md](../../../SPEC.md). Schema: [schema/design.v1.schema.
 | `intent.reference` | Required if `intent` present |
 | `intent.direction` / `signature` / `treatment` | Committed aesthetic, boldness budget, register |
 | `voice` | UI copy contract: register, casing, terminology, errors |
-| `tokens` | Normative color/type/spacing/radius/motion (groups may nest; full dot-path refs) |
+| `tokens` | Normative color/type/spacing/radius/motion/background (groups may nest; full dot-path refs) |
+| `policy.color.accent_cycle` | Ordered decorative accent rotation (multi-accent brands) |
 | `locked` | Dot-paths that require ask before edit |
 | `components` | Catalog + when/when_not + variants |
 | `patterns` | Composition recipes |

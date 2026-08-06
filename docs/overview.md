@@ -7,7 +7,7 @@ This page is the system map for **design.v1**. Normative rules live in [SPEC.md]
 Agents need a **single portable contract** that:
 
 1. Is machine-readable (YAML / JSON Schema).
-2. Encodes tokens, components, policy, and taste reference.
+2. Encodes tokens, components, policy, voice (UI copy), and a committed intent (`direction` · `signature` · `treatment`).
 3. Can be updated in place as the product design evolves.
 4. Bridges common codegen stacks (especially [shadcn/ui](https://ui.shadcn.com/)).
 5. Can be bootstrapped from public brand analyses like [getdesign.md](https://getdesign.md/).
@@ -16,7 +16,7 @@ Agents need a **single portable contract** that:
 flowchart LR
   Human[Human / design lead] -->|authors| D[".design"]
   GetD[getdesign.md DESIGN.md] -->|convert| D
-  D -->|skill: read/follow| Agent[Coding agent]
+  D -->|read/follow via skill or agent.instructions| Agent[Coding agent]
   Agent -->|UI code| App[Product UI]
   Agent -->|theme write| CSS[globals.css]
   Agent -->|in-place edit| D
@@ -29,10 +29,13 @@ flowchart LR
 block-beta
   columns 1
   block:identity
-    id["identity: name, version, status, overview, intent"]
+    id["identity: name, version, status, overview, intent (direction · signature · treatment), themes"]
   end
   block:system
-    sys["system: tokens (color/type/space/radius/elevation), components, patterns, locked"]
+    sys["system: tokens (nestable: color/type/space/radius/elevation/motion/background), components, patterns, locked"]
+  end
+  block:voice
+    voc["voice: UI copy contract — register, casing, terminology, action_naming, errors"]
   end
   block:rationale
     rat["rationale: DESIGN.md prose — colors, layout, elevation, shapes, dos/donts"]
@@ -41,21 +44,22 @@ block-beta
     rul["rules: policy, decisions, constraints, examples"]
   end
   block:integ
-    integ["integrations: shadcn (optional)"]
+    integ["integrations: shadcn · figma — plus exports · assets"]
   end
   block:meta
-    meta["meta: agent, sources, provenance, extends, omitted"]
+    meta["meta: agent (required), sources, provenance, extends, omitted"]
   end
 ```
 
 | Layer | Fields | Agent duty |
 | --- | --- | --- |
-| Identity | `name`, `version`, `status`, `overview`, `intent` | Orient taste and lifecycle |
-| System | `tokens`, `components`, `patterns`, `locked` | Bind every component property; reuse catalog; ask on locked |
+| Identity | `name`, `version`, `status`, `overview`, `intent` (`direction`, `signature`, `treatment`), `themes` | Orient taste; commit to the direction; calibrate treatment per surface (`patterns.<name>.treatment` overrides) |
+| System | `tokens` (nestable groups, ref chains), `components`, `patterns`, `locked` | Bind every component property; reuse catalog; ask on locked |
+| Voice | `voice` | Apply copy rules (register, casing, terminology, action naming, errors) with the same force as tokens |
 | Rationale | `rationale.*` | Apply DESIGN.md body guidance tokens omit |
 | Rules | `policy`, `decisions`, `constraints`, `examples` | Resolve conflicts and missing pieces |
-| Integrations | `integrations.shadcn` | Theme CSS vars + prefer shadcn primitives |
-| Meta | `agent`, `sources`, `provenance`, `extends`, `omitted` | Procedure + provenance + intentional gaps |
+| Integrations | `integrations.shadcn`, `integrations.figma`, `exports`, `assets` | Theme CSS vars + prefer shadcn primitives; emit declared exports |
+| Meta | `agent` (required `instructions`), `sources`, `provenance`, `extends`, `omitted` | Self-teach procedure + provenance + intentional gaps |
 
 ## Discovery (nearest wins)
 
@@ -104,6 +108,8 @@ stateDiagram-v2
   Verify --> [*]
   Update --> Follow: continue task
 ```
+
+Large files read in tiers (SPEC §8.1): normative core first (`intent`, `constraints`, `policy`/`decisions`, `tokens`, `components`, `voice`, `locked`), judgment prose on demand, tooling sections only when performing that operation. `verify` reports **added / removed / modified** per token group plus a **regression** flag (SPEC §18).
 
 Detailed procedures: [agent-consumption.md](agent-consumption.md) · Skill: [skills/design/SKILL.md](../skills/design/SKILL.md).
 

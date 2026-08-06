@@ -1,0 +1,14 @@
+# Normalize line endings: text files are stored and checked out as LF
+* text=auto
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.py text eol=lf
+*.design text eol=lf
+*.svg text eol=lf
+
+# Binary assets
+*.png binary
+*.ico binary
+*.woff2 binary

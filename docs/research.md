@@ -31,11 +31,20 @@ flowchart TB
 5. **shadcn as integration, not dependency** — optional `integrations.shadcn`; tokens remain normative.  
 6. **Examples from getdesign.md** — realistic multi-brand teaching set with clear disclaimers.
 
+## Verified 2026-08 update
+
+State check against the ecosystem as of August 2026, recorded so later readers know what this spec revision was validated against. The notes above are historical and unchanged.
+
+- **Google DESIGN.md 0.4.0** — the interop mapping (SPEC §7, §11.3, §13) was re-verified against DESIGN.md 0.4.0: frontmatter token groups, component property bags, `omitted`, legacy token refs, reference-chain depth 10, and nesting depth 20 all still match. Positioning stands: `.design` is **its own format** that imports DESIGN.md **losslessly** (complete mapping) — not a superset.
+- **shadcn/ui current model** — styles `vega` / `nova` / `maia` / `lyra` / `mira` / `luma` / `rhea` / `sera` (`new-york` legacy), primitive `base` choice (`base` \| `radix` \| `react-aria`), `icon_library`, init presets, namespaced `registries` (`@ns` → URL, never guessed), an MCP server, and the full CSS-variable set including `chart-1`…`chart-5`, `sidebar-*`, and mode-independent `css_vars.theme`; on Tailwind v4, custom variables must also register under `@theme inline`. SPEC §7.1 reflects all of this, and `exports.shadcn_registry` emits an installable `registry:theme` item.
+- **What v1.1 absorbed** — `voice` (§13C, applied with token force); `intent.direction` / `signature` / `treatment` with `patterns.<name>.treatment` per-surface overrides; required top-level `agent` with the canonical self-contained instructions template (§8) and reading tiers for large files (§8.1); nested token groups (depth ≤ 20) with token→token reference chains (depth ≤ 10); `tokens.background` atmosphere and `tokens.motion` easing/spring tokens; `policy.color.accent_cycle`; `decisions.*` generalized beyond components; `themes.single`, the designed-not-inverted mode rule, and `exports.css.mode_strategy`; `exports.shadcn_registry`, `exports.tailwind` `version: 3`, and `exports.css.prefix`; constraint-authoring guidance (§16.1); the expanded validation table (§19); and `verify` reporting added / removed / modified per group with a regression flag (§18).
+- **CI** — every example now validates against the schema via `scripts/lint_design.py` in GitHub Actions.
+
 ## Open follow-ups (non-blocking for v1)
 
-- CLI: `lint`, `diff`, `verify`, `export-dtcg`, `apply-shadcn-css`  
+- CLI: `diff`, `verify`, `export-dtcg`, `apply-shadcn-css` (`lint` exists as `scripts/lint_design.py`, run in CI)  
 - Official registry of community `*.design` files  
-- Deeper dark-mode / chart / sidebar token coverage in converters  
+- Converter coverage for the full dark-mode / chart / sidebar variable set (SPEC §7.1 now specifies it)  
 
 ## Links
 

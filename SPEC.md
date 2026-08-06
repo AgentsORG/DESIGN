@@ -448,15 +448,19 @@ agent:
     If the skill is absent, follow these instructions exactly.
 
     READ
-    - Load this entire file before any UI generation or restyle.
-    - Order: overview/intent → constraints → policy/decisions → tokens → rationale → components/patterns → integrations → locked.
+    - Load this file before any UI generation or restyle. Large file? Normative core first
+      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+    - Order: overview/intent → constraints → policy/decisions → tokens → voice → rationale → components/patterns → integrations → locked.
     - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
 
     FOLLOW (generate or edit UI)
+    - Calibrate treatment per surface: patterns.<name>.treatment > intent.treatment
+      (utilitarian = restrained product craft; editorial = distinctive identity).
     - Prefer catalog components; obey when / when_not and decisions.* (first match wins).
     - Bind every listed component property (backgroundColor, textColor, typography, rounded, padding, size, height, width).
     - Never invent raw hex/spacing/radius when a token exists.
-    - Apply patterns.*; enforce constraints.always / never.
+    - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
+    - Concentrate boldness in intent.signature; keep everything around it quiet.
     - Match the project's existing styling stack — do not switch stacks.
     - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
     - Craft defaults when this file is silent: one primary CTA; nested radius = outer − padding; transform/opacity only (<300ms); 44×44 targets; focus visible; prefers-reduced-motion; no transition:all.
@@ -561,6 +565,7 @@ Tokens are normative. Agents MUST use token values instead of inventing raw colo
 | `tokens.zIndex` | — | Stacking scale |
 | `tokens.border` | — | Optional border widths / styles |
 | `tokens.iconography` | Iconography prose | Default set, sizes, stroke rules |
+| `tokens.background` | — | Atmosphere treatments: gradients, mesh, noise/grain, patterns — the one aesthetic dimension flat color maps cannot express |
 
 Additional groups are allowed. Scale level names MAY be any descriptive string (`xs`, `sm`, `md`, `lg`, `xl`, `full`, `section`, …).
 
@@ -605,6 +610,10 @@ tokens:
       exit: cubic-bezier(0.4, 0, 1, 1)
       move: ease-in-out
     spring: { duration: 0.5s, bounce: 0 }
+  background:
+    hero-mesh: "radial-gradient(at 30% 20%, #007cf0, transparent 60%), radial-gradient(at 70% 60%, #ff0080, transparent 55%)"
+    grain: "url(#noise) opacity 0.04"
+    section-wash: "linear-gradient(180deg, {tokens.color.canvas} 0%, {tokens.color.canvas-soft} 100%)"
 ```
 
 Easing curves, durations, and spring configs SHOULD live here as shared tokens — new motion extends these, never introduces a parallel hand-typed set.
@@ -630,7 +639,8 @@ Color semantics:
 
 | Field | Type | Notes |
 | --- | --- | --- |
-| `fontFamily` | string | Required for a useful style |
+| `fontFamily` | string \| string[] | Required for a useful style. MAY be a CSS-style comma list or an array — the first entry is the brand face, the rest are the fallback stack (match x-height) |
+| `fallbacks` | string[] | Alternative to an inline stack: ordered fallback faces applied when the primary is unavailable (offline targets, blocked font CDNs) |
 | `fontSize` | Dimension | e.g. `16px`, `1rem` |
 | `fontWeight` | number \| string | e.g. `400`, `600` |
 | `lineHeight` | Dimension \| number | Unitless multiplier recommended |
@@ -946,10 +956,14 @@ policy:
     contrast: AA
     focus_visible: required
     reduced_motion: honor
+  color:
+    accent_cycle: [accent-orange, accent-blue, accent-green]
   responsive:
     if_mobile: reduce_padding_before_font_size
     if_dense_data: prioritize_table_over_cards
 ```
+
+`policy.color.accent_cycle` is an ordered list of `tokens.color` names that **decorative, non-text elements rotate through** (multi-accent brand systems). Text color on each accent is chosen by contrast against that background, not fixed. Without this field, agents MUST NOT rotate accents.
 
 | Field | Default | Meaning |
 | --- | --- | --- |
@@ -982,9 +996,14 @@ decisions:
       then: { variant: danger }
     - if: page_primary
       then: { variant: filled }
+  typography:
+    - if: "text >= 24px"
+      then: { role: heading }
+    - if: "numeric data column"
+      then: { role: mono-data }
 ```
 
-Agents SHOULD walk `decisions.<component>` in order and apply the first matching rule.
+Agents SHOULD walk `decisions.<key>` in order and apply the first matching rule. Keys are not limited to components: token roles (`typography`, `color`, `elevation`) MAY carry deterministic application rules, which is what lets an agent apply the brand across arbitrary surfaces without per-case judgment.
 
 ---
 
@@ -1041,7 +1060,7 @@ Agents update `.design` by **editing the file directly**.
 | `bootstrap` / `extract` | Create or fill draft from `sources`; set `status: bootstrap` |
 | `update` | Edit unlocked fields; bump `version` and `updated_at` |
 | `lock` / `unlock` | Adjust `status` and/or `locked[]` with user intent |
-| `verify` | Compare contract to code (CSS vars, Tailwind, components); report findings; fix only when asked |
+| `verify` | Compare contract to code (CSS vars, Tailwind, components); report findings per token group as **added / removed / modified**, plus a **regression** flag when anything consumers may rely on was removed or changed; fix only when asked |
 
 ### SemVer
 
@@ -1143,8 +1162,16 @@ overview: |
 
 intent:
   reference: "A precise internal tool — Stripe Dashboard density without coldness"
+  direction: calm-utilitarian
+  signature: "One saturated blue reserved for the single primary action"
+  treatment: utilitarian
   density: comfortable
   trust: high
+
+voice:
+  register: "Plain and direct; confident, never cute."
+  casing: sentence
+  errors: "Say what happened and the next step."
 
 tokens:
   color:

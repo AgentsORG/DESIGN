@@ -25,15 +25,19 @@ If the AgentsORG `design` skill is installed, activate it - then still obey THIS
 If the skill is absent, follow these instructions exactly.
 
 READ
-- Load this entire file before any UI generation or restyle.
-- Order: overview/intent -> constraints -> policy/decisions -> tokens -> rationale -> components/patterns -> integrations -> locked.
+- Load this file before any UI generation or restyle. Large file? Normative core first
+  (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+- Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
 - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
 
 FOLLOW (generate or edit UI)
+- Calibrate treatment per surface: patterns.<name>.treatment > intent.treatment
+  (utilitarian = restrained product craft; editorial = distinctive identity).
 - Prefer catalog components; obey when / when_not and decisions.* (first match wins).
 - Bind every listed component property (backgroundColor, textColor, typography, rounded, padding, size, height, width).
 - Never invent raw hex/spacing/radius when a token exists.
-- Apply patterns.*; enforce constraints.always / never.
+- Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
+- Concentrate boldness in intent.signature; keep everything around it quiet.
 - Match the project's existing styling stack - do not switch stacks.
 - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
 - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
@@ -291,6 +295,29 @@ def emit_literal_block(key: str, text: str, indent: int = 2) -> list[str]:
     return lines
 
 
+def _hex_rgb(value: str):
+    m = re.match(r"^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$", str(value).strip())
+    if not m:
+        return None
+    h = m.group(1)
+    if len(h) == 3:
+        h = "".join(ch * 2 for ch in h)
+    return tuple(int(h[i : i + 2], 16) / 255 for i in (0, 2, 4))
+
+
+def _contrast(fg: str, bg: str):
+    a, b = _hex_rgb(fg), _hex_rgb(bg)
+    if a is None or b is None:
+        return None
+
+    def lum(rgb):
+        chan = [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in rgb]
+        return 0.2126 * chan[0] + 0.7152 * chan[1] + 0.0722 * chan[2]
+
+    l1, l2 = sorted((lum(a), lum(b)), reverse=True)
+    return (l1 + 0.05) / (l2 + 0.05)
+
+
 def build_shadcn_map(colors: dict) -> dict:
     c = colors
 
@@ -320,6 +347,14 @@ def build_shadcn_map(colors: dict) -> dict:
         "input": pick("hairline", "border", "input", default="#e4e4e7"),
         "ring": pick("primary-focus", "primary", "ring", default="#0a0a0a"),
     }
+    # contrast-correct our own derived pairs: muted-foreground must read on muted
+    ratio = _contrast(light["muted-foreground"], light["muted"])
+    if ratio is not None and ratio < 4.5:
+        for candidate in (pick("body", "text-secondary", "ink-soft"), light["foreground"]):
+            if candidate and (_contrast(candidate, light["muted"]) or 0) >= 4.5:
+                light["muted-foreground"] = candidate
+                break
+
     canvas = (pick("canvas") or "").lower()
     is_dark = canvas in ("#000", "#000000", "#010102", "#0a0a0a") or (
         canvas.startswith("#") and len(canvas) >= 7 and int(canvas[1:3], 16) < 40
@@ -345,6 +380,9 @@ BRANDS = {
         "site": "https://vercel.com",
         "upstream": "https://github.com/voltagent/awesome-design-md/blob/main/design-md/vercel/DESIGN.md",
         "intent_ref": "Vercel marketing — black/white precision, Geist, maximal restraint",
+        "direction": "stark monochrome engineering",
+        "signature": "The multi-stop mesh gradient at hero scale — the only color in an otherwise black-and-white system",
+        "voice_register": "Terse, technical, engineer-to-engineer; imperative mood; zero hype",
     },
     "stripe": {
         "file": ".tmp-stripe-DESIGN.md",
@@ -353,6 +391,9 @@ BRANDS = {
         "site": "https://stripe.com",
         "upstream": "https://github.com/voltagent/awesome-design-md/blob/main/design-md/stripe/DESIGN.md",
         "intent_ref": "Stripe marketing — signature purple gradients, weight-300 elegance, fintech clarity",
+        "direction": "polished fintech clarity",
+        "signature": "The animated multi-color gradient ribbon over otherwise disciplined neutrals",
+        "voice_register": "Precise, confident, benefit-led; explains money movement plainly",
     },
     "notion": {
         "file": ".tmp-notion-DESIGN.md",
@@ -361,6 +402,9 @@ BRANDS = {
         "site": "https://notion.com",
         "upstream": "https://github.com/voltagent/awesome-design-md/blob/main/design-md/notion/DESIGN.md",
         "intent_ref": "Notion — warm minimalism, serif headings, soft surfaces, workspace calm",
+        "direction": "warm editorial minimalism",
+        "signature": "Hand-drawn spot illustrations on calm ivory surfaces",
+        "voice_register": "Friendly, plain-spoken, lowercase-calm; tool talk without jargon",
     },
     "apple": {
         "file": ".tmp-apple-DESIGN.md",
@@ -369,6 +413,9 @@ BRANDS = {
         "site": "https://apple.com",
         "upstream": "https://github.com/voltagent/awesome-design-md/blob/main/design-md/apple/DESIGN.md",
         "intent_ref": "Apple marketing — premium whitespace, SF Pro, cinematic product photography",
+        "direction": "cinematic product minimalism",
+        "signature": "Full-bleed product photography carrying entire sections; type stays out of its way",
+        "voice_register": "Declarative, rhythmic short lines; superlatives spent sparingly",
     },
     "linear": {
         "file": ".tmp-linear.app-DESIGN.md",
@@ -377,6 +424,9 @@ BRANDS = {
         "site": "https://linear.app",
         "upstream": "https://github.com/voltagent/awesome-design-md/blob/main/design-md/linear.app/DESIGN.md",
         "intent_ref": "Linear.app — ultra-minimal dark SaaS, lavender accent, product screenshots as hero",
+        "direction": "dark precision software",
+        "signature": "Glass-and-glow product panels floating on near-black",
+        "voice_register": "Crisp, opinionated, low-noise; states positions without hedging",
     },
     "supabase": {
         "file": ".tmp-supabase-DESIGN.md",
@@ -385,6 +435,9 @@ BRANDS = {
         "site": "https://supabase.com",
         "upstream": "https://github.com/voltagent/awesome-design-md/blob/main/design-md/supabase/DESIGN.md",
         "intent_ref": "Supabase — dark emerald developer platform, code-first documentation aesthetic",
+        "direction": "dark developer utility",
+        "signature": "A single emerald accent on near-black, code-first surfaces",
+        "voice_register": "Direct, docs-like, developer-native; commands over descriptions",
     },
 }
 
@@ -429,11 +482,22 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     lines.append("")
     lines.append("intent:")
     lines.append(f"  reference: {yaml_quote(cfg['intent_ref'])}")
+    if cfg.get("direction"):
+        lines.append(f"  direction: {yaml_quote(cfg['direction'])}")
+    if cfg.get("signature"):
+        lines.append(f"  signature: {yaml_quote(cfg['signature'])}")
     lines.append("  density: comfortable")
     lines.append("  trust: high")
     lines.append("  energy: medium")
     lines.append("  playfulness: low")
     lines.append("")
+    if cfg.get("voice_register"):
+        lines.append("voice:")
+        lines.append(f"  register: {yaml_quote(cfg['voice_register'])}")
+        lines.append("  casing: sentence")
+        lines.append('  action_naming: "Button labels name the exact action; the same verb carries through the flow"')
+        lines.append('  errors: "State what happened, why, and the next step; never blame the user"')
+        lines.append("")
     lines.append("targets:")
     lines.append("  - web")
     lines.append("")
@@ -577,7 +641,8 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     lines.append("integrations:")
     lines.append("  shadcn:")
     lines.append("    enabled: true")
-    lines.append("    style: new-york")
+    lines.append("    style: new-york            # legacy style; current styles: see SPEC §7.1")
+    lines.append("    icon_library: lucide")
     lines.append("    css_variables: true")
     lines.append("    base_color: neutral")
     lines.append("    css: app/globals.css")
@@ -586,12 +651,40 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     lines.append('      components: "@/components"')
     lines.append('      utils: "@/lib/utils"')
     lines.append('      ui: "@/components/ui"')
+    lines.append('      lib: "@/lib"')
+    lines.append('      hooks: "@/hooks"')
     radius_base = rounded.get("md") or rounded.get("lg") or "0.5rem"
     lines.append(f"    radius: {yaml_quote(radius_base)}")
     lines.append("    css_vars:")
+    lines.append("      theme:")
+    lines.append(f"        radius: {yaml_quote(radius_base)}")
     mode = "dark" if sh["is_dark_marketing"] else "light"
     lines.append(f"      {mode}:")
-    for k, v in sh["light"].items():
+    vars_full = dict(sh["light"])
+    # sidebar defaults mirror background / primary / accent / border / ring
+    vars_full.update(
+        {
+            "sidebar": vars_full["background"],
+            "sidebar-foreground": vars_full["foreground"],
+            "sidebar-primary": vars_full["primary"],
+            "sidebar-primary-foreground": vars_full["primary-foreground"],
+            "sidebar-accent": vars_full["accent"],
+            "sidebar-accent-foreground": vars_full["accent-foreground"],
+            "sidebar-border": vars_full["border"],
+            "sidebar-ring": vars_full["ring"],
+        }
+    )
+    # chart-1..5 from distinct brand accents when the palette provides them
+    chart_candidates = []
+    for key in ("link", "violet", "cyan", "success", "warning", "highlight-pink",
+                "error", "accent", "primary"):
+        val = colors.get(key)
+        if val and val not in chart_candidates:
+            chart_candidates.append(val)
+    if len(chart_candidates) >= 5:
+        for i, val in enumerate(chart_candidates[:5], start=1):
+            vars_full[f"chart-{i}"] = val
+    for k, v in vars_full.items():
         lines.append(f"        {k}: {yaml_quote(v)}")
     lines.append("    map_from_tokens:")
     lines.append("      background: tokens.color.canvas|tokens.color.surface|tokens.color.background")

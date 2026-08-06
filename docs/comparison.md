@@ -19,21 +19,21 @@ flowchart TB
   end
 
   GD -->|bootstrap examples| D
-  GMD -.->|complementary prose+YAML| D
+  GMD -.->|"lossless import (0.4.0)"| D
   DTCG -.->|export target| D
   AG -->|points agents at| D
   CD -->|sync into| D
   V0 -->|sync into| D
-  D -->|orchestrates theme| SH
+  D -->|orchestrates theme + registry item| SH
 ```
 
 | Format / product | Role vs `.design` |
 | --- | --- |
-| [Google DESIGN.md](https://github.com/google-labs-code/design.md) | Complementary MD+YAML identity doc; `.design` imports it **losslessly** and adds policy, lifecycle, voice, and shadcn orchestration. Field map: [design-md-mapping.md](design-md-mapping.md) |
+| [Google DESIGN.md](https://github.com/google-labs-code/design.md) | Complementary MD+YAML identity doc, now with its own CLI. `.design` is its own format that imports DESIGN.md **losslessly** — complete mapping, verified against DESIGN.md 0.4.0 — and adds policy, lifecycle, voice, treatment, and shadcn orchestration. Field map: [design-md-mapping.md](design-md-mapping.md) |
 | [DTCG](https://www.designtokens.org/) | Token exchange format — export `tokens.*`; do not replace the living contract |
 | [AGENTS.md](https://agents.md/) | Repo behavior — point it at `.design` for UI work |
 | [getdesign.md](https://getdesign.md/) | Brand DESIGN.md analyses — great bootstrap source → convert to `.design` |
-| [shadcn/ui](https://ui.shadcn.com/) | Component + theme runtime — orchestrated via `integrations.shadcn` |
+| [shadcn/ui](https://ui.shadcn.com/) | Component + theme runtime — current model: styles (`vega`, `nova`, … ; `new-york` legacy), primitive `base` choice (`base` \| `radix` \| `react-aria`), namespaced registries, MCP server. Orchestrated via `integrations.shadcn`; a distributable theme ships via `exports.shadcn_registry` (`registry:theme` item) |
 | Claude Design / Stitch / Figma | Extraction UIs — merge results into repo-canonical `.design` |
 | skills.sh Agent Skills | Procedure layer — `skills/design` teaches READ/FOLLOW/UPDATE/VERIFY |
 
@@ -46,6 +46,9 @@ flowchart TB
 | Agent repo instructions | `AGENTS.md` → `.design` |
 | Taste inspiration from a public brand | getdesign.md → example → adapt |
 | React/Tailwind primitives | shadcn + `integrations.shadcn` |
+| Enforceable UI copy rules (register, casing, terminology, error style) | `voice` — applied with token force |
+| Marketing boldness vs product restraint per surface | `intent.treatment` + `patterns.<name>.treatment` overrides |
+| Distribute the theme to other shadcn projects | `exports.shadcn_registry` (`registry:theme` item, installable via shadcn CLI) |
 
 ## What `.design` deliberately is not
 

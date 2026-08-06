@@ -22,7 +22,13 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 - Constraint-authoring guidance (SPEC §16.1); expanded validation table (collisions, token-like unknown keys, missing primary/typography, section order)
 - Skill: treatment calibration, plan → critique → confirm → write bootstrap, adjacent-signal scanning, post-generation self-check, tiered reading
 - CRAFT bar: major expansion — typography/color-scale/surface numbers, iconography & illustration, gestures & direct manipulation, performance, information architecture, default-looks-to-avoid catalogue
-- CI: schema validation of all examples + format lint rules
+- Typography `fontFamily` stacks / `fallbacks`; `tokens.background` atmosphere group (gradients, mesh, noise)
+- `policy.color.accent_cycle` (ordered decorative accent rotation); `decisions.*` generalized beyond components (token-role rules such as `decisions.typography`)
+- Verify reports added/removed/modified per token group plus a regression flag
+- Canonical `agent.instructions` template covers voice, treatment, signature, and tiered reading (SPEC §8, docs, converter, examples)
+- Examples now carry `intent.direction`/`signature`, `voice`, sidebar/chart CSS variables, and `css_vars.theme`
+- Linter: WCAG contrast checks (component bags + shadcn fg/bg pairs), alias-collision detection, orphan-token summary, instruction-duty coverage
+- CI: schema validation of all examples + format lint rules + banned-reference leak guard; `.gitattributes` line-ending normalization
 
 ### Fixed
 

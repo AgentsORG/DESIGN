@@ -25,3 +25,10 @@ jobs:
           test -f skills/design/SKILL.md
           test -f docs/INDEX.md
           echo core files ok
+      - name: Guard against private-source mentions
+        run: |
+          if git grep -I -i -n -E "aiforui|kowalski|animations\.dev|emilkowal|antalik|easings?\.(dev|co)|index\.how" -- ':!.github/workflows/validate.yml'; then
+            echo "::error::banned reference found in tracked files"
+            exit 1
+          fi
+          echo leak guard ok

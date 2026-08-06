@@ -186,7 +186,18 @@
                 "type": "object",
                 "additionalProperties": true,
                 "properties": {
-                  "fontFamily": { "type": "string" },
+                  "fontFamily": {
+                    "oneOf": [
+                      { "type": "string" },
+                      { "type": "array", "items": { "type": "string" } }
+                    ],
+                    "description": "Brand face, or a stack (comma list / array) whose tail is the fallback chain."
+                  },
+                  "fallbacks": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Ordered fallback faces when the primary is unavailable."
+                  },
                   "fontSize": { "type": ["string", "number"] },
                   "fontWeight": { "type": ["string", "number"] },
                   "lineHeight": { "type": ["string", "number"] },
@@ -246,6 +257,11 @@
             }
           },
           "description": "Default icon set, stroke rules, and sizes."
+        },
+        "background": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" },
+          "description": "Atmosphere treatments: gradients, mesh, noise/grain, patterns."
         }
       }
     },
@@ -430,6 +446,17 @@
         "accessibility": {
           "type": "object",
           "additionalProperties": true
+        },
+        "color": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "accent_cycle": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Ordered tokens.color names that decorative non-text elements rotate through; text color chosen by contrast."
+            }
+          }
         },
         "responsive": {
           "type": "object",

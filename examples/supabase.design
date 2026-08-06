@@ -14,15 +14,19 @@ agent:
     If the skill is absent, follow these instructions exactly.
     
     READ
-    - Load this entire file before any UI generation or restyle.
-    - Order: overview/intent -> constraints -> policy/decisions -> tokens -> rationale -> components/patterns -> integrations -> locked.
+    - Load this file before any UI generation or restyle. Large file? Normative core first
+      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+    - Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
     - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
     
     FOLLOW (generate or edit UI)
+    - Calibrate treatment per surface: patterns.<name>.treatment > intent.treatment
+      (utilitarian = restrained product craft; editorial = distinctive identity).
     - Prefer catalog components; obey when / when_not and decisions.* (first match wins).
     - Bind every listed component property (backgroundColor, textColor, typography, rounded, padding, size, height, width).
     - Never invent raw hex/spacing/radius when a token exists.
-    - Apply patterns.*; enforce constraints.always / never.
+    - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
+    - Concentrate boldness in intent.signature; keep everything around it quiet.
     - Match the project's existing styling stack - do not switch stacks.
     - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
     - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
@@ -58,10 +62,18 @@ overview: |
 
 intent:
   reference: "Supabase \u2014 dark emerald developer platform, code-first documentation aesthetic"
+  direction: dark developer utility
+  signature: "A single emerald accent on near-black, code-first surfaces"
   density: comfortable
   trust: high
   energy: medium
   playfulness: low
+
+voice:
+  register: "Direct, docs-like, developer-native; commands over descriptions"
+  casing: sentence
+  action_naming: "Button labels name the exact action; the same verb carries through the flow"
+  errors: "State what happened, why, and the next step; never blame the user"
 
 targets:
   - web
@@ -604,7 +616,8 @@ omitted:
 integrations:
   shadcn:
     enabled: true
-    style: new-york
+    style: new-york            # legacy style; current styles: see SPEC §7.1
+    icon_library: lucide
     css_variables: true
     base_color: neutral
     css: app/globals.css
@@ -613,8 +626,12 @@ integrations:
       components: "@/components"
       utils: "@/lib/utils"
       ui: "@/components/ui"
+      lib: "@/lib"
+      hooks: "@/hooks"
     radius: "8px"
     css_vars:
+      theme:
+        radius: "8px"
       light:
         background: "#ffffff"
         foreground: "#171717"
@@ -627,13 +644,21 @@ integrations:
         secondary: "#f4f4f5"
         secondary-foreground: "#171717"
         muted: "#f4f4f5"
-        muted-foreground: "#71717a"
+        muted-foreground: "#171717"
         accent: "#f4f4f5"
         accent-foreground: "#171717"
         destructive: "#dc2626"
         border: "#dfdfdf"
         input: "#dfdfdf"
         ring: "#3ecf8e"
+        sidebar: "#ffffff"
+        sidebar-foreground: "#171717"
+        sidebar-primary: "#3ecf8e"
+        sidebar-primary-foreground: "#171717"
+        sidebar-accent: "#f4f4f5"
+        sidebar-accent-foreground: "#171717"
+        sidebar-border: "#dfdfdf"
+        sidebar-ring: "#3ecf8e"
     map_from_tokens:
       background: tokens.color.canvas|tokens.color.surface|tokens.color.background
       foreground: tokens.color.ink|tokens.color.text|tokens.color.foreground

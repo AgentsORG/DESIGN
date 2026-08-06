@@ -31,15 +31,19 @@ cp examples/supabase.design ./.design
 cp examples/apple.design ./.design
 ```
 
-Edit `name`, `overview`, `intent.reference`, and `tokens` to match your product. Pipeline notes: [getdesign.md](getdesign.md).
+Edit `name`, `overview`, `intent` (`reference`, `direction`, `signature`), `voice`, and `tokens` to match your product. Pipeline notes: [getdesign.md](getdesign.md).
+
+Every valid file embeds `agent.instructions` — the canonical template ([self-contained.md](self-contained.md)) covers voice, per-surface treatment calibration, signature focus, and tiered reading for large files — so a drag-dropped file works even without the skill installed.
 
 ## 3. Wire AGENTS.md
 
 ```markdown
 ## Design
 - Before UI work: read `./.design` (or nearest `*.design`).
+  For large files, load the normative core first (intent, constraints,
+  policy/decisions, tokens, components, voice, locked); rationale on demand.
 - Install/activate skill `design` when available.
-- Follow tokens and components; edit `.design` when the system changes.
+- Follow tokens, components, and voice; edit `.design` when the system changes.
 - If `integrations.shadcn.enabled`, apply CSS vars to globals.css and prefer shadcn UI.
 - Ask before changing paths listed in `locked`.
 ```
@@ -81,7 +85,8 @@ Full guide: [shadcn.md](shadcn.md).
 
 - [ ] `.design` or `*.design` at package/repo root  
 - [ ] `schema: design.v1`  
-- [ ] `intent.reference` is a specific sentence  
+- [ ] `agent.instructions` present (required — template: [self-contained.md](self-contained.md))  
+- [ ] `intent.reference` is a specific sentence (add `direction` + `signature` when known)  
 - [ ] `tokens` cover color + type at minimum  
 - [ ] `AGENTS.md` points at the file  
 - [ ] Skill installed (optional but recommended) — includes CRAFT defaults when contract is silent  
