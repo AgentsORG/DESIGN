@@ -39,8 +39,37 @@
     "targets": {
       "type": "array",
       "items": {
-        "type": "string"
-      }
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["name"],
+            "additionalProperties": true,
+            "properties": {
+              "name": { "type": "string" },
+              "external_assets": { "type": "boolean" },
+              "single_file": { "type": "boolean" },
+              "notes": { "type": "string" }
+            }
+          }
+        ]
+      },
+      "description": "Target surfaces; object form declares environment constraints (e.g. no external assets, single-file output)."
+    },
+    "voice": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "register": { "type": "string" },
+        "casing": { "type": "string" },
+        "terminology": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "action_naming": { "type": "string" },
+        "errors": { "type": "string" }
+      },
+      "description": "UI copy contract: register, casing, system-term → user-term map, action-name continuity, error style."
     },
     "extends": {
       "type": "array",
@@ -72,21 +101,34 @@
           "type": "string",
           "minLength": 1
         },
+        "direction": {
+          "type": "string",
+          "description": "Committed aesthetic direction (e.g. minimal, editorial, brutalist, industrial, retro-futuristic)."
+        },
+        "signature": {
+          "type": "string",
+          "description": "One sentence naming the single distinctive element that carries the design."
+        },
+        "treatment": {
+          "type": "string",
+          "enum": ["utilitarian", "editorial"],
+          "description": "Default rendering register: restrained product craft vs distinctive identity."
+        },
         "density": {
           "type": "string",
-          "enum": ["compact", "comfortable", "spacious"]
+          "examples": ["compact", "comfortable", "spacious"]
         },
         "trust": {
           "type": "string",
-          "enum": ["low", "medium", "high"]
+          "examples": ["low", "medium", "high"]
         },
         "energy": {
           "type": "string",
-          "enum": ["low", "medium", "high"]
+          "examples": ["low", "medium", "high"]
         },
         "playfulness": {
           "type": "string",
-          "enum": ["low", "medium", "high"]
+          "examples": ["low", "medium", "high"]
         },
         "emotion": {
           "type": "string"
@@ -131,9 +173,7 @@
       "properties": {
         "color": {
           "type": "object",
-          "additionalProperties": {
-            "type": ["string", "number", "object"]
-          }
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" }
         },
         "typography": {
           "type": "object",
@@ -160,15 +200,11 @@
         },
         "spacing": {
           "type": "object",
-          "additionalProperties": {
-            "type": ["string", "number"]
-          }
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" }
         },
         "radius": {
           "type": "object",
-          "additionalProperties": {
-            "type": ["string", "number"]
-          }
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" }
         },
         "motion": {
           "type": "object",
@@ -181,7 +217,35 @@
         },
         "border": {
           "type": "object",
-          "additionalProperties": true
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" }
+        },
+        "breakpoint": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" },
+          "description": "Named viewport thresholds (sm, md, lg, content-max, …)."
+        },
+        "opacity": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" },
+          "description": "Opacity scale; prefer 0–1 values for CSS."
+        },
+        "zIndex": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number"] },
+          "description": "Stacking scale (nav, modal, toast, …)."
+        },
+        "iconography": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "set": { "type": "string" },
+            "stroke": { "type": ["string", "number"] },
+            "sizes": {
+              "type": "object",
+              "additionalProperties": { "type": ["string", "number"] }
+            }
+          },
+          "description": "Default icon set, stroke rules, and sizes."
         }
       }
     },
@@ -195,7 +259,7 @@
       "type": "object",
       "description": "Catalog components and/or DESIGN.md flat property bags.",
       "additionalProperties": {
-        "oneOf": [
+        "anyOf": [
           { "$ref": "#/$defs/component" },
           { "$ref": "#/$defs/componentPropertyBag" }
         ]
@@ -246,6 +310,11 @@
       "additionalProperties": true,
       "properties": {
         "default": { "type": "string" },
+        "single": {
+          "type": "boolean",
+          "description": "Deliberately single-theme system (suppresses missing-mode warnings)."
+        },
+        "reason": { "type": "string" },
         "modes": {
           "type": "object",
           "additionalProperties": {
@@ -263,8 +332,33 @@
       "additionalProperties": true,
       "properties": {
         "dtcg": { "type": "object", "additionalProperties": true },
-        "css": { "type": "object", "additionalProperties": true },
+        "css": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "path": { "type": "string" },
+            "selector": { "type": "string" },
+            "prefix": { "type": "string" },
+            "mode_strategy": {
+              "type": "string",
+              "enum": ["media-query", "data-attribute", "both"]
+            },
+            "attribute": { "type": "string" }
+          }
+        },
         "tailwind": { "type": "object", "additionalProperties": true },
+        "shadcn_registry": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "path": { "type": "string" },
+            "type": {
+              "type": "string",
+              "examples": ["registry:theme", "registry:style", "registry:base"]
+            }
+          },
+          "description": "shadcn registry item so the brand theme installs anywhere via the shadcn CLI."
+        },
         "style_dictionary": { "type": "object", "additionalProperties": true },
         "ios": { "type": "object", "additionalProperties": true },
         "android": { "type": "object", "additionalProperties": true }
@@ -301,6 +395,10 @@
           "prioritize": {
             "type": "array",
             "items": { "type": "string" }
+          },
+          "treatment": {
+            "type": "string",
+            "enum": ["utilitarian", "editorial"]
           }
         }
       }
@@ -412,12 +510,36 @@
     }
   },
   "$defs": {
+    "tokenNode": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" }
+        }
+      ],
+      "description": "Token leaf (string/number) or nested group (depth ≤ 20); referenced by full dot path."
+    },
     "shadcnIntegration": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
         "enabled": { "type": "boolean" },
         "style": { "type": "string" },
+        "base": {
+          "type": "string",
+          "description": "Primitive library the project is built on (base | radix | react-aria). Never mix bases.",
+          "examples": ["base", "radix", "react-aria"]
+        },
+        "icon_library": {
+          "type": "string",
+          "examples": ["lucide", "radix", "tabler"]
+        },
+        "preset": {
+          "type": "string",
+          "description": "components.json init preset combining base + style (e.g. base-nova)."
+        },
         "css_variables": { "type": "boolean" },
         "base_color": { "type": "string" },
         "css": { "type": "string" },
@@ -429,12 +551,47 @@
           "type": "object",
           "additionalProperties": { "type": "string" }
         },
+        "registries": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "required": ["url"],
+                "additionalProperties": true,
+                "properties": {
+                  "url": { "type": "string" },
+                  "headers": {
+                    "type": "object",
+                    "additionalProperties": { "type": "string" }
+                  },
+                  "params": {
+                    "type": "object",
+                    "additionalProperties": { "type": "string" }
+                  }
+                }
+              }
+            ]
+          },
+          "description": "@namespace → registry URL (or {url, headers, params}). Use ${ENV_VAR} for secrets; never inline them."
+        },
+        "components": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Canonical items to install (names, @namespace/name, or URLs)."
+        },
+        "mcp": {
+          "type": "boolean",
+          "description": "Hint that the shadcn MCP server is available for search/view/add."
+        },
         "css_vars": {
           "type": "object",
           "additionalProperties": {
             "type": "object",
             "additionalProperties": { "type": ["string", "number"] }
-          }
+          },
+          "description": "Mode → variable map. Keys: light, dark, and optional theme (mode-independent vars: radius, fonts, tracking)."
         },
         "map_from_tokens": {
           "type": "object",
@@ -475,6 +632,16 @@
     "component": {
       "type": "object",
       "additionalProperties": true,
+      "if": {
+        "required": ["variants"],
+        "properties": { "variants": { "type": "array", "minItems": 1 } }
+      },
+      "then": {
+        "anyOf": [
+          { "required": ["when"] },
+          { "required": ["when_not"] }
+        ]
+      },
       "properties": {
         "description": { "type": "string" },
         "import": { "type": "string" },
@@ -513,14 +680,19 @@
     },
     "componentPropertyBag": {
       "type": "object",
-      "description": "DESIGN.md component property tokens (plus aliases).",
+      "description": "DESIGN.md component property tokens (plus aliases). Unknown properties accepted (string/number/boolean) per consumer rules.",
       "additionalProperties": {
-        "type": ["string", "number"]
+        "type": ["string", "number", "boolean"]
       },
       "properties": {
         "backgroundColor": { "type": ["string", "number"] },
         "textColor": { "type": ["string", "number"] },
-        "typography": { "type": ["string", "number"] },
+        "typography": {
+          "oneOf": [
+            { "type": ["string", "number"] },
+            { "type": "object", "additionalProperties": true }
+          ]
+        },
         "rounded": { "type": ["string", "number"] },
         "padding": { "type": ["string", "number"] },
         "size": { "type": ["string", "number"] },

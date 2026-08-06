@@ -12,7 +12,7 @@ description: >
 license: MIT
 metadata:
   author: AgentsORG
-  version: "1.0"
+  version: "1.1"
   spec: design.v1
 ---
 
@@ -36,6 +36,8 @@ Project `.design` always beats generic frontend/taste skills. User chat can over
 4. Resolve `extends` depth-first; child overrides parent; cycles = error — stop and report.
 5. If no file exists and UI work is requested, offer **bootstrap** (do not invent an invisible system).
 
+When bootstrapping or extracting, scan **adjacent design signals** before proposing anything: design notes in `AGENTS.md` / `CLAUDE.md`, an existing `DESIGN.md`, `globals.css` / theme files, Tailwind config, `components.json`, Storybook. Extract the full visual vocabulary — not just hex values: density, elevation language, hover/motion character, copy tone. Record what you scanned in `sources`.
+
 Load order once found:
 
 1. `agent.instructions`
@@ -52,13 +54,17 @@ Load order once found:
 
 ## 2. Read
 
-Treat tokens and structured rules as **normative**. Use `intent.reference` and `overview` for taste. Adjective-only intent without a specific reference is weak — prefer the reference sentence.
+Treat tokens and structured rules as **normative**. Use `intent.reference` and `overview` for taste. Adjective-only intent without a specific reference is weak — prefer the reference sentence. When present, `intent.direction` is the committed aesthetic direction and `intent.signature` is where boldness concentrates — everything else stays quiet.
+
+For large files, read in tiers (SPEC §8.1): the normative core (`agent`, `intent`, `constraints`, `policy`, `decisions`, `tokens`, `components`, `locked`, `themes`, `voice`) MUST load before UI work; long `rationale.*` sections MAY load on demand per task.
 
 **Self-contained:** every valid file MUST include `agent.instructions`. If you were given only this file (drag-drop / @-mention) and the skill package is missing, obey `agent.instructions` in the file — it duplicates the essential READ → FOLLOW → UPDATE → VERIFY loop.
 
 If `agent.skill` is `design`, you are on the correct procedure.
 
 ## 3. Follow (generate / edit UI)
+
+First calibrate **treatment** for the surface: `patterns.<name>.treatment` > `intent.treatment` > request type (memo/dashboard/internal tool → `utilitarian`; landing/marketing/keepsake → `editorial`). Utilitarian surfaces get restrained product craft; only editorial surfaces run the distinctive-identity register.
 
 Walk this loop every time:
 
@@ -85,9 +91,17 @@ Need UI change?
 
 Preserve `policy.hierarchy` when trading off (default: typography → spacing → contrast → color).
 
-Then apply craft defaults from [references/CRAFT.md](references/CRAFT.md) wherever `.design` is silent (hierarchy, surfaces, motion, a11y, copy). **`.design` wins** on conflict.
+Then apply craft defaults from [references/CRAFT.md](references/CRAFT.md) wherever `.design` is silent (hierarchy, surfaces, motion, a11y, copy). **`.design` wins** on conflict. Apply `voice` to all UI copy with the same force as tokens.
 
-After generating, cite which tokens and components you used.
+**Self-check before finishing** (report inline):
+
+- Every `constraints.never` item absent; `constraints.always` items present
+- One primary emphasis per view; boldness only in the signature
+- No raw hex/spacing/radius where a token exists
+- Both theme modes legible (or `themes.single` declared)
+- No catalogued default look (CRAFT "Default looks to avoid") claimed by accident
+
+Then cite which tokens and components you used.
 
 Detailed trees: [references/APPLY.md](references/APPLY.md). Craft: [references/CRAFT.md](references/CRAFT.md). shadcn: [docs/shadcn.md](../../docs/shadcn.md).
 
@@ -99,9 +113,16 @@ Edit the `.design` file **in place**. Git is the history — do not invent an in
 | --- | --- |
 | Path in `locked` | Ask the user before changing |
 | Unlocked path + user asked to update | Edit file; bump `version` + `updated_at` |
-| Bootstrap / extract | Fill draft; set `status: bootstrap`; populate `sources` |
+| Bootstrap / extract | **Plan → critique → confirm → write** (below) |
 | Sync from Claude Design / Stitch / Figma | Merge into file; ask before overwriting locked keys |
 | Breaking change | Confirm with user; MAJOR SemVer bump |
+
+**Bootstrap / remix is a two-pass process.** The `.design` file *is* the design plan:
+
+1. **Plan** — draft the token proposal: 4–6 named colors, 2+ type roles (characterful display used sparingly, complementary body, utility face), one-line layout intent, and the `intent.signature`.
+2. **Critique** — ask: *would this plan be identical for any similar product?* If yes, it is a default, not a decision — revise before writing. Check it against the CRAFT "Default looks to avoid" catalogue.
+3. **Confirm** — for restyles, show a small swatch sheet (palette + type roles, both modes) and get user confirmation before mutating the contract.
+4. **Write** — fill the file, set `status: bootstrap`, populate `sources`; derive all subsequent UI only from the file.
 
 SemVer: MAJOR = breaking visual/API; MINOR = additive; PATCH = fix/clarify.
 
@@ -148,4 +169,3 @@ See [references/SPEC-SUMMARY.md](references/SPEC-SUMMARY.md).
 | [CRAFT.md](references/CRAFT.md) | Design-engineering bar when contract is silent |
 | [REVIEW.md](references/REVIEW.md) | Verify / critique |
 | [UPDATE.md](references/UPDATE.md) | In-place edit rules |
-| [ATTRIBUTION.md](references/ATTRIBUTION.md) | Craft source credits |

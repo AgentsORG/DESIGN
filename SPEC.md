@@ -119,6 +119,7 @@ Required:
 | `schema` | string | MUST be `design.v1` |
 | `name` | string | Short system identifier |
 | `version` | string | SemVer of the contract (e.g. `1.4.0`) |
+| `agent` | object | MUST contain `instructions` (§8) so the file is self-contained |
 
 Recommended:
 
@@ -128,9 +129,9 @@ Recommended:
 | `updated_at` | string | ISO-8601 timestamp |
 | `description` | string | One-line summary |
 | `overview` | string | Specific cultural/product reference narrative |
-| `agent` | object | Bootstrap instructions for agents |
 | `intent` | object | Typed intent + required `reference` when present |
-| `targets` | string[] | e.g. `web`, `mobile`, `presentation` |
+| `targets` | (string \| object)[] | e.g. `web`, `mobile`, `presentation`; object form declares environment constraints (§7.6) |
+| `voice` | object | UI copy contract (§13C) |
 | `extends` | string[] | Parent design files |
 | `sources` | object[] | Extraction provenance |
 | `tokens` | object | Normative design tokens |
@@ -151,9 +152,9 @@ Recommended:
 
 Unknown top-level keys: consumers MUST preserve them and SHOULD warn; they MUST NOT fail solely due to unknown keys (extension growth).
 
-### DESIGN.md parity
+### DESIGN.md interop
 
-`.design` is a **superset** of [Google DESIGN.md](https://github.com/google-labs-code/design.md) frontmatter + body. Nothing required for designing from a DESIGN.md analysis SHOULD be dropped:
+`.design` imports [Google DESIGN.md](https://github.com/google-labs-code/design.md) frontmatter + body **losslessly**. Nothing required for designing from a DESIGN.md analysis SHOULD be dropped:
 
 | DESIGN.md | `.design` |
 | --- | --- |
@@ -174,17 +175,23 @@ Full mapping: [docs/design-md-mapping.md](docs/design-md-mapping.md).
 
 When `integrations.shadcn.enabled` is true, agents MUST:
 
-1. Prefer installing/using shadcn components listed in the project (via CLI / registry) instead of inventing primitives.
-2. Write theme tokens into the CSS file referenced by `integrations.shadcn.css` using the [shadcn CSS variable convention](https://ui.shadcn.com/docs/theming) (`background`/`foreground`, `primary`/`primary-foreground`, …).
-3. Keep `components.json` fields in sync when initializing a project (`style`, `tailwind.cssVariables`, aliases).
+1. Prefer installing/using shadcn components listed in the project (via CLI / registry / MCP) instead of inventing primitives.
+2. Write theme tokens into the CSS file referenced by `integrations.shadcn.css` using the [shadcn CSS variable convention](https://ui.shadcn.com/docs/theming) (`background`/`foreground`, `primary`/`primary-foreground`, …) — the **full** current variable set, including `chart-1`…`chart-5` and the `sidebar-*` group, so Chart and Sidebar components theme correctly.
+3. Keep `components.json` fields in sync when initializing a project (`style`, `base`, `iconLibrary`, aliases, `registries`, `tailwind.cssVariables`). `tailwind.baseColor` and `tailwind.cssVariables` cannot be changed after init — restyle through `css_vars`, never by re-initializing.
+4. On Tailwind v4 projects, register any **custom** variable (beyond the standard set) under `@theme inline` in addition to `:root` / `.dark`, or no utility class can use it.
+5. Install brand components only from declared `registries` — never guess a registry namespace.
+6. Match the project's primitive `base` (`base` \| `radix` \| `react-aria`); never mix primitive libraries in one project.
 
 ```yaml
 integrations:
   shadcn:
     enabled: true
-    style: new-york          # components.json style (e.g. new-york, base-nova)
+    style: nova              # current styles: vega, nova, maia, lyra, mira, luma, rhea, sera (legacy: new-york)
+    base: base               # primitive library: base | radix | react-aria
+    icon_library: lucide
+    preset: base-nova        # optional init preset (base + style combo)
     css_variables: true      # MUST be true for token-driven theming
-    base_color: neutral      # init baseColor; brand comes from css_vars
+    base_color: neutral      # init-only; options: neutral, stone, zinc, mauve, olive, mist, taupe
     css: app/globals.css
     components_json: ./components.json
     rsc: true
@@ -193,8 +200,16 @@ integrations:
       components: "@/components"
       utils: "@/lib/utils"
       ui: "@/components/ui"
-    radius: "0.5rem"         # maps to --radius (base of radius scale)
+      lib: "@/lib"
+      hooks: "@/hooks"
+    registries:
+      "@acme": "https://registry.acme.com/{name}.json"   # ${ENV_VAR} for auth headers; never inline secrets
+    components: [button, card, input]    # canonical installs (names, @ns/name, or URLs)
+    mcp: true                # shadcn MCP server available for search/view/add
+    radius: "0.5rem"         # maps to --radius (base of derived radius-sm…radius-4xl scale)
     css_vars:
+      theme:                 # mode-independent vars (radius, fonts, tracking)
+        radius: "0.5rem"
       light:
         background: "#ffffff"
         foreground: "#0a0a0a"
@@ -214,10 +229,23 @@ integrations:
         card-foreground: "#0a0a0a"
         popover: "#ffffff"
         popover-foreground: "#0a0a0a"
+        chart-1: "#2a9d90"
+        chart-2: "#e76e50"
+        chart-3: "#274754"
+        chart-4: "#e8c468"
+        chart-5: "#f4a462"
+        sidebar: "#fafafa"
+        sidebar-foreground: "#0a0a0a"
+        sidebar-primary: "#0a0a0a"
+        sidebar-primary-foreground: "#fafafa"
+        sidebar-accent: "#f4f4f5"
+        sidebar-accent-foreground: "#0a0a0a"
+        sidebar-border: "#e4e4e7"
+        sidebar-ring: "#0a0a0a"
       dark:
         background: "#0a0a0a"
         foreground: "#fafafa"
-        # ...
+        # …same keys
     map_from_tokens:
       background: tokens.color.canvas
       foreground: tokens.color.ink
@@ -226,6 +254,11 @@ integrations:
       border: tokens.color.hairline
       ring: tokens.color.primary-focus
 ```
+
+Value notes:
+
+- `css_vars` values are any valid CSS color written **verbatim** into `:root` / `.dark` — never wrap in `hsl()`. Upstream shadcn ships `oklch()` values since Tailwind v4; hex is equally valid. Keep the format consistent with `tokens.*`.
+- `map_from_tokens` values are dot-paths into this file. The fallback form `a|b|c` means *first path that resolves wins* (useful for generated files mapping across brands).
 
 ### Relationship
 
@@ -312,6 +345,9 @@ Rules:
 - Base `tokens` are the shared defaults; mode objects **override** by path.
 - `integrations.shadcn.css_vars.light` / `.dark` SHOULD match `themes.modes.light` / `dark` when both exist; **tokens + themes win**.
 - Agents MUST generate UI for the active mode (user/OS preference or `themes.default`) and not invent a third palette.
+- Mode palettes MUST be **designed, not inverted**: dark mode preserves surface layering (the top canvas stays the lightest dark surface) and re-tunes accents; it is never a mechanical negative of light.
+- Deliberately single-theme systems SHOULD declare `themes: { single: true, reason: "…" }` so consumers do not warn about (or invent) a missing mode.
+- Recommended CSS emission: components consume variables only; modes redefine variables under `@media (prefers-color-scheme: dark)` **and** `:root[data-theme="dark"]` / `:root[data-theme="light"]` so an explicit toggle beats the OS preference in both directions (see `exports.css.mode_strategy`).
 
 ---
 
@@ -327,14 +363,25 @@ exports:
   css:
     path: "./src/styles/tokens.css"
     selector: ":root"
+    prefix: ""                      # optional var prefix
+    mode_strategy: both             # media-query | data-attribute | both
+    attribute: data-theme
   tailwind:
-    path: "./tailwind.theme.css"    # v4 @theme) or config fragment
+    path: "./tailwind.theme.css"    # v4 @theme CSS; version: 3 emits a theme.extend JSON fragment
     version: 4
+  shadcn_registry:
+    path: "./registry/brand-theme.json"
+    type: registry:theme            # registry:theme | registry:style | registry:base
   style_dictionary:
     config: "./sd.config.js"
   ios: { path: "./Sources/Tokens/Colors.swift" }
   android: { path: "./tokens/colors.xml" }
 ```
+
+Notes:
+
+- `shadcn_registry` maps `css_vars.light`/`dark` → registry-item `cssVars.light`/`dark` and mode-independent vars → `cssVars.theme`, producing a [registry item](https://ui.shadcn.com/docs/registry/registry-item-json) installable in any project via the shadcn CLI.
+- `css.mode_strategy: both` emits variables under the media query **and** the `data-theme` attribute selectors so explicit toggles override OS preference.
 
 Recommended pipeline:
 
@@ -365,6 +412,26 @@ assets:
 ```
 
 Paths only — never embed binaries. Clear-space / misuse rules belong in `rationale` or `constraints`.
+
+---
+
+## 7.6 Targets (environment constraints)
+
+`targets` entries MAY be objects that declare the constraints of the rendering environment, so agents adapt emission instead of shipping silently broken output:
+
+```yaml
+targets:
+  - web
+  - name: web-artifact
+    external_assets: false     # CSP blocks CDN fonts/scripts — inline everything, data-URI assets
+    single_file: true          # bundle to one self-contained HTML file
+    notes: "System font stack or embedded @font-face only"
+  - name: email
+    external_assets: true
+    notes: "Table layout; no custom properties"
+```
+
+When `external_assets: false`, agents MUST NOT emit external font/script/stylesheet URLs for that target — inline styles and assets, or fall back to system stacks.
 
 ---
 
@@ -414,6 +481,18 @@ Authors MAY shorten `instructions` only if every READ / FOLLOW / UPDATE / VERIFY
 
 Consumers that encounter a file **without** `agent.instructions` SHOULD warn and apply the portable skill (if present) or the template in docs/self-contained.md.
 
+### 8.1 Reading tiers (large files)
+
+Authors SHOULD keep a `.design` file readable in one pass. When a file grows large (long `rationale`, many components), consumers MAY read in tiers instead of loading everything up front:
+
+| Tier | Sections | Loading |
+| --- | --- | --- |
+| Normative core | `schema`, `agent`, `intent`, `constraints`, `policy`, `decisions`, `tokens`, `components`, `locked`, `themes`, `voice` | MUST load before generating UI |
+| Judgment | `overview`, `rationale.*`, `patterns`, `examples` | SHOULD load; MAY defer sections irrelevant to the task |
+| Tooling | `integrations`, `exports`, `assets`, `sources`, `provenance` | Load when performing that operation |
+
+Oversized narrative belongs in linked docs (via `examples.ref`-style paths), not inline.
+
 ---
 
 ## 9. Intent
@@ -421,6 +500,9 @@ Consumers that encounter a file **without** `agent.instructions` SHOULD warn and
 ```yaml
 intent:
   reference: "Linear density with marketplace clarity"
+  direction: editorial-minimal
+  signature: "The mesh-gradient hero band — everything else stays monochrome"
+  treatment: utilitarian
   density: comfortable
   trust: high
   energy: medium
@@ -430,7 +512,13 @@ intent:
 
 If `intent` is present, `intent.reference` MUST be present and SHOULD be a specific cultural or product reference (not a list of generic adjectives).
 
-Optional scale fields (`trust`, `energy`, `playfulness`, etc.) SHOULD use `low` \| `medium` \| `high` or documented enums such as `density`: `compact` \| `comfortable` \| `spacious`.
+| Field | Purpose |
+| --- | --- |
+| `direction` | The **committed** aesthetic direction, named (e.g. `minimal`, `editorial`, `brutalist`, `industrial`, `retro-futuristic`, `playful-geometric`). One named direction beats three adjectives. |
+| `signature` | The single distinctive element that carries the design. Boldness concentrates in the signature; everything around it stays quiet. |
+| `treatment` | Default register: `utilitarian` (polished, restrained product craft) or `editorial` (distinctive identity — landing pages, marketing). `patterns.<name>.treatment` overrides per surface. |
+
+Optional scale fields (`trust`, `energy`, `playfulness`, etc.) SHOULD use `low` \| `medium` \| `high` or documented scales such as `density`: `compact` \| `comfortable` \| `spacious`.
 
 ---
 
@@ -476,6 +564,21 @@ Tokens are normative. Agents MUST use token values instead of inventing raw colo
 
 Additional groups are allowed. Scale level names MAY be any descriptive string (`xs`, `sm`, `md`, `lg`, `xl`, `full`, `section`, …).
 
+Token groups MAY **nest** to arbitrary depth (RECOMMENDED ≤ 20 levels, matching DESIGN.md interop limits). Nested tokens are addressed by their full dot path:
+
+```yaml
+tokens:
+  color:
+    background:
+      light: "#ffffff"
+      dark: "#0a0a0a"
+  spacing:
+    inset:
+      sm: 8
+      md: 16
+# refs: {tokens.color.background.light}, {tokens.spacing.inset.md}
+```
+
 ```yaml
 tokens:
   breakpoint:
@@ -495,7 +598,16 @@ tokens:
     set: lucide
     stroke: 1.5
     sizes: { sm: 16, md: 20, lg: 24 }
+  motion:
+    duration: { fast: 150ms, base: 250ms, slow: 400ms }
+    easing:
+      enter: cubic-bezier(0.32, 0.72, 0, 1)
+      exit: cubic-bezier(0.4, 0, 1, 1)
+      move: ease-in-out
+    spring: { duration: 0.5s, bounce: 0 }
 ```
+
+Easing curves, durations, and spring configs SHOULD live here as shared tokens — new motion extends these, never introduces a parallel hand-typed set.
 
 ### 11.2 Value types
 
@@ -506,6 +618,13 @@ tokens:
 | Typography | object | see below |
 | Elevation | CSS shadow / filter string or structured object | `"0 4px 24px rgba(0,0,0,0.12)"` |
 | Token reference | `{dot.path}` | `"{tokens.color.primary}"` |
+
+Color semantics:
+
+- Hex `#RRGGBB` is the RECOMMENDED default authoring format; `oklch()` is RECOMMENDED when deriving scales programmatically.
+- Contrast checks compute in sRGB, but consumers MUST preserve the **authored** string for display and export.
+- Non-color strings found in color positions on import (gradients, `color-mix()` chains) are accepted as opaque strings with a warning — never dropped, never a crash.
+- When exporting to DESIGN.md, unitless `radius` numbers MUST gain a `px` suffix (DESIGN.md `rounded` accepts Dimensions only, units limited to `px`/`em`/`rem`); `spacing` numbers pass through.
 
 **Typography object** fields (DESIGN.md-compatible):
 
@@ -529,7 +648,8 @@ tokens:
   - `{rounded.X}` → `{tokens.radius.X}`
 - Inside `components`, references MAY point at composite typography objects (e.g. `{tokens.typography.label-md}`), matching DESIGN.md.
 - Elsewhere, references SHOULD resolve to primitive values.
-- Broken or circular references MUST fail validation.
+- A token value MAY reference another token; consumers MUST resolve chains up to depth **10** (matching DESIGN.md interop limits).
+- Broken or circular references MUST fail validation; exceeding reference depth (10) or nesting depth (20) is an error. Linters SHOULD suggest the nearest known token name on broken refs.
 
 ### 11.4 Elevation
 
@@ -565,7 +685,7 @@ Paths use dot notation from the document root. Agents MUST ask the user before e
 
 ## 13. Components
 
-Components are normative style contracts for UI atoms. This section is a **superset** of the [DESIGN.md Components](https://github.com/google-labs-code/design.md/blob/main/docs/spec.md) model: every DESIGN.md component property is representable, and `.design` adds catalog metadata (`when` / `when_not`, `import`, `decisions`) so agents do not lose usage rules during designing.
+Components are normative style contracts for UI atoms. This section represents the [DESIGN.md Components](https://github.com/google-labs-code/design.md/blob/main/docs/spec.md) model **completely**: every DESIGN.md component property is representable, and `.design` adds catalog metadata (`when` / `when_not`, `import`, `decisions`) so agents do not lose usage rules during designing.
 
 ### 13.1 Two valid encodings
 
@@ -664,7 +784,7 @@ Each property bag (flat entry or `tokens.<variant>`) MAY include:
 
 Canonical writers SHOULD prefer DESIGN.md names (`backgroundColor`, `textColor`, `rounded`) for interop. Readers MUST accept aliases (`background`, `foreground`, `radius`).
 
-Unknown property names: **accept with warning** (same consumer behavior as DESIGN.md) — do not strip during import.
+Unknown property names: **accept with warning** (same consumer behavior as DESIGN.md) — do not strip during import. Boolean scalar values in property bags MUST be accepted, not rejected. The same property reachable via two names (`background` **and** `backgroundColor`) with **different** values is a collision error.
 
 ### 13.4 Recommended component types
 
@@ -760,6 +880,35 @@ omitted:
 
 Each entry is either a string path/name or `{ section, reason? }`.
 
+Both namespaces are valid: DESIGN.md section/category names imported verbatim (`spacing`, `Do's and Don'ts`) and `.design`-native dot paths (`tokens.motion`). Do not rewrite imported names to dot paths — round-tripping breaks. Entries suppress the matching §19 warnings.
+
+---
+
+## 13C. Voice (UI copy contract)
+
+Words are design material. `voice` gives agents an enforceable home for copy rules that brand systems always carry and token files never do:
+
+```yaml
+voice:
+  register: "Plain, direct, technical-friendly. Confident, never cute."
+  casing: sentence            # UI casing default (labels, buttons, headings)
+  terminology:
+    webhook_endpoint: "notification URL"     # system term → user term
+    org: "workspace"
+  action_naming: "Button label names the exact action; the same verb carries through the flow (Publish → Published)."
+  errors: "State what happened, why, and the next step. Never blame the user."
+```
+
+| Field | Meaning |
+| --- | --- |
+| `register` | The product's voice in one or two sentences |
+| `casing` | `sentence` \| `title` \| custom note |
+| `terminology` | Map of internal/system terms → end-user vocabulary |
+| `action_naming` | Continuity rule for action labels across a flow |
+| `errors` | Error copy style rule |
+
+Agents writing UI copy MUST apply `voice` with the same force as `tokens`: end-user vocabulary, active voice, labels naming the exact action, error copy that states cause and fix.
+
 ---
 
 ## 14. Patterns
@@ -767,12 +916,17 @@ Each entry is either a string path/name or `{ section, reason? }`.
 ```yaml
 patterns:
   landing_hero:
+    treatment: editorial
     allowed: [headline, subhead, primary_cta, supporting_visual]
     forbidden: [stat_strip, floating_promo_chips]
     prioritize: []
+  settings_page:
+    treatment: utilitarian
+    allowed: [section_nav, field_groups, save_bar]
+    forbidden: [decorative_illustration]
 ```
 
-Patterns describe composition recipes, not full page trees.
+Patterns describe composition recipes, not full page trees. `treatment` overrides `intent.treatment` per surface: `utilitarian` surfaces get restrained product craft; `editorial` surfaces run the distinctive-identity register. A well-composed page is never the wrong answer; an over-designed identity sometimes is.
 
 ---
 
@@ -857,6 +1011,13 @@ examples:
 
 `ref` MAY be a relative path or URL. Binary assets are not embedded.
 
+### 16.1 Authoring constraints that work
+
+- Write constraints as **absolute or numeric laws** (`never`, `always`, `≤ 300ms`), not hedged prose (`try to`, `where appropriate`, `tasteful`). Hedged rules do not change agent behavior.
+- Pair non-obvious rules with their why (in `rationale.*`) so they generalize to cases the author never wrote down.
+- Encode judgment as decision procedures (`decisions.*` if→then, first match wins) rather than outcome descriptions.
+- A good file constrains **dimensions** (type, color, motion, backgrounds), names the **defaults to avoid**, and gives one **specific reference** — it does not dictate every pixel. Constrained direction plus execution freedom outperforms both extremes.
+
 ---
 
 ## 17. Provenance
@@ -899,13 +1060,20 @@ Consumers and linters SHOULD check:
 | Rule | Severity |
 | --- | --- |
 | Missing `schema` / `name` / `version` | error |
-| Broken `{token}` references | error |
+| Broken `{token}` references (SHOULD suggest nearest known token) | error |
 | Circular `extends` or token refs | error |
+| Token reference chain deeper than 10 / nesting deeper than 20 | error |
+| Alias or path collision — same property/token reachable via two names with different values | error |
 | Component with `variants` but no `when`/`when_not` | error |
 | `intent` without `reference` | error |
 | Edit to `locked` path without user ask | error |
-| Unknown top-level key | warning |
 | Missing `agent.instructions` | error |
+| Missing `tokens.color.primary` (unless in `omitted`) | warning |
+| Empty or missing `tokens.typography` (unless in `omitted`) | warning |
+| Unknown top-level key | warning |
+| Unknown top-level key whose value parses as a token-like map (silently ignored tokens) | warning |
+| Unknown typography sub-property | warning |
+| `rationale` sections out of canonical order (§13A) | warning |
 | Orphan color tokens never referenced | warning |
 | Contrast failures on component fg/bg pairs | warning |
 
@@ -1036,8 +1204,8 @@ This document defines **design.v1**. Future major schema versions (`design.v2`, 
 A file is **design.v1 conformant** when:
 
 1. It parses as a single YAML or JSON object.  
-2. It includes valid `schema`, `name`, and `version`.  
+2. It includes valid `schema`, `name`, `version`, and `agent.instructions`.  
 3. It satisfies the MUST rules in this document for the fields it uses.  
-4. Token references and `extends` graphs resolve without cycles.  
+4. Token references and `extends` graphs resolve without cycles (chain depth ≤ 10, nesting depth ≤ 20).  
 
 A consumer is **conformant** when it implements discovery (§4), precedence (§5), and the update rules (§18) for the operations it claims to support.

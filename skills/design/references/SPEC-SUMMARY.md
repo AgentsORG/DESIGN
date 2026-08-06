@@ -1,6 +1,6 @@
 # SPEC-SUMMARY — design.v1 field map
 
-Normative detail: [SPEC.md](../../SPEC.md). Schema: [schema/design.v1.schema.json](../../schema/design.v1.schema.json).
+Normative detail: [SPEC.md](../../../SPEC.md). Schema: [schema/design.v1.schema.json](../../../schema/design.v1.schema.json).
 
 ## Required
 
@@ -9,6 +9,7 @@ Normative detail: [SPEC.md](../../SPEC.md). Schema: [schema/design.v1.schema.jso
 | `schema` | MUST be `design.v1` |
 | `name` | System id |
 | `version` | SemVer of the contract |
+| `agent.instructions` | Self-contained drop-in procedure |
 
 ## Canonical (follow + update in place)
 
@@ -17,8 +18,9 @@ Normative detail: [SPEC.md](../../SPEC.md). Schema: [schema/design.v1.schema.jso
 | `status` | `bootstrap` \| `refine` \| `lock` \| `evolve` |
 | `overview` | Specific reference narrative |
 | `intent.reference` | Required if `intent` present |
-| `agent.instructions` | Drop-in process stub |
-| `tokens` | Normative color/type/spacing/radius/motion |
+| `intent.direction` / `signature` / `treatment` | Committed aesthetic, boldness budget, register |
+| `voice` | UI copy contract: register, casing, terminology, errors |
+| `tokens` | Normative color/type/spacing/radius/motion (groups may nest; full dot-path refs) |
 | `locked` | Dot-paths that require ask before edit |
 | `components` | Catalog + when/when_not + variants |
 | `patterns` | Composition recipes |
@@ -40,7 +42,7 @@ Normative detail: [SPEC.md](../../SPEC.md). Schema: [schema/design.v1.schema.jso
 
 Property bags MUST support: `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width` (aliases: `background`, `foreground`, `radius`). Variants MAY be nested under `tokens` or flat sibling keys (`button-primary-hover`). Bind every listed property when implementing.
 
-Craft defaults when silent: [CRAFT.md](CRAFT.md). See [docs/design-md-mapping.md](../../docs/design-md-mapping.md).
+Craft defaults when silent: [CRAFT.md](CRAFT.md). See [docs/design-md-mapping.md](../../../docs/design-md-mapping.md).
 
 ## Not in the format
 

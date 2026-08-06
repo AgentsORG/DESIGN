@@ -29,7 +29,7 @@ flowchart TB
 
 | Format / product | Role vs `.design` |
 | --- | --- |
-| [Google DESIGN.md](https://github.com/google-labs-code/design.md) | Complementary MD+YAML identity doc; `.design` is a YAML **superset** (tokens + rationale + policy + lifecycle + shadcn). Field map: [design-md-mapping.md](design-md-mapping.md) |
+| [Google DESIGN.md](https://github.com/google-labs-code/design.md) | Complementary MD+YAML identity doc; `.design` imports it **losslessly** and adds policy, lifecycle, voice, and shadcn orchestration. Field map: [design-md-mapping.md](design-md-mapping.md) |
 | [DTCG](https://www.designtokens.org/) | Token exchange format — export `tokens.*`; do not replace the living contract |
 | [AGENTS.md](https://agents.md/) | Repo behavior — point it at `.design` for UI work |
 | [getdesign.md](https://getdesign.md/) | Brand DESIGN.md analyses — great bootstrap source → convert to `.design` |

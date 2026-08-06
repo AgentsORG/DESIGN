@@ -35,4 +35,3 @@ When the contract is silent, agents apply the craft bar in [references/CRAFT.md]
 | [SKILL.md](SKILL.md) | Procedure |
 | [references/CRAFT.md](references/CRAFT.md) | Design-engineering defaults |
 | [references/REVIEW.md](references/REVIEW.md) | Critique / verify |
-| [references/ATTRIBUTION.md](references/ATTRIBUTION.md) | Craft source credits |

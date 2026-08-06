@@ -18,6 +18,7 @@ Complete guide to the AgentsORG **`.design`** format (design.v1).
 | Doc | Description |
 | --- | --- |
 | [self-contained.md](self-contained.md) | Drag-drop / in-file agent.instructions |
+| [drop-in.md](drop-in.md) | Install `.design` in a product repo |
 | [shadcn.md](shadcn.md) | Integrate [shadcn/ui](https://ui.shadcn.com/) |
 | [getdesign.md](getdesign.md) | Convert [getdesign.md](https://getdesign.md/) analyses |
 | [human-authoring.md](human-authoring.md) | Write a strong contract |

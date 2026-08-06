@@ -40,23 +40,21 @@ agent:
     DISCLAIMER
     Independent visual analysis - not affiliated with the named brand. Adapt before production use.
 
-
-
 overview: |
-  Linear's marketing canvas is the deepest dark surface in this collection — `{colors.canvas}` is #010102, essentially pure black with a faint blue tint. On top sits a four-step surface ladder (`{colors.surface-1}` through `{colors.surface-4}`) for cards, panels, and lifted tiles, with hairline borders running from `{colors.hairline}` (#23252a) up through `{colors.hairline-strong}` and `{colors.hairline-tertiary}`. Light gray text (`{colors.ink}` #f7f8f8) carries the body and headlines.
+  Linear's marketing canvas is the deepest dark surface in this collection — `{tokens.color.canvas}` is #010102, essentially pure black with a faint blue tint. On top sits a four-step surface ladder (`{tokens.color.surface-1}` through `{tokens.color.surface-4}`) for cards, panels, and lifted tiles, with hairline borders running from `{tokens.color.hairline}` (#23252a) up through `{tokens.color.hairline-strong}` and `{tokens.color.hairline-tertiary}`. Light gray text (`{tokens.color.ink}` #f7f8f8) carries the body and headlines.
   
-  The single chromatic accent is **Linear lavender-blue** `{colors.primary}` (#5e6ad2) — used on the brand mark, focus rings, and the primary CTA button. A lighter hover state (`{colors.primary-hover}` #828fff) and a focus-tinted variant (`{colors.primary-focus}` #5e69d1) extend the same hue. Linear avoids saturated greens, oranges, reds, etc. on the marketing canvas — the only semantic color is `{colors.semantic-success}` (#27a644) for status pills and the rare success indicator.
+  The single chromatic accent is **Linear lavender-blue** `{tokens.color.primary}` (#5e6ad2) — used on the brand mark, focus rings, and the primary CTA button. A lighter hover state (`{tokens.color.primary-hover}` #828fff) and a focus-tinted variant (`{tokens.color.primary-focus}` #5e69d1) extend the same hue. Linear avoids saturated greens, oranges, reds, etc. on the marketing canvas — the only semantic color is `{tokens.color.semantic-success}` (#27a644) for status pills and the rare success indicator.
   
   Display type runs Linear's custom sans (with `SF Pro Display` fallback) at weight 500–700 with negative letter-spacing scaling from -3.0px at 80px down to 0 at body. The body family is Linear's text cut, and a Linear Mono is reserved for code snippets in product screenshots.
   
-  The page rhythm is **dense product screenshots** — Linear's marketing leads with high-fidelity captures of the product UI (issue list, project view, dashboard) framed in `{colors.surface-1}` panels with `{rounded.xl}` 16px corners. The chrome is intentionally minimal so the app screenshots can do the heavy lifting.
+  The page rhythm is **dense product screenshots** — Linear's marketing leads with high-fidelity captures of the product UI (issue list, project view, dashboard) framed in `{tokens.color.surface-1}` panels with `{tokens.radius.xl}` 16px corners. The chrome is intentionally minimal so the app screenshots can do the heavy lifting.
   
   **Key Characteristics:**
-  - **Dark-canvas marketing system** — `{colors.canvas}` (#010102) is the deepest dark in this collection.
-  - **Lavender-blue brand accent** (`{colors.primary}` #5e6ad2) — used scarcely on brand mark, focus, and the primary CTA.
+  - **Dark-canvas marketing system** — `{tokens.color.canvas}` (#010102) is the deepest dark in this collection.
+  - **Lavender-blue brand accent** (`{tokens.color.primary}` #5e6ad2) — used scarcely on brand mark, focus, and the primary CTA.
   - Four-step surface ladder (canvas → surface-1 → surface-2 → surface-3 → surface-4) carries hierarchy without shadow.
   - Display tracking pulls aggressively negative (-3.0px at 80px); body holds at -0.05px.
-  - Cards use `{rounded.lg}` 12px corners with 1px hairline borders — never pill, rarely 16px.
+  - Cards use `{tokens.radius.lg}` 12px corners with 1px hairline borders — never pill, rarely 16px.
   - **Product UI screenshots** dominate the page. The marketing chrome is a dark frame for the app.
   - No second chromatic color. No atmospheric gradients. No spotlight cards.
 
@@ -76,8 +74,8 @@ sources:
     note: getdesign.md curated DESIGN.md analysis
   - type: url
     ref: https://linear.app
-  - type: file
-    path: https://github.com/voltagent/awesome-design-md/blob/main/design-md/linear.app/DESIGN.md
+  - type: url
+    ref: https://github.com/voltagent/awesome-design-md/blob/main/design-md/linear.app/DESIGN.md
     note: Upstream DESIGN.md (awesome-design-md)
   - type: other
     note: Independent analysis — not affiliated with the brand
@@ -205,8 +203,6 @@ tokens:
     xxl: "24px"
     pill: "9999px"
     full: "9999px"
-  elevation:
-    note: "See rationale.elevation for brand depth model; add concrete shadow tokens as they stabilize."
 
 locked:
   - tokens.color.primary
@@ -444,53 +440,53 @@ components:
 
 rationale:
   overview: |
-    Linear's marketing canvas is the deepest dark surface in this collection — `{colors.canvas}` is #010102, essentially pure black with a faint blue tint. On top sits a four-step surface ladder (`{colors.surface-1}` through `{colors.surface-4}`) for cards, panels, and lifted tiles, with hairline borders running from `{colors.hairline}` (#23252a) up through `{colors.hairline-strong}` and `{colors.hairline-tertiary}`. Light gray text (`{colors.ink}` #f7f8f8) carries the body and headlines.
+    Linear's marketing canvas is the deepest dark surface in this collection — `{tokens.color.canvas}` is #010102, essentially pure black with a faint blue tint. On top sits a four-step surface ladder (`{tokens.color.surface-1}` through `{tokens.color.surface-4}`) for cards, panels, and lifted tiles, with hairline borders running from `{tokens.color.hairline}` (#23252a) up through `{tokens.color.hairline-strong}` and `{tokens.color.hairline-tertiary}`. Light gray text (`{tokens.color.ink}` #f7f8f8) carries the body and headlines.
     
-    The single chromatic accent is **Linear lavender-blue** `{colors.primary}` (#5e6ad2) — used on the brand mark, focus rings, and the primary CTA button. A lighter hover state (`{colors.primary-hover}` #828fff) and a focus-tinted variant (`{colors.primary-focus}` #5e69d1) extend the same hue. Linear avoids saturated greens, oranges, reds, etc. on the marketing canvas — the only semantic color is `{colors.semantic-success}` (#27a644) for status pills and the rare success indicator.
+    The single chromatic accent is **Linear lavender-blue** `{tokens.color.primary}` (#5e6ad2) — used on the brand mark, focus rings, and the primary CTA button. A lighter hover state (`{tokens.color.primary-hover}` #828fff) and a focus-tinted variant (`{tokens.color.primary-focus}` #5e69d1) extend the same hue. Linear avoids saturated greens, oranges, reds, etc. on the marketing canvas — the only semantic color is `{tokens.color.semantic-success}` (#27a644) for status pills and the rare success indicator.
     
     Display type runs Linear's custom sans (with `SF Pro Display` fallback) at weight 500–700 with negative letter-spacing scaling from -3.0px at 80px down to 0 at body. The body family is Linear's text cut, and a Linear Mono is reserved for code snippets in product screenshots.
     
-    The page rhythm is **dense product screenshots** — Linear's marketing leads with high-fidelity captures of the product UI (issue list, project view, dashboard) framed in `{colors.surface-1}` panels with `{rounded.xl}` 16px corners. The chrome is intentionally minimal so the app screenshots can do the heavy lifting.
+    The page rhythm is **dense product screenshots** — Linear's marketing leads with high-fidelity captures of the product UI (issue list, project view, dashboard) framed in `{tokens.color.surface-1}` panels with `{tokens.radius.xl}` 16px corners. The chrome is intentionally minimal so the app screenshots can do the heavy lifting.
     
     **Key Characteristics:**
-    - **Dark-canvas marketing system** — `{colors.canvas}` (#010102) is the deepest dark in this collection.
-    - **Lavender-blue brand accent** (`{colors.primary}` #5e6ad2) — used scarcely on brand mark, focus, and the primary CTA.
+    - **Dark-canvas marketing system** — `{tokens.color.canvas}` (#010102) is the deepest dark in this collection.
+    - **Lavender-blue brand accent** (`{tokens.color.primary}` #5e6ad2) — used scarcely on brand mark, focus, and the primary CTA.
     - Four-step surface ladder (canvas → surface-1 → surface-2 → surface-3 → surface-4) carries hierarchy without shadow.
     - Display tracking pulls aggressively negative (-3.0px at 80px); body holds at -0.05px.
-    - Cards use `{rounded.lg}` 12px corners with 1px hairline borders — never pill, rarely 16px.
+    - Cards use `{tokens.radius.lg}` 12px corners with 1px hairline borders — never pill, rarely 16px.
     - **Product UI screenshots** dominate the page. The marketing chrome is a dark frame for the app.
     - No second chromatic color. No atmospheric gradients. No spotlight cards.
   colors: |
     > Source pages: linear.app (home), /intake, /pricing, /contact/sales, /build.
     
     ### Brand & Accent
-    - **Lavender-Blue** ({colors.primary}): The signature Linear accent — primary CTA, brand mark, link emphasis.
-    - **Lavender Hover** ({colors.primary-hover}): Lighter lavender (#828fff) — hovered state of the primary CTA.
-    - **Lavender Focus** ({colors.primary-focus}): Focus-ring tint (#5e69d1) — focused inputs, focused buttons.
-    - **Brand Secure** ({colors.brand-secure}): Muted lavender-gray (#7a7fad) — used in "Linear Security" surfaces.
+    - **Lavender-Blue** ({tokens.color.primary}): The signature Linear accent — primary CTA, brand mark, link emphasis.
+    - **Lavender Hover** ({tokens.color.primary-hover}): Lighter lavender (#828fff) — hovered state of the primary CTA.
+    - **Lavender Focus** ({tokens.color.primary-focus}): Focus-ring tint (#5e69d1) — focused inputs, focused buttons.
+    - **Brand Secure** ({tokens.color.brand-secure}): Muted lavender-gray (#7a7fad) — used in "Linear Security" surfaces.
     
     ### Surface
-    - **Canvas** ({colors.canvas}): Default page background — #010102, near-pure black with a faint blue tint.
-    - **Surface 1** ({colors.surface-1}): One step above canvas — feature cards, pricing cards, product screenshot panels.
-    - **Surface 2** ({colors.surface-2}): Two steps above — featured pricing card, hovered cards.
-    - **Surface 3** ({colors.surface-3}): Three steps above — line-tertiary backgrounds, sub-nav.
-    - **Surface 4** ({colors.surface-4}): Four steps above — bg-level-3, deepest lifted surface.
-    - **Hairline** ({colors.hairline}): 1px borders on cards and dividers.
-    - **Hairline Strong** ({colors.hairline-strong}): Stronger 1px borders — input focus rings.
-    - **Hairline Tertiary** ({colors.hairline-tertiary}): Tertiary borders for nested surfaces.
-    - **Inverse Canvas** ({colors.inverse-canvas}): Pure white — surface of the inverse pill CTA on a small set of section openers.
-    - **Inverse Surface 1** ({colors.inverse-surface-1}): One step above inverse canvas.
-    - **Inverse Surface 2** ({colors.inverse-surface-2}): Two steps above inverse canvas.
+    - **Canvas** ({tokens.color.canvas}): Default page background — #010102, near-pure black with a faint blue tint.
+    - **Surface 1** ({tokens.color.surface-1}): One step above canvas — feature cards, pricing cards, product screenshot panels.
+    - **Surface 2** ({tokens.color.surface-2}): Two steps above — featured pricing card, hovered cards.
+    - **Surface 3** ({tokens.color.surface-3}): Three steps above — line-tertiary backgrounds, sub-nav.
+    - **Surface 4** ({tokens.color.surface-4}): Four steps above — bg-level-3, deepest lifted surface.
+    - **Hairline** ({tokens.color.hairline}): 1px borders on cards and dividers.
+    - **Hairline Strong** ({tokens.color.hairline-strong}): Stronger 1px borders — input focus rings.
+    - **Hairline Tertiary** ({tokens.color.hairline-tertiary}): Tertiary borders for nested surfaces.
+    - **Inverse Canvas** ({tokens.color.inverse-canvas}): Pure white — surface of the inverse pill CTA on a small set of section openers.
+    - **Inverse Surface 1** ({tokens.color.inverse-surface-1}): One step above inverse canvas.
+    - **Inverse Surface 2** ({tokens.color.inverse-surface-2}): Two steps above inverse canvas.
     
     ### Text
-    - **Ink** ({colors.ink}): All headlines and emphasized body type — light gray #f7f8f8.
-    - **Ink Muted** ({colors.ink-muted}): Secondary type at #d0d6e0 — meta info on hero panels.
-    - **Ink Subtle** ({colors.ink-subtle}): Tertiary type at #8a8f98 — deselected pricing tabs, footer columns.
-    - **Ink Tertiary** ({colors.ink-tertiary}): Quaternary at #62666d — disabled, footnotes.
+    - **Ink** ({tokens.color.ink}): All headlines and emphasized body type — light gray #f7f8f8.
+    - **Ink Muted** ({tokens.color.ink-muted}): Secondary type at #d0d6e0 — meta info on hero panels.
+    - **Ink Subtle** ({tokens.color.ink-subtle}): Tertiary type at #8a8f98 — deselected pricing tabs, footer columns.
+    - **Ink Tertiary** ({tokens.color.ink-tertiary}): Quaternary at #62666d — disabled, footnotes.
     
     ### Semantic
-    - **Success Green** ({colors.semantic-success}): Status pills, success indicators. The only semantic color on marketing.
-    - **Overlay** ({colors.semantic-overlay}): Pure black overlay scrim for modals.
+    - **Success Green** ({tokens.color.semantic-success}): Status pills, success indicators. The only semantic color on marketing.
+    - **Overlay** ({tokens.color.semantic-overlay}): Pure black overlay scrim for modals.
   typography: |
     ### Font Family
     
@@ -504,19 +500,19 @@ rationale:
     
     | Token | Size | Weight | Line Height | Letter Spacing | Use |
     |---|---|---|---|---|---|
-    | `{typography.display-xl}` | 80px | 600 | 1.05 | -3.0px | Largest hero headline |
-    | `{typography.display-lg}` | 56px | 600 | 1.10 | -1.8px | Section opener headlines |
-    | `{typography.display-md}` | 40px | 600 | 1.15 | -1.0px | Sub-section headlines |
-    | `{typography.headline}` | 28px | 600 | 1.20 | -0.6px | Pricing tier titles, CTA banner heading |
-    | `{typography.card-title}` | 22px | 500 | 1.25 | -0.4px | Feature card title |
-    | `{typography.subhead}` | 20px | 400 | 1.40 | -0.2px | Lead body, intro paragraphs |
-    | `{typography.body-lg}` | 18px | 400 | 1.50 | -0.1px | Hero subhead, lead paragraphs |
-    | `{typography.body}` | 16px | 400 | 1.50 | -0.05px | Default body |
-    | `{typography.body-sm}` | 14px | 400 | 1.50 | 0 | Card body, footer columns |
-    | `{typography.caption}` | 12px | 400 | 1.40 | 0 | Captions, meta, status |
-    | `{typography.button}` | 14px | 500 | 1.20 | 0 | All button labels |
-    | `{typography.eyebrow}` | 13px | 500 | 1.30 | 0.4px | Section eyebrow (slight positive tracking) |
-    | `{typography.mono}` | 13px | 400 | 1.50 | 0 | Linear Mono for code in product screenshots |
+    | `{tokens.typography.display-xl}` | 80px | 600 | 1.05 | -3.0px | Largest hero headline |
+    | `{tokens.typography.display-lg}` | 56px | 600 | 1.10 | -1.8px | Section opener headlines |
+    | `{tokens.typography.display-md}` | 40px | 600 | 1.15 | -1.0px | Sub-section headlines |
+    | `{tokens.typography.headline}` | 28px | 600 | 1.20 | -0.6px | Pricing tier titles, CTA banner heading |
+    | `{tokens.typography.card-title}` | 22px | 500 | 1.25 | -0.4px | Feature card title |
+    | `{tokens.typography.subhead}` | 20px | 400 | 1.40 | -0.2px | Lead body, intro paragraphs |
+    | `{tokens.typography.body-lg}` | 18px | 400 | 1.50 | -0.1px | Hero subhead, lead paragraphs |
+    | `{tokens.typography.body}` | 16px | 400 | 1.50 | -0.05px | Default body |
+    | `{tokens.typography.body-sm}` | 14px | 400 | 1.50 | 0 | Card body, footer columns |
+    | `{tokens.typography.caption}` | 12px | 400 | 1.40 | 0 | Captions, meta, status |
+    | `{tokens.typography.button}` | 14px | 500 | 1.20 | 0 | All button labels |
+    | `{tokens.typography.eyebrow}` | 13px | 500 | 1.30 | 0.4px | Section eyebrow (slight positive tracking) |
+    | `{tokens.typography.mono}` | 13px | 400 | 1.50 | 0 | Linear Mono for code in product screenshots |
     
     ### Principles
     
@@ -532,8 +528,8 @@ rationale:
     ### Spacing System
     
     - **Base unit**: 4px.
-    - **Tokens (front matter)**: `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 96px.
-    - Card interior padding: `{spacing.lg}` 24px on feature/pricing cards; `{spacing.xl}` 32px on testimonial cards; `{spacing.xxl}` 48px on CTA banners.
+    - **Tokens (front matter)**: `{tokens.spacing.xxs}` 4px · `{tokens.spacing.xs}` 8px · `{tokens.spacing.sm}` 12px · `{tokens.spacing.md}` 16px · `{tokens.spacing.lg}` 24px · `{tokens.spacing.xl}` 32px · `{tokens.spacing.xxl}` 48px · `{tokens.spacing.section}` 96px.
+    - Card interior padding: `{tokens.spacing.lg}` 24px on feature/pricing cards; `{tokens.spacing.xl}` 32px on testimonial cards; `{tokens.spacing.xxl}` 48px on CTA banners.
     - Pill button padding: 8px vertical · 14px horizontal — Linear's compact button spec.
     - Form input padding: 8px vertical · 12px horizontal.
     
@@ -546,15 +542,15 @@ rationale:
     
     ### Whitespace Philosophy
     
-    The dark canvas IS the whitespace. Sections separate by lift onto surface-1 panels, not by gaps in white. Within a panel, generous `{spacing.lg}` 24px gaps between content blocks; `{spacing.section}` 96px between sections.
+    The dark canvas IS the whitespace. Sections separate by lift onto surface-1 panels, not by gaps in white. Within a panel, generous `{tokens.spacing.lg}` 24px gaps between content blocks; `{tokens.spacing.section}` 96px between sections.
   elevation: |
     | Level | Treatment | Use |
     |---|---|---|
     | 0 (flat) | No shadow, no border | Default for body type, hero text, footer |
-    | 1 (charcoal lift) | `{colors.surface-1}` background on canvas, 1px `{colors.hairline}` | Default cards, product panels |
-    | 2 (surface-2 lift) | `{colors.surface-2}` background, 1px `{colors.hairline-strong}` | Featured pricing card, hovered cards |
-    | 3 (surface-3 lift) | `{colors.surface-3}` background | Sub-nav, dropdown menus |
-    | 4 (focus ring) | 2px `{colors.primary-focus}` outline at 50% opacity | Focused input, focused button |
+    | 1 (charcoal lift) | `{tokens.color.surface-1}` background on canvas, 1px `{tokens.color.hairline}` | Default cards, product panels |
+    | 2 (surface-2 lift) | `{tokens.color.surface-2}` background, 1px `{tokens.color.hairline-strong}` | Featured pricing card, hovered cards |
+    | 3 (surface-3 lift) | `{tokens.color.surface-3}` background | Sub-nav, dropdown menus |
+    | 4 (focus ring) | 2px `{tokens.color.primary-focus}` outline at 50% opacity | Focused input, focused button |
     
     Linear's depth is carried by surface ladder + hairline borders. The brand resists drop shadows on dark almost entirely.
     
@@ -568,89 +564,89 @@ rationale:
     
     | Token | Value | Use |
     |---|---|---|
-    | `{rounded.xs}` | 4px | Small chips, status badges |
-    | `{rounded.sm}` | 6px | Inline tags |
-    | `{rounded.md}` | 8px | All buttons, form inputs |
-    | `{rounded.lg}` | 12px | Pricing cards, feature cards, testimonial cards |
-    | `{rounded.xl}` | 16px | Product screenshot panels |
-    | `{rounded.xxl}` | 24px | Oversized CTA banners (rare) |
-    | `{rounded.pill}` | 9999px | Pricing tab toggles, status pills |
-    | `{rounded.full}` | 9999px | Avatar circles |
+    | `{tokens.radius.xs}` | 4px | Small chips, status badges |
+    | `{tokens.radius.sm}` | 6px | Inline tags |
+    | `{tokens.radius.md}` | 8px | All buttons, form inputs |
+    | `{tokens.radius.lg}` | 12px | Pricing cards, feature cards, testimonial cards |
+    | `{tokens.radius.xl}` | 16px | Product screenshot panels |
+    | `{tokens.radius.xxl}` | 24px | Oversized CTA banners (rare) |
+    | `{tokens.radius.pill}` | 9999px | Pricing tab toggles, status pills |
+    | `{tokens.radius.full}` | 9999px | Avatar circles |
     
     ### Photography & Illustration Geometry
     
-    - Product UI screenshots dominate; they sit in `{rounded.xl}` 16px tiles with `{spacing.lg}` 24px outer padding.
-    - Customer logo tiles render at small sizes (~24px logo height) on `{colors.canvas}` with no border.
-    - Avatar circles in testimonial cards use `{rounded.full}` at 32–40px sizes.
+    - Product UI screenshots dominate; they sit in `{tokens.radius.xl}` 16px tiles with `{tokens.spacing.lg}` 24px outer padding.
+    - Customer logo tiles render at small sizes (~24px logo height) on `{tokens.color.canvas}` with no border.
+    - Avatar circles in testimonial cards use `{tokens.radius.full}` at 32–40px sizes.
   components: |
     ### Buttons
     
     **`button-primary`** — Lavender CTA. The default primary CTA across all pages.
-    - Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button}`, padding 8px 14px, rounded `{rounded.md}`.
-    - Pressed state lives in `button-primary-pressed` (background shifts to `{colors.primary-focus}`).
-    - Hover state lives in `button-primary-hover` (background shifts to `{colors.primary-hover}` lighter lavender).
+    - Background `{tokens.color.primary}`, text `{tokens.color.on-primary}`, type `{tokens.typography.button}`, padding 8px 14px, rounded `{tokens.radius.md}`.
+    - Pressed state lives in `button-primary-pressed` (background shifts to `{tokens.color.primary-focus}`).
+    - Hover state lives in `button-primary-hover` (background shifts to `{tokens.color.primary-hover}` lighter lavender).
     
     **`button-secondary`** — Charcoal button. Used for secondary CTAs ("Sign in", "Read changelog").
-    - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.button}`, padding 8px 14px, rounded `{rounded.md}`. 1px `{colors.hairline}` border.
+    - Background `{tokens.color.surface-1}`, text `{tokens.color.ink}`, type `{tokens.typography.button}`, padding 8px 14px, rounded `{tokens.radius.md}`. 1px `{tokens.color.hairline}` border.
     
     **`button-tertiary`** — Plain text button.
-    - Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.button}`, rounded `{rounded.md}`, padding 8px 14px.
+    - Background `{tokens.color.canvas}`, text `{tokens.color.ink}`, type `{tokens.typography.button}`, rounded `{tokens.radius.md}`, padding 8px 14px.
     
     **`button-inverse`** — White-on-dark inverse CTA.
-    - Background `{colors.inverse-canvas}`, text `{colors.inverse-ink}`, type `{typography.button}`, rounded `{rounded.md}`, padding 8px 14px.
+    - Background `{tokens.color.inverse-canvas}`, text `{tokens.color.inverse-ink}`, type `{tokens.typography.button}`, rounded `{tokens.radius.md}`, padding 8px 14px.
     
     ### Pricing Tabs
     
     **`pricing-tab-default`** + **`pricing-tab-selected`** — Pill-toggle on `/pricing`.
-    - Default: `{colors.canvas}` background, `{colors.ink-subtle}` text, rounded `{rounded.pill}`, padding 6px 14px.
-    - Selected: `{colors.surface-2}` background, `{colors.ink}` text — selected = surface lift.
+    - Default: `{tokens.color.canvas}` background, `{tokens.color.ink-subtle}` text, rounded `{tokens.radius.pill}`, padding 6px 14px.
+    - Selected: `{tokens.color.surface-2}` background, `{tokens.color.ink}` text — selected = surface lift.
     
     ### Cards & Containers
     
     **`pricing-card`** — Each tier on `/pricing`.
-    - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.lg}`, padding 24px. 1px `{colors.hairline}` border.
+    - Background `{tokens.color.surface-1}`, text `{tokens.color.ink}`, type `{tokens.typography.body}`, rounded `{tokens.radius.lg}`, padding 24px. 1px `{tokens.color.hairline}` border.
     
     **`pricing-card-featured`** — Recommended tier — surface lift to surface-2.
-    - Background `{colors.surface-2}`, otherwise identical structure.
+    - Background `{tokens.color.surface-2}`, otherwise identical structure.
     
     **`feature-card`** — Generic feature highlight tile.
-    - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.lg}`, padding 24px.
+    - Background `{tokens.color.surface-1}`, text `{tokens.color.ink}`, type `{tokens.typography.body}`, rounded `{tokens.radius.lg}`, padding 24px.
     
     **`product-screenshot-card`** — The dominant card type — frames a high-fidelity Linear app UI screenshot.
-    - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.xl}`, padding 24px.
+    - Background `{tokens.color.surface-1}`, text `{tokens.color.ink}`, type `{tokens.typography.body}`, rounded `{tokens.radius.xl}`, padding 24px.
     
     **`testimonial-card`** — Customer quote with avatar + name + role.
-    - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body-lg}`, rounded `{rounded.lg}`, padding 32px.
+    - Background `{tokens.color.surface-1}`, text `{tokens.color.ink}`, type `{tokens.typography.body-lg}`, rounded `{tokens.radius.lg}`, padding 32px.
     
     **`customer-logo-tile`** — Small tile in the customer marquee.
-    - Background `{colors.canvas}`, text `{colors.ink-subtle}`, type `{typography.caption}`, rounded `{rounded.xs}`, padding 16px.
+    - Background `{tokens.color.canvas}`, text `{tokens.color.ink-subtle}`, type `{tokens.typography.caption}`, rounded `{tokens.radius.xs}`, padding 16px.
     
     **`cta-banner`** — Closing CTA panel near page bottom.
-    - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.headline}`, rounded `{rounded.lg}`, padding 48px.
+    - Background `{tokens.color.surface-1}`, text `{tokens.color.ink}`, type `{tokens.typography.headline}`, rounded `{tokens.radius.lg}`, padding 48px.
     
     ### Inputs & Forms
     
     **`text-input`** + **`text-input-focused`** — Form fields on `/contact/sales` and signup overlays.
-    - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.md}`, padding 8px 12px.
-    - Focused state retains the same surface; the focus ring is a 2px `{colors.primary-focus}` outline at 50% opacity.
+    - Background `{tokens.color.surface-1}`, text `{tokens.color.ink}`, type `{tokens.typography.body}`, rounded `{tokens.radius.md}`, padding 8px 12px.
+    - Focused state retains the same surface; the focus ring is a 2px `{tokens.color.primary-focus}` outline at 50% opacity.
     
     ### Status & Build Page
     
     **`changelog-row`** — Each row in `/build` (changelog page) listing version, date, and changes.
-    - Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.xs}`, padding 24px 0. 1px `{colors.hairline}` bottom rule.
+    - Background `{tokens.color.canvas}`, text `{tokens.color.ink}`, type `{tokens.typography.body}`, rounded `{tokens.radius.xs}`, padding 24px 0. 1px `{tokens.color.hairline}` bottom rule.
     
     **`status-badge`** — Small status pill.
-    - Background `{colors.surface-2}`, text `{colors.ink-muted}`, type `{typography.caption}`, rounded `{rounded.pill}`, padding 2px 8px.
+    - Background `{tokens.color.surface-2}`, text `{tokens.color.ink-muted}`, type `{tokens.typography.caption}`, rounded `{tokens.radius.pill}`, padding 2px 8px.
     
     ### Navigation
     
     **`top-nav`** — Sticky dark bar with the Linear wordmark left, primary nav links centered, and a `button-secondary` ("Sign in") + `button-primary` ("Get started") pair right.
-    - Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.body-sm}`, height 56px.
+    - Background `{tokens.color.canvas}`, text `{tokens.color.ink}`, type `{tokens.typography.body-sm}`, height 56px.
     
     ### Footer
     
-    **`footer`** — Dense link grid on `{colors.canvas}` with the Linear wordmark left.
-    - Background `{colors.canvas}`, text `{colors.ink-subtle}`, type `{typography.caption}`, padding 64px 32px.
+    **`footer`** — Dense link grid on `{tokens.color.canvas}` with the Linear wordmark left.
+    - Background `{tokens.color.canvas}`, text `{tokens.color.ink-subtle}`, type `{tokens.typography.caption}`, padding 64px 32px.
   responsive: |
     ### Breakpoints
     
@@ -673,7 +669,7 @@ rationale:
     - **Top nav**: links collapse to hamburger below 768px.
     - **Card grids**: 3-up → 2-up at 1024px → 1-up below 768px.
     - **Pricing comparison**: per-tier accordion below 768px.
-    - **Display type**: `{typography.display-xl}` 80px scales toward `{typography.display-md}` 40px on mobile.
+    - **Display type**: `{tokens.typography.display-xl}` 80px scales toward `{tokens.typography.display-md}` 40px on mobile.
     
     ### Image Behavior
     
@@ -682,7 +678,7 @@ rationale:
   iteration: |
     1. Focus on ONE component at a time and reference it by its `components:` token name.
     2. When introducing a section, decide first which surface lift it lives on.
-    3. Default body to `{typography.body}` at weight 400.
+    3. Default body to `{tokens.typography.body}` at weight 400.
     4. Run `npx @google/design.md lint DESIGN.md` after edits.
     5. Add new variants as separate component entries.
     6. Treat lavender as scarce: brand mark, primary CTA, focus, link emphasis.
@@ -694,13 +690,13 @@ rationale:
     - Linear's actual product UI uses a richer color-tag palette (red, orange, yellow, green, blue, purple) for issue priorities and project labels — those colors live in the in-product surfaces shown in mockups.
     - The custom display, text, and mono families are proprietary; an open-source substitute is acceptable.
   dos:
-    - "Reserve `{colors.canvas}` (#010102) as the system's anchor surface \u2014 the faint blue tint is intentional."
-    - "Use `{colors.primary}` lavender ONLY for: brand mark, primary CTA, focus ring, link emphasis."
+    - "Reserve `{tokens.color.canvas}` (#010102) as the system's anchor surface \u2014 the faint blue tint is intentional."
+    - "Use `{tokens.color.primary}` lavender ONLY for: brand mark, primary CTA, focus ring, link emphasis."
     - Use the four-step surface ladder for hierarchy. Avoid skipping levels.
     - Pair display weight 600 with body weight 400 — Linear resists 700+ display weights.
     - Apply negative letter-spacing aggressively on display.
     - Use product UI screenshots as the protagonist of every section.
-    - "Compose CTAs as `{rounded.md}` 8px corners."
+    - "Compose CTAs as `{tokens.radius.md}` 8px corners."
   donts:
     - ship a light-mode marketing page.
     - use lavender as a section background or card fill.
@@ -709,6 +705,10 @@ rationale:
     - pill-round CTAs.
     - "use `#000000` true black as the canvas."
     - combine multiple bright accents in product screenshot mockups.
+
+omitted:
+  - section: tokens.elevation
+    reason: "Depth model lives in rationale.elevation; add shadow tokens as they stabilize"
 
 integrations:
   shadcn:
@@ -767,13 +767,13 @@ constraints:
     - read rationale.layout / rationale.elevation / rationale.shapes before inventing chrome
     - when shadcn is enabled, apply integrations.shadcn.css_vars to globals.css
     - prefer catalog components over one-off controls
-    - "Reserve `{colors.canvas}` (#010102) as the system's anchor surface \u2014 the faint blue tint is intentional."
-    - "Use `{colors.primary}` lavender ONLY for: brand mark, primary CTA, focus ring, link emphasis."
+    - "Reserve `{tokens.color.canvas}` (#010102) as the system's anchor surface \u2014 the faint blue tint is intentional."
+    - "Use `{tokens.color.primary}` lavender ONLY for: brand mark, primary CTA, focus ring, link emphasis."
     - Use the four-step surface ladder for hierarchy. Avoid skipping levels.
     - Pair display weight 600 with body weight 400 — Linear resists 700+ display weights.
     - Apply negative letter-spacing aggressively on display.
     - Use product UI screenshots as the protagonist of every section.
-    - "Compose CTAs as `{rounded.md}` 8px corners."
+    - "Compose CTAs as `{tokens.radius.md}` 8px corners."
   never:
     - generic purple-on-white AI chrome unrelated to this brand
     - dropping DESIGN.md component variants or rationale during restyle
@@ -794,7 +794,7 @@ examples:
 
 provenance:
   owner: AgentsORG
-  last_reviewed: "2026-08-05"
+  last_reviewed: "2026-08-06"
   source_material:
     - https://getdesign.md/linear.app/design-md
     - https://github.com/voltagent/awesome-design-md/blob/main/design-md/linear.app/DESIGN.md

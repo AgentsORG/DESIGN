@@ -6,16 +6,22 @@ on:
     branches: [main]
 
 jobs:
-  validate-schema:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install validators
+        run: pip install pyyaml jsonschema
       - name: Validate design.v1.schema.json parses
         run: python -c "import json; json.load(open('schema/design.v1.schema.json')); print('schema ok')"
-      - name: Spot-check examples exist
+      - name: Validate examples against schema + lint rules
+        run: python scripts/lint_design.py
+      - name: Core files exist
         run: |
-          test -f examples/vercel.design
-          test -f examples/stripe.design
           test -f SPEC.md
           test -f skills/design/SKILL.md
-          echo examples ok
+          test -f docs/INDEX.md
+          echo core files ok

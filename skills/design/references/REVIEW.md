@@ -12,7 +12,7 @@ Lead with one line: **Blocked** | **Approve with changes** | **Ship it**.
 - **Approve with changes** — craft issues; must-fix before merge preferred  
 - **Ship it** — no findings against `.design`, CRAFT floor, and a11y  
 
-Then list **Blocking**, **Should fix**, and **Nits** (optional). Don’t bury one blocker under ten nits.
+Then list **Blocking**, **Should fix**, and **Nits** (optional). Don’t bury one blocker under ten nits. A clean **Ship it** is a real outcome — never manufacture nitpicks to look thorough.
 
 ## Priority order (triage)
 
@@ -40,7 +40,7 @@ Then list **Blocking**, **Should fix**, and **Nits** (optional). Don’t bury on
 
 **Craft / a11y / motion**
 
-- `transition: all`  
+- `transition: all` — including a bare utility `transition` class (it compiles to `transition-property: all`)  
 - Hover-only access to a core action  
 - Icon-only control with no accessible name  
 - Animating `width` / `height` / `margin` / `top` / `left` instead of `transform` / `opacity`  
@@ -49,9 +49,16 @@ Then list **Blocking**, **Should fix**, and **Nits** (optional). Don’t bury on
 - `<input>` font-size under 16px (iOS zoom)  
 - Random `z-index: 9999` instead of a scale (`tokens.zIndex`)  
 - Font weight change on hover/active (layout shift)  
-- Missing `prefers-reduced-motion` on motion  
+- Missing `prefers-reduced-motion` on motion (reduced = gentler, not zero: keep brief opacity/color feedback)  
 - Bare `outline: none` without a replacement focus ring  
 - Nested child reusing parent radius (pinched corners)  
+- Unbounded list rendered without virtualization (~50+ items possible)  
+- Raster image scaled above its natural size  
+- Focus not returned to the trigger after an overlay closes  
+- Blanket `will-change` (or `will-change` on non-compositor properties)  
+- `position: sticky` silently dead under an ancestor's `overflow: hidden`  
+
+**Exemption:** centered modals/dialogs correctly use `transform-origin: center` — origin-aware scaling applies to trigger-anchored surfaces (popovers, dropdowns, tooltips) only. Do not flag it.
 
 ## Findings table (required for craft issues)
 
@@ -62,6 +69,21 @@ Present craft findings as a markdown table:
 | `transition: all 300ms` on Button | `transition: transform 150ms, opacity 150ms` | Unbounded `all` animates layout props |
 
 Be specific (cite values, `file:line` when possible). For `.design` violations, name the token/component path to use.
+
+## Fixing motion (remedial order)
+
+When a motion finding needs a fix, prefer remedies in this order — deleting is often the strongest fix:
+
+1. Delete the animation
+2. Reduce it (shorter, smaller, fewer properties)
+3. Fix easing
+4. Fix origin / physicality
+5. Make it interruptible (transition/spring instead of keyframes)
+6. Move it to `transform` / `opacity`
+7. Make timing asymmetric (fast response, slow deliberation)
+8. Polish (blur bridge, stagger)
+
+When feel cannot be judged from code, run the animation at 2–5× duration (or step frame-by-frame in the browser's animation inspector); test gestures on a real device; re-judge with fresh eyes before sign-off — timing desyncs between coordinated properties are invisible at full speed.
 
 ## Verify against code
 

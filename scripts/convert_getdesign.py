@@ -11,7 +11,14 @@ import json
 import pathlib
 import re
 
-ROOT = pathlib.Path(r"C:\PROJECTS\AgentsORG\DESIGN")
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+
+# Some upstream analyses obfuscate brand names; examples use the real name
+# consistently (non-affiliation is covered by NOTICE.md and sources notes).
+BRAND_NAME_FIXES = {
+    "Stripi": "Stripe",
+    "Supabaze": "Supabase",
+}
 
 SELF_CONTAINED_INSTRUCTIONS = """You are holding a .design living visual contract (schema design.v1).
 If the AgentsORG `design` skill is installed, activate it - then still obey THIS file as source of truth.
@@ -273,13 +280,13 @@ def typo_to_block(name: str, obj: dict) -> str:
 
 
 def emit_literal_block(key: str, text: str, indent: int = 2) -> list[str]:
-    """Emit a YAML literal block scalar."""
+    """Emit a YAML literal block scalar (prose refs rewritten to tokens.*)."""
     pad = " " * indent
     lines = [f"{pad}{key}: |"]
     if not text.strip():
         lines.append(f"{pad}  ")
         return lines
-    for ln in text.splitlines():
+    for ln in rewrite_refs(text).splitlines():
         lines.append(f"{pad}  {ln}")
     return lines
 
@@ -400,6 +407,8 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     dos, donts = [], []
     if "dos_donts" in sections:
         dos, donts = extract_dos_donts(sections["dos_donts"])
+        dos = [rewrite_refs(d) for d in dos]
+        donts = [rewrite_refs(d) for d in donts]
 
     lines: list[str] = []
     lines.append("schema: design.v1")
@@ -434,8 +443,8 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     lines.append("    note: getdesign.md curated DESIGN.md analysis")
     lines.append("  - type: url")
     lines.append(f"    ref: {cfg['site']}")
-    lines.append("  - type: file")
-    lines.append(f"    path: {cfg['upstream']}")
+    lines.append("  - type: url")
+    lines.append(f"    ref: {cfg['upstream']}")
     lines.append("    note: Upstream DESIGN.md (awesome-design-md)")
     lines.append("  - type: other")
     lines.append("    note: Independent analysis — not affiliated with the brand")
@@ -460,9 +469,6 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
         lines.append("  radius:")
         for k, v in rounded.items():
             lines.append(f"    {k}: {yaml_quote(v)}")
-    # elevation placeholder note — detailed treatments live in rationale.elevation
-    lines.append("  elevation:")
-    lines.append('    note: "See rationale.elevation for brand depth model; add concrete shadow tokens as they stabilize."')
     lines.append("")
 
     lock_keys = []
@@ -560,11 +566,12 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
         lines.extend(emit_literal_block("dos_donts_raw", sections["dos_donts"], indent=2))
     lines.append("")
 
-    if data.get("omitted"):
-        lines.append("omitted:")
-        for o in data["omitted"]:
-            lines.append(f"  - {yaml_quote(o)}")
-        lines.append("")
+    lines.append("omitted:")
+    for o in data.get("omitted") or []:
+        lines.append(f"  - {yaml_quote(o)}")
+    lines.append("  - section: tokens.elevation")
+    lines.append('    reason: "Depth model lives in rationale.elevation; add shadow tokens as they stabilize"')
+    lines.append("")
 
     # shadcn
     lines.append("integrations:")
@@ -630,7 +637,7 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     lines.append("")
     lines.append("provenance:")
     lines.append("  owner: AgentsORG")
-    lines.append('  last_reviewed: "2026-08-05"')
+    lines.append('  last_reviewed: "2026-08-06"')
     lines.append("  source_material:")
     lines.append(f"    - {cfg['getdesign']}")
     lines.append(f"    - {cfg['upstream']}")
@@ -650,6 +657,8 @@ def main():
     for slug, cfg in BRANDS.items():
         src = ROOT / cfg["file"]
         text = src.read_text(encoding="utf-8")
+        for obfuscated, real in BRAND_NAME_FIXES.items():
+            text = text.replace(obfuscated, real)
         fm, body = extract_fm(text)
         if not fm:
             print("NO FM", slug)

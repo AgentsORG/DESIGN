@@ -23,12 +23,14 @@ cp examples/vercel.design ./.design
 | Problem | What `.design` does |
 | --- | --- |
 | Agents invent off-brand hex and rebuild Button | Normative `tokens` + `components` with when/when_not |
+| Every generated page looks like every other AI page | `intent.direction` + `signature` + default-looks-to-avoid craft catalogue |
 | Style guides go stale | Edit the file in place; git is history |
 | DESIGN.md prose lost on import | Full `rationale.*` + property bags |
+| Copy tone drifts per session | `voice` — the UI copy contract |
 | Skill not installed | Required `agent.instructions` — drag-drop still works |
 | shadcn / Figma / DTCG drift | `integrations` + `exports` + `themes` |
 
-Superset of [Google DESIGN.md](https://github.com/google-labs-code/design.md). Orchestrates [shadcn/ui](https://ui.shadcn.com/). Bootstraps from [getdesign.md](https://getdesign.md/). Works with every [skills.sh](https://www.skills.sh/agent/) agent.
+Imports [Google DESIGN.md](https://github.com/google-labs-code/design.md) losslessly. Orchestrates [shadcn/ui](https://ui.shadcn.com/). Bootstraps from [getdesign.md](https://getdesign.md/). Works with every [skills.sh](https://www.skills.sh/agent/) agent.
 
 ## Ecosystem
 
@@ -118,12 +120,13 @@ See [docs/shadcn.md](docs/shadcn.md), [docs/ecosystem.md](docs/ecosystem.md), an
 | Layer | Contents |
 | --- | --- |
 | **Agent** | `agent.instructions` (required) — self-teach on drop-in |
-| **Identity** | `name`, `version`, `status`, `overview`, `intent`, `themes` |
-| **System** | `tokens`, `components`, `patterns`, `locked`, `assets` |
+| **Identity** | `name`, `version`, `status`, `overview`, `intent` (direction, signature, treatment), `themes` |
+| **System** | `tokens` (nestable groups), `components`, `patterns`, `locked`, `assets` |
+| **Voice** | UI copy contract — register, casing, terminology, error style |
 | **Rationale** | DESIGN.md body prose (`rationale.*`) |
 | **Rules** | `policy`, `decisions`, `constraints`, `examples` |
-| **Integrations** | `shadcn`, `figma` |
-| **Exports** | DTCG, CSS, Tailwind, Style Dictionary, native |
+| **Integrations** | `shadcn` (styles, bases, registries, MCP), `figma` |
+| **Exports** | DTCG, CSS, Tailwind, shadcn registry item, Style Dictionary, native |
 
 Lifecycle: `bootstrap` → `refine` → `lock` → `evolve`. History lives in **git**.
 

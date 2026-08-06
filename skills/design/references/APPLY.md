@@ -123,12 +123,17 @@ Detect the project's approach (Tailwind, CSS modules, vanilla-extract, etc.). Ma
 integrations.shadcn.enabled?
 ├── No → styling system path above
 └── Yes
-    ├── Prefer components under aliases.ui (install via shadcn CLI if missing)
-    ├── Ensure components.json has cssVariables: true
+    ├── Detect project context first (shadcn info / MCP) — style, base, installed components
+    ├── Match the project's primitive base (base | radix | react-aria); never mix bases
+    ├── Prefer components under aliases.ui
+    │   └── Missing? search → docs → add --dry-run → add (from declared registries only;
+    │       never guess a registry namespace; verify import aliases after third-party adds)
+    ├── Ensure components.json has cssVariables: true (immutable after init — never re-init)
     ├── Resolve theme:
-    │   ├── css_vars.light / .dark present? → use them
-    │   └── else derive from map_from_tokens → tokens.*
-    ├── Write :root and .dark variables into integrations.shadcn.css
+    │   ├── css_vars.theme / .light / .dark present? → use them
+    │   └── else derive from map_from_tokens → tokens.* (a|b|c = first path that resolves)
+    ├── Write :root and .dark variables into integrations.shadcn.css — the FULL var set
+    │   (incl. chart-1…5, sidebar-*); custom vars also registered under @theme inline (Tailwind v4)
     ├── Set --radius from integrations.shadcn.radius (or tokens.radius)
     └── If tokens disagree with css_vars → tokens win; update css_vars + CSS
 ```

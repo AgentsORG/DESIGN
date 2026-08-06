@@ -13,9 +13,8 @@ skills/design/
     APPLY.md               # Decision trees
     CRAFT.md               # Design-engineering bar when contract is silent
     UPDATE.md
-    REVIEW.md              # Critique triage (ui-review style)
+    REVIEW.md              # Critique triage
     SPEC-SUMMARY.md
-    ATTRIBUTION.md         # Craft source credits
 ```
 
 ## Install
