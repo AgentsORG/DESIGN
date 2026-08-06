@@ -46,7 +46,7 @@ flowchart LR
 | Nested groups in `colors` / `spacing` / `rounded` | Same nesting under `tokens.color` / `tokens.spacing` / `tokens.radius` | DESIGN.md ≥ 0.3.0 allows arbitrary nesting (depth ≤ 20) with dot-path refs; structure is preserved 1:1 (see below) |
 | `components.<id>.*` | `components` | See component encoding below |
 | `omitted` | `omitted` | Same semantics; DESIGN.md section/category names are preserved verbatim (see below) |
-| `{colors.x}` refs | `{tokens.color.x}` | Auto-rewritten on import in **normative fields** (`tokens`, `components`); prose in `overview` / `rationale` may retain legacy `{colors.x}` refs in converted files |
+| `{colors.x}` refs | `{tokens.color.x}` | Auto-rewritten on import everywhere: normative fields (`tokens`, `components`) **and** prose (`description`, `overview`, `rationale`, dos/donts) |
 
 ### Nested token groups
 
@@ -186,7 +186,7 @@ When converting a DESIGN.md / getdesign analysis:
 3. [ ] Hover/active/focus sibling keys retained  
 4. [ ] All eight body sections landed in `rationale` (or `omitted` with reason)  
 5. [ ] Do’s/Don’ts mirrored into `constraints`  
-6. [ ] Token references rewritten to `tokens.*` in normative fields (prose may retain legacy refs)  
+6. [ ] Token references rewritten to `tokens.*` everywhere (normative fields and prose)  
 7. [ ] `.design` `version` freshly assigned as SemVer — DESIGN.md's format version (`alpha`) recorded in a `sources` note, never copied  
 8. [ ] Provenance / sources cite the DESIGN.md URL  
 

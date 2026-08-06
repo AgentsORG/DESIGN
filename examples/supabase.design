@@ -2,7 +2,7 @@ schema: design.v1
 name: supabase
 version: 1.0.0
 status: refine
-description: "An inspired interpretation of Supabase's design language \u2014 an open-source database platform built on a clean white-and-near-black system with a single signature emerald-green CTA, a custom humanist sans display tier,..."
+description: "An inspired interpretation of Supabase's design language — an open-source database platform built on a clean white-and-near-black system with a single signature emerald-green CTA, a custom humanist sans display tier …"
 
 $schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v1.schema.json
 
@@ -15,7 +15,7 @@ agent:
     
     READ
     - Load this file before any UI generation or restyle. Large file? Normative core first
-      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+      (intent, constraints, policy/decisions, tokens, components, themes, voice, locked); rationale on demand.
     - Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
     - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
     
@@ -27,8 +27,10 @@ agent:
     - Never invent raw hex/spacing/radius when a token exists.
     - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
     - Concentrate boldness in intent.signature; keep everything around it quiet.
+    - Themes: generate for the active mode (themes.default); modes are designed, never inverted.
     - Match the project's existing styling stack - do not switch stacks.
     - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - If integrations.figma is present: this file is repo-canonical unless sync.direction says otherwise; ask on conflicts.
     - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
     
     UPDATE
@@ -36,11 +38,16 @@ agent:
     - Ask before changing any path in locked. Bump version (SemVer).
     
     VERIFY
-    - Compare tokens <-> CSS/Tailwind; components <-> imports; report drift before fixing.
+    - Compare tokens <-> CSS/Tailwind and components <-> imports; report drift per token group
+      as added/removed/modified plus a regression flag before fixing.
     
     PRECEDENCE
     1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
     
+    NEVER
+    - Invent a parallel design system beside this file
+    - Embed binaries or full page HTML trees here
+    - Claim affiliation with third-party brands used only as visual references
     DISCLAIMER
     Independent visual analysis - not affiliated with the named brand. Adapt before production use.
 
@@ -61,7 +68,7 @@ overview: |
   - Pricing tiers use a dark inverted `{tokens.color.canvas-night}` featured tier, not a green one — the green is reserved for buttons and dot accents.
 
 intent:
-  reference: "Supabase \u2014 dark emerald developer platform, code-first documentation aesthetic"
+  reference: "Supabase — dark emerald developer platform, code-first documentation aesthetic"
   direction: dark developer utility
   signature: "A single emerald accent on near-black, code-first surfaces"
   density: comfortable
@@ -596,14 +603,14 @@ rationale:
     5. Keep emerald scarce; one filled green button per viewport.
     6. The white-canvas commitment is non-negotiable — adding atmospheric backdrops breaks the brand.
   dos:
-    - "Reserve `{tokens.color.primary}` emerald for filled CTAs and the wordmark accent \u2014 it should appear sparingly."
+    - "Reserve `{tokens.color.primary}` emerald for filled CTAs and the wordmark accent — it should appear sparingly."
     - Render display tiers at weight 500 with negative letter-spacing — the engineered tightness is part of the brand.
-    - "Use `{tokens.radius.sm}` 6px for buttons \u2014 square-ish radii, never pill-shaped."
+    - "Use `{tokens.radius.sm}` 6px for buttons — square-ish radii, never pill-shaped."
     - "Composite product UI mockups inside `{tokens.radius.lg}` containers with subtle Level 2 shadows."
-    - "Use near-black `{tokens.color.ink}` on the emerald button (not white) \u2014 the green reads as \"lit\" with dark type, which is the brand's idiosyncratic choice."
+    - "Use near-black `{tokens.color.ink}` on the emerald button (not white) — the green reads as \"lit\" with dark type, which is the brand's idiosyncratic choice."
     - Apply system mono for every code block.
   donts:
-    - "introduce additional accent colors as system colors \u2014 purples, yellows, and pinks belong inside chart points and integration logos only."
+    - "introduce additional accent colors as system colors — purples, yellows, and pinks belong inside chart points and integration logos only."
     - bump display weight above 500 — the brand's calibrated mid-weight breaks at 600+.
     - use pill-shaped buttons; the brand's button radius is square-ish 6px.
     - use white text on the emerald button — the brand specifically uses near-black on green.
@@ -683,16 +690,16 @@ constraints:
     - read rationale.layout / rationale.elevation / rationale.shapes before inventing chrome
     - when shadcn is enabled, apply integrations.shadcn.css_vars to globals.css
     - prefer catalog components over one-off controls
-    - "Reserve `{tokens.color.primary}` emerald for filled CTAs and the wordmark accent \u2014 it should appear sparingly."
+    - "Reserve `{tokens.color.primary}` emerald for filled CTAs and the wordmark accent — it should appear sparingly."
     - Render display tiers at weight 500 with negative letter-spacing — the engineered tightness is part of the brand.
-    - "Use `{tokens.radius.sm}` 6px for buttons \u2014 square-ish radii, never pill-shaped."
+    - "Use `{tokens.radius.sm}` 6px for buttons — square-ish radii, never pill-shaped."
     - "Composite product UI mockups inside `{tokens.radius.lg}` containers with subtle Level 2 shadows."
-    - "Use near-black `{tokens.color.ink}` on the emerald button (not white) \u2014 the green reads as \"lit\" with dark type, which is the brand's idiosyncratic choice."
+    - "Use near-black `{tokens.color.ink}` on the emerald button (not white) — the green reads as \"lit\" with dark type, which is the brand's idiosyncratic choice."
     - Apply system mono for every code block.
   never:
     - generic purple-on-white AI chrome unrelated to this brand
     - dropping DESIGN.md component variants or rationale during restyle
-    - "introduce additional accent colors as system colors \u2014 purples, yellows, and pinks belong inside chart points and integration logos only."
+    - "introduce additional accent colors as system colors — purples, yellows, and pinks belong inside chart points and integration logos only."
     - bump display weight above 500 — the brand's calibrated mid-weight breaks at 600+.
     - use pill-shaped buttons; the brand's button radius is square-ish 6px.
     - use white text on the emerald button — the brand specifically uses near-black on green.

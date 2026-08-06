@@ -23,7 +23,7 @@ When editing format docs or examples, treat [SPEC.md](SPEC.md) as source of trut
 2. Keep `schema/design.v1.schema.json` in sync.
 3. Update `skills/design/` references if procedure changes.
 4. Refresh examples (`python scripts/convert_getdesign.py` or hand-edit).
-5. Validate: `python scripts/lint_design.py` (schema + format lint over all examples).
+5. Validate: `python scripts/lint_design.py`; exporter/diff smoke: `python scripts/export_design.py templates/starter.design --out-dir <tmp>`.
 6. Keep `docs/` diagrams accurate (especially shadcn + discovery).
 7. Note breaking changes clearly; bump documented schema only with a new `design.vN` when breaking.
 

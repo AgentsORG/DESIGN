@@ -2,7 +2,7 @@ schema: design.v1
 name: linear
 version: 1.0.0
 status: refine
-description: "A near-black product-focused marketing canvas built around #010102 (the deepest dark surface of any tool in this collection), light gray text (#f7f8f8), and the signature Linear lavender-blue (#5e6ad2) used as the sin..."
+description: "An inspired interpretation of Linear's design language — a near-black product-focused marketing canvas built around #010102 (the deepest dark surface of any tool in this collection), light gray text (#f7f8f8), and …"
 
 $schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v1.schema.json
 
@@ -15,7 +15,7 @@ agent:
     
     READ
     - Load this file before any UI generation or restyle. Large file? Normative core first
-      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+      (intent, constraints, policy/decisions, tokens, components, themes, voice, locked); rationale on demand.
     - Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
     - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
     
@@ -27,8 +27,10 @@ agent:
     - Never invent raw hex/spacing/radius when a token exists.
     - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
     - Concentrate boldness in intent.signature; keep everything around it quiet.
+    - Themes: generate for the active mode (themes.default); modes are designed, never inverted.
     - Match the project's existing styling stack - do not switch stacks.
     - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - If integrations.figma is present: this file is repo-canonical unless sync.direction says otherwise; ask on conflicts.
     - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
     
     UPDATE
@@ -36,11 +38,16 @@ agent:
     - Ask before changing any path in locked. Bump version (SemVer).
     
     VERIFY
-    - Compare tokens <-> CSS/Tailwind; components <-> imports; report drift before fixing.
+    - Compare tokens <-> CSS/Tailwind and components <-> imports; report drift per token group
+      as added/removed/modified plus a regression flag before fixing.
     
     PRECEDENCE
     1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
     
+    NEVER
+    - Invent a parallel design system beside this file
+    - Embed binaries or full page HTML trees here
+    - Claim affiliation with third-party brands used only as visual references
     DISCLAIMER
     Independent visual analysis - not affiliated with the named brand. Adapt before production use.
 
@@ -63,7 +70,7 @@ overview: |
   - No second chromatic color. No atmospheric gradients. No spotlight cards.
 
 intent:
-  reference: "Linear.app \u2014 ultra-minimal dark SaaS, lavender accent, product screenshots as hero"
+  reference: "Linear.app — ultra-minimal dark SaaS, lavender accent, product screenshots as hero"
   direction: dark precision software
   signature: Glass-and-glow product panels floating on near-black
   density: comfortable
@@ -702,7 +709,7 @@ rationale:
     - Linear's actual product UI uses a richer color-tag palette (red, orange, yellow, green, blue, purple) for issue priorities and project labels — those colors live in the in-product surfaces shown in mockups.
     - The custom display, text, and mono families are proprietary; an open-source substitute is acceptable.
   dos:
-    - "Reserve `{tokens.color.canvas}` (#010102) as the system's anchor surface \u2014 the faint blue tint is intentional."
+    - "Reserve `{tokens.color.canvas}` (#010102) as the system's anchor surface — the faint blue tint is intentional."
     - "Use `{tokens.color.primary}` lavender ONLY for: brand mark, primary CTA, focus ring, link emphasis."
     - Use the four-step surface ladder for hierarchy. Avoid skipping levels.
     - Pair display weight 600 with body weight 400 — Linear resists 700+ display weights.
@@ -792,7 +799,7 @@ constraints:
     - read rationale.layout / rationale.elevation / rationale.shapes before inventing chrome
     - when shadcn is enabled, apply integrations.shadcn.css_vars to globals.css
     - prefer catalog components over one-off controls
-    - "Reserve `{tokens.color.canvas}` (#010102) as the system's anchor surface \u2014 the faint blue tint is intentional."
+    - "Reserve `{tokens.color.canvas}` (#010102) as the system's anchor surface — the faint blue tint is intentional."
     - "Use `{tokens.color.primary}` lavender ONLY for: brand mark, primary CTA, focus ring, link emphasis."
     - Use the four-step surface ladder for hierarchy. Avoid skipping levels.
     - Pair display weight 600 with body weight 400 — Linear resists 700+ display weights.

@@ -9,7 +9,7 @@ The file is the source of truth. Git is the audit trail.
 | `bootstrap` / `extract` | New or empty system from sources | Fill draft fields; `status: bootstrap`; populate `sources` |
 | `update` | User asked to change brand/components | Edit unlocked fields; bump `version` + `updated_at` |
 | `lock` / `unlock` | Release / exploration | Adjust `status` and `locked[]` with user intent |
-| `verify` | Drift check | Report; edit only when asked to fix |
+| `verify` | Drift check | Report per token group (added / removed / modified) + regression flag; edit only when asked to fix |
 
 ## Locked paths
 

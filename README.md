@@ -161,7 +161,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.
 
 ## Status
 
-**design.v1** — released; current contract **1.1** ([CHANGELOG](CHANGELOG.md)): voice, committed intent (direction / signature / treatment), nested tokens, current shadcn model + registry export, annotated starter template, CI-enforced validation ([scripts/lint_design.py](scripts/lint_design.py)). Standalone CLI (`diff`, `export`) planned.
+**design.v1** — released; current contract **1.2** ([CHANGELOG](CHANGELOG.md)): voice, committed intent (direction / signature / treatment), nested tokens, current shadcn model + registry export, annotated starter template, and reference tooling — [lint](scripts/lint_design.py), [export](scripts/export_design.py) (CSS / Tailwind v4 / DTCG / shadcn registry item), [diff](scripts/diff_design.py) with §18 regression flag — all CI-enforced. Standalone packaged CLI planned.
 
 ## License
 

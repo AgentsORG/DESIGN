@@ -18,8 +18,26 @@ Thanks for helping make `.design` the living visual contract for AI design.
 3. Update skills/design/ references
 4. Refresh examples if needed:
      python scripts/convert_getdesign.py
-5. Update docs/ (especially diagrams)
-6. Open a PR
+5. Validate everything:
+     python scripts/lint_design.py
+6. Update docs/ (especially diagrams)
+7. Open a PR — CI runs the same validation plus a leak guard
+```
+
+## Reference tooling
+
+| Script | Purpose |
+| --- | --- |
+| `scripts/lint_design.py` | Schema + SPEC §19 lint over all examples/templates (runs in CI) |
+| `scripts/export_design.py` | Emit `exports.*` artifacts: CSS variables (mode strategies), Tailwind v4 `@theme`, DTCG JSON, shadcn registry item |
+| `scripts/diff_design.py` | SPEC §18 diff: added/removed/modified per token group + regression flag (`--fail-on-regression`) |
+| `scripts/convert_getdesign.py` | Regenerate brand examples from DESIGN.md analyses |
+
+```bash
+pip install pyyaml jsonschema
+python scripts/lint_design.py
+python scripts/export_design.py templates/starter.design --out-dir /tmp/exports
+python scripts/diff_design.py old.design new.design --fail-on-regression
 ```
 
 ## Regenerating examples
@@ -27,8 +45,9 @@ Thanks for helping make `.design` the living visual contract for AI design.
 Requires temporary DESIGN.md downloads (gitignored):
 
 ```bash
-# download sources into .tmp-*-DESIGN.md (see scripts/convert_getdesign.py)
+# download sources into .tmp-*-DESIGN.md (see scripts/convert_getdesign.py BRANDS)
 python scripts/convert_getdesign.py
+python scripts/lint_design.py
 ```
 
 ## Docs

@@ -92,7 +92,7 @@ After binding tokens + components
 └── Marketing hero restrained unless patterns.* say otherwise?
 ```
 
-If a CRAFT rule conflicts with tokens / constraints / rationale / when_when_not → **`.design` wins**.
+If a CRAFT rule conflicts with tokens / constraints / rationale / when / when_not → **`.design` wins**.
 
 ## Component API (invent path)
 

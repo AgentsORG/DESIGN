@@ -26,7 +26,7 @@ If the skill is absent, follow these instructions exactly.
 
 READ
 - Load this file before any UI generation or restyle. Large file? Normative core first
-  (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+  (intent, constraints, policy/decisions, tokens, components, themes, voice, locked); rationale on demand.
 - Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
 - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
 
@@ -38,8 +38,10 @@ FOLLOW (generate or edit UI)
 - Never invent raw hex/spacing/radius when a token exists.
 - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
 - Concentrate boldness in intent.signature; keep everything around it quiet.
+- Themes: generate for the active mode (themes.default); modes are designed, never inverted.
 - Match the project's existing styling stack - do not switch stacks.
 - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+- If integrations.figma is present: this file is repo-canonical unless sync.direction says otherwise; ask on conflicts.
 - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
 
 UPDATE
@@ -47,11 +49,19 @@ UPDATE
 - Ask before changing any path in locked. Bump version (SemVer).
 
 VERIFY
-- Compare tokens <-> CSS/Tailwind; components <-> imports; report drift before fixing.
+- Compare tokens <-> CSS/Tailwind and components <-> imports; report drift per token group
+  as added/removed/modified plus a regression flag before fixing.
 
 PRECEDENCE
 1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
 
+NEVER
+- Invent a parallel design system beside this file
+- Embed binaries or full page HTML trees here
+- Claim affiliation with third-party brands used only as visual references"""
+
+# Appended only to brand-analysis examples (not to generic templates/stubs).
+BRAND_DISCLAIMER = """
 DISCLAIMER
 Independent visual analysis - not affiliated with the named brand. Adapt before production use."""
 
@@ -251,9 +261,11 @@ def yaml_quote(s: str) -> str:
         return '""'
     s = str(s)
     if re.search(r'[:#\[\]{},&*?|>!%@`]', s) or s.startswith(" ") or s.endswith(" ") or "\n" in s:
-        return json.dumps(s)
-    if s == "" or s.lower() in ("true", "false", "null") or re.match(r"^-?\d", s):
-        return json.dumps(s)
+        return json.dumps(s, ensure_ascii=False)
+    if s and s[0] in "\"'-":
+        return json.dumps(s, ensure_ascii=False)
+    if s == "" or s.lower() in ("true", "false", "null", "yes", "no", "on", "off", "y", "n", "~") or re.match(r"^-?\d", s):
+        return json.dumps(s, ensure_ascii=False)
     return s
 
 
@@ -452,10 +464,14 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     sh = build_shadcn_map(colors)
 
     overview = sections.get("overview") or meta.get("description") or cfg["intent_ref"]
-    # truncate description one-liner
-    desc = meta.get("description") or overview
+    # one-line description: refs rewritten, uniform independent-analysis framing,
+    # truncated at a word boundary
+    desc = rewrite_refs(meta.get("description") or overview)
+    brand_title = slug.capitalize()
+    if "inspired interpretation" not in desc.lower():
+        desc = f"An inspired interpretation of {brand_title}'s design language — " + desc[0].lower() + desc[1:]
     if len(desc) > 220:
-        desc = desc[:217].rstrip() + "..."
+        desc = desc[:217].rsplit(" ", 1)[0].rstrip(",;:") + " …"
 
     dos, donts = [], []
     if "dos_donts" in sections:
@@ -475,7 +491,7 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     lines.append("agent:")
     lines.append("  skill: design")
     lines.append("  instructions: |")
-    for line in SELF_CONTAINED_INSTRUCTIONS.splitlines():
+    for line in (SELF_CONTAINED_INSTRUCTIONS + BRAND_DISCLAIMER).splitlines():
         lines.append(f"    {line}" if line else "    ")
     lines.append("")
     lines.extend(emit_literal_block("overview", overview, indent=0))
@@ -740,9 +756,28 @@ def emit_design(slug: str, cfg: dict, data: dict, sections: dict[str, str]) -> s
     return "\n".join(lines)
 
 
+# Upstream analyses occasionally reference pipeline tooling that does not exist
+# in this repo; scrub those lines so shipped files carry no dangling instructions.
+SCRUB_LINE_PATTERNS = [
+    re.compile(r"^.*derive-examples-block\.mjs.*$", re.M),
+    re.compile(r"^.*resolve any TO_FILL markers.*$", re.M),
+]
+SCRUB_REPLACEMENT = "> Demonstration surfaces derived from the component tokens above; each `ex-*` entry reuses brand-native primitives so the same surfaces re-skin consistently."
+
+
 def main():
     out_dir = ROOT / "examples"
     out_dir.mkdir(exist_ok=True)
+
+    missing = [cfg["file"] for cfg in BRANDS.values() if not (ROOT / cfg["file"]).exists()]
+    if missing:
+        print("ABORT: missing converter inputs (gitignored DESIGN.md downloads):")
+        for name in missing:
+            print(f"  {name}")
+        print("Download each brand's DESIGN.md into the repo root first (see BRANDS for URLs).")
+        print("No files were deleted.")
+        return 1
+
     for old in out_dir.glob("*.design"):
         old.unlink()
         print("removed", old.name)
@@ -752,6 +787,8 @@ def main():
         text = src.read_text(encoding="utf-8")
         for obfuscated, real in BRAND_NAME_FIXES.items():
             text = text.replace(obfuscated, real)
+        for pattern in SCRUB_LINE_PATTERNS:
+            text = pattern.sub(lambda m: SCRUB_REPLACEMENT if m.group(0).lstrip().startswith(">") else "", text)
         fm, body = extract_fm(text)
         if not fm:
             print("NO FM", slug)
@@ -776,4 +813,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main() or 0)

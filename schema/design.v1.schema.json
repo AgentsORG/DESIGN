@@ -21,7 +21,8 @@
     },
     "version": {
       "type": "string",
-      "pattern": "^\\d+\\.\\d+\\.\\d+([.-].+)?$"
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+      "description": "SemVer 2.0.0 (MAJOR.MINOR.PATCH with optional pre-release and build metadata)."
     },
     "status": {
       "type": "string",
@@ -132,12 +133,6 @@
         },
         "emotion": {
           "type": "string"
-        },
-        "tone": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         }
       }
     },
@@ -150,7 +145,8 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["repo", "figma", "url", "file", "components_json", "other"]
+            "examples": ["repo", "figma", "url", "file", "components_json", "other"],
+            "description": "Source kind; common values listed as examples — unknown kinds are accepted."
           },
           "path": {
             "type": "string"
@@ -242,7 +238,7 @@
         },
         "zIndex": {
           "type": "object",
-          "additionalProperties": { "type": ["string", "number"] },
+          "additionalProperties": { "$ref": "#/$defs/tokenNode" },
           "description": "Stacking scale (nav, modal, toast, …)."
         },
         "iconography": {
@@ -707,9 +703,21 @@
     },
     "componentPropertyBag": {
       "type": "object",
-      "description": "DESIGN.md component property tokens (plus aliases). Unknown properties accepted (string/number/boolean) per consumer rules.",
+      "description": "DESIGN.md component property tokens (plus aliases). Unknown properties accepted (string/number/boolean) per consumer rules. Catalog-reserved keys are forbidden here so malformed catalog entries cannot slip through this branch.",
       "additionalProperties": {
         "type": ["string", "number", "boolean"]
+      },
+      "not": {
+        "anyOf": [
+          { "required": ["when"] },
+          { "required": ["when_not"] },
+          { "required": ["variants"] },
+          { "required": ["states"] },
+          { "required": ["anatomy"] },
+          { "required": ["tokens"] },
+          { "required": ["import"] },
+          { "required": ["status"] }
+        ]
       },
       "properties": {
         "backgroundColor": { "type": ["string", "number"] },

@@ -12,7 +12,7 @@ description: >
 license: MIT
 metadata:
   author: AgentsORG
-  version: "1.1"
+  version: "1.2"
   spec: design.v1
 ---
 
@@ -44,13 +44,14 @@ Load order once found:
 2. `overview` / `intent` / `rationale.overview`
 3. `constraints` (+ `rationale.dos` / `rationale.donts`)
 4. `policy` / `decisions`
-5. `tokens` (including `elevation` when present)
-6. `rationale` (colors, typography, layout, elevation, shapes, components)
-7. `components` / `patterns` (bind every property in each bag)
-8. `integrations` (e.g. shadcn)
-9. `examples`
-10. `locked` when updating
-11. `omitted` (do not invent filler for listed sections)
+5. `tokens` (including `elevation` when present) + `themes` (active mode)
+6. `voice` (applies to all UI copy)
+7. `rationale` (colors, typography, layout, elevation, shapes, components)
+8. `components` / `patterns` (bind every property in each bag)
+9. `integrations` (e.g. shadcn)
+10. `examples`
+11. `locked` when updating
+12. `omitted` (do not invent filler for listed sections)
 
 ## 2. Read
 
@@ -136,7 +137,7 @@ When asked to sync/verify, or after large UI refactors:
 2. If `integrations.shadcn.enabled`, compare `css_vars` + `radius` to `globals.css` and `components.json`
 3. Compare `components` to real imports and variants
 4. Flag hardcoded hex/spacing that should be tokens
-5. Report findings; update `.design` only when asked
+5. Report findings per token group as **added / removed / modified**, plus a **regression** flag when anything consumers may rely on was removed or changed (`scripts/diff_design.py` implements this shape); update `.design` only when asked
 
 Checklist: [references/REVIEW.md](references/REVIEW.md) (includes CRAFT escalation triggers and Before/After/Why table).
 

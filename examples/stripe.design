@@ -2,7 +2,7 @@ schema: design.v1
 name: stripe
 version: 1.0.0
 status: refine
-description: "An inspired interpretation of Stripe's design language \u2014 a financial-infrastructure brand built on a deep navy ink, an electric indigo primary, and a recurring atmospheric gradient mesh that occupies the upper third o..."
+description: "An inspired interpretation of Stripe's design language — a financial-infrastructure brand built on a deep navy ink, an electric indigo primary, and a recurring atmospheric gradient mesh that occupies the upper third …"
 
 $schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v1.schema.json
 
@@ -15,7 +15,7 @@ agent:
     
     READ
     - Load this file before any UI generation or restyle. Large file? Normative core first
-      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+      (intent, constraints, policy/decisions, tokens, components, themes, voice, locked); rationale on demand.
     - Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
     - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
     
@@ -27,8 +27,10 @@ agent:
     - Never invent raw hex/spacing/radius when a token exists.
     - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
     - Concentrate boldness in intent.signature; keep everything around it quiet.
+    - Themes: generate for the active mode (themes.default); modes are designed, never inverted.
     - Match the project's existing styling stack - do not switch stacks.
     - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - If integrations.figma is present: this file is repo-canonical unless sync.direction says otherwise; ask on conflicts.
     - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
     
     UPDATE
@@ -36,11 +38,16 @@ agent:
     - Ask before changing any path in locked. Bump version (SemVer).
     
     VERIFY
-    - Compare tokens <-> CSS/Tailwind; components <-> imports; report drift before fixing.
+    - Compare tokens <-> CSS/Tailwind and components <-> imports; report drift per token group
+      as added/removed/modified plus a regression flag before fixing.
     
     PRECEDENCE
     1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
     
+    NEVER
+    - Invent a parallel design system beside this file
+    - Embed binaries or full page HTML trees here
+    - Claim affiliation with third-party brands used only as visual references
     DISCLAIMER
     Independent visual analysis - not affiliated with the named brand. Adapt before production use.
 
@@ -61,7 +68,7 @@ overview: |
   - Cream-band feature cards (`{tokens.color.canvas-cream}`) introduce a warm interlude between blue/white sections without breaking the brand's chromatic logic.
 
 intent:
-  reference: "Stripe marketing \u2014 signature purple gradients, weight-300 elegance, fintech clarity"
+  reference: "Stripe marketing — signature purple gradients, weight-300 elegance, fintech clarity"
   direction: polished fintech clarity
   signature: The animated multi-color gradient ribbon over otherwise disciplined neutrals
   density: comfortable
@@ -619,7 +626,7 @@ rationale:
     6. Apply `ss01` globally on the body; apply `tnum` per-element on numeric content.
     7. The gradient mesh is non-negotiable on marketing heroes — bare-canvas heroes break the brand.
   dos:
-    - "Reserve `{tokens.color.primary}` for filled CTAs and inline link emphasis \u2014 it should appear sparingly, one filled button per band."
+    - "Reserve `{tokens.color.primary}` for filled CTAs and inline link emphasis — it should appear sparingly, one filled button per band."
     - Apply the gradient mesh to every marketing hero; bare-canvas heroes feel off-brand.
     - Render display tiers at weight 300 with negative letter-spacing — the thin tracking is the typographic signature.
     - "Use `font-feature-settings: \"tnum\"` on every money / numeric cell."
@@ -628,9 +635,9 @@ rationale:
   donts:
     - bump display weight above 300 — at 400 the brand's editorial air collapses.
     - add new accent colors outside the documented gradient stops (cream / orange / lavender / indigo / ruby / magenta).
-    - "use the indigo `{tokens.color.primary}` as a body-text color \u2014 it's a CTA and link color, not a type color at body size."
-    - "shrink button padding below `8px 16px` \u2014 the tight pill is part of the brand's transactional feel."
-    - "render money cells without `tnum` \u2014 it breaks the quiet financial-data signature."
+    - "use the indigo `{tokens.color.primary}` as a body-text color — it's a CTA and link color, not a type color at body size."
+    - "shrink button padding below `8px 16px` — the tight pill is part of the brand's transactional feel."
+    - "render money cells without `tnum` — it breaks the quiet financial-data signature."
     - replace the pill shape with rounded-rectangles for buttons.
 
 omitted:
@@ -707,7 +714,7 @@ constraints:
     - read rationale.layout / rationale.elevation / rationale.shapes before inventing chrome
     - when shadcn is enabled, apply integrations.shadcn.css_vars to globals.css
     - prefer catalog components over one-off controls
-    - "Reserve `{tokens.color.primary}` for filled CTAs and inline link emphasis \u2014 it should appear sparingly, one filled button per band."
+    - "Reserve `{tokens.color.primary}` for filled CTAs and inline link emphasis — it should appear sparingly, one filled button per band."
     - Apply the gradient mesh to every marketing hero; bare-canvas heroes feel off-brand.
     - Render display tiers at weight 300 with negative letter-spacing — the thin tracking is the typographic signature.
     - "Use `font-feature-settings: \"tnum\"` on every money / numeric cell."
@@ -718,9 +725,9 @@ constraints:
     - dropping DESIGN.md component variants or rationale during restyle
     - bump display weight above 300 — at 400 the brand's editorial air collapses.
     - add new accent colors outside the documented gradient stops (cream / orange / lavender / indigo / ruby / magenta).
-    - "use the indigo `{tokens.color.primary}` as a body-text color \u2014 it's a CTA and link color, not a type color at body size."
-    - "shrink button padding below `8px 16px` \u2014 the tight pill is part of the brand's transactional feel."
-    - "render money cells without `tnum` \u2014 it breaks the quiet financial-data signature."
+    - "use the indigo `{tokens.color.primary}` as a body-text color — it's a CTA and link color, not a type color at body size."
+    - "shrink button padding below `8px 16px` — the tight pill is part of the brand's transactional feel."
+    - "render money cells without `tnum` — it breaks the quiet financial-data signature."
     - replace the pill shape with rounded-rectangles for buttons.
 
 examples:

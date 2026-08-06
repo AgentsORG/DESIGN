@@ -30,8 +30,9 @@ cp examples/stripe.design ./.design
 # then adapt name / intent / locked for your product
 ```
 
-Regenerate:
+Regenerate (requires the gitignored `.tmp-*-DESIGN.md` downloads in the repo root — see `BRANDS` in [scripts/convert_getdesign.py](../scripts/convert_getdesign.py) for the source URLs; the script aborts safely if they are missing):
 
 ```bash
 python scripts/convert_getdesign.py
+python scripts/lint_design.py
 ```

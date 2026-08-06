@@ -2,7 +2,7 @@ schema: design.v1
 name: apple
 version: 1.0.0
 status: refine
-description: "A photography-first interface that turns marketing into a museum gallery. Edge-to-edge product tiles alternate light and dark canvases, framed by SF Pro Display headlines with negative letter-spacing and a single Acti..."
+description: "An inspired interpretation of Apple's design language — a photography-first interface that turns marketing into a museum gallery. Edge-to-edge product tiles alternate light and dark canvases, framed by SF Pro Display …"
 
 $schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v1.schema.json
 
@@ -15,7 +15,7 @@ agent:
     
     READ
     - Load this file before any UI generation or restyle. Large file? Normative core first
-      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+      (intent, constraints, policy/decisions, tokens, components, themes, voice, locked); rationale on demand.
     - Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
     - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
     
@@ -27,8 +27,10 @@ agent:
     - Never invent raw hex/spacing/radius when a token exists.
     - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
     - Concentrate boldness in intent.signature; keep everything around it quiet.
+    - Themes: generate for the active mode (themes.default); modes are designed, never inverted.
     - Match the project's existing styling stack - do not switch stacks.
     - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - If integrations.figma is present: this file is repo-canonical unless sync.direction says otherwise; ask on conflicts.
     - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
     
     UPDATE
@@ -36,11 +38,16 @@ agent:
     - Ask before changing any path in locked. Bump version (SemVer).
     
     VERIFY
-    - Compare tokens <-> CSS/Tailwind; components <-> imports; report drift before fixing.
+    - Compare tokens <-> CSS/Tailwind and components <-> imports; report drift per token group
+      as added/removed/modified plus a regression flag before fixing.
     
     PRECEDENCE
     1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
     
+    NEVER
+    - Invent a parallel design system beside this file
+    - Embed binaries or full page HTML trees here
+    - Claim affiliation with third-party brands used only as visual references
     DISCLAIMER
     Independent visual analysis - not affiliated with the named brand. Adapt before production use.
 
@@ -62,7 +69,7 @@ overview: |
   - Section rhythm across multiple pages: light hero → dark product tile → light utility tile → dark tile → parchment footer — a predictable pulse.
 
 intent:
-  reference: "Apple marketing \u2014 premium whitespace, SF Pro, cinematic product photography"
+  reference: "Apple marketing — premium whitespace, SF Pro, cinematic product photography"
   direction: cinematic product minimalism
   signature: Full-bleed product photography carrying entire sections; type stays out of its way
   density: comfortable
@@ -723,23 +730,23 @@ rationale:
     - Atmospheric photography (environment page mountain vista) is a content asset, not a design token; the documented `{components.environment-quote-card}` describes the structural surface only.
     - The exact backdrop-filter blur radius on `{components.sub-nav-frosted}` and `{components.floating-sticky-bar}` is platform-dependent; production CSS uses `saturate(180%) blur(20px)` as a typical baseline but the value isn't formalized as a token.
   dos:
-    - "Use `{tokens.color.primary}` (Action Blue #0066cc) for every interactive element \u2014 links, pill CTAs, focus signals \u2014 and nothing else. The single accent is non-negotiable."
-    - "Set headlines in `{tokens.typography.hero-display}` or `{tokens.typography.display-lg}` with negative letter-spacing (`-0.28 \u2192 -0.374px`) to get the signature \"Apple tight\" cadence."
-    - "Run body copy at `{tokens.typography.body}` (17px / 400 / 1.47 / -0.374px) \u2014 not 16px. The extra pixel defines the brand's reading pace."
+    - "Use `{tokens.color.primary}` (Action Blue #0066cc) for every interactive element — links, pill CTAs, focus signals — and nothing else. The single accent is non-negotiable."
+    - "Set headlines in `{tokens.typography.hero-display}` or `{tokens.typography.display-lg}` with negative letter-spacing (`-0.28 → -0.374px`) to get the signature \"Apple tight\" cadence."
+    - "Run body copy at `{tokens.typography.body}` (17px / 400 / 1.47 / -0.374px) — not 16px. The extra pixel defines the brand's reading pace."
     - "Alternate `{components.product-tile-light}` (or parchment) and `{components.product-tile-dark}` for full-bleed section rhythm. The color change IS the divider."
     - "Reserve `{tokens.radius.pill}` for the primary blue CTA and any other element that should read as an \"action\" (configurator chips, search input, sticky bar CTA)."
-    - "Apply the single product-shadow (`rgba(0, 0, 0, 0.22) 3px 5px 30px`) only to product renders resting on a surface \u2014 never on cards, buttons, or text."
-    - "Use `transform: scale(0.95)` as the active/press state on every button \u2014 it's the system-wide micro-interaction."
-    - "Keep the global nav `{tokens.color.surface-black}` (true black) \u2014 it's the only place pure black appears on most pages."
+    - "Apply the single product-shadow (`rgba(0, 0, 0, 0.22) 3px 5px 30px`) only to product renders resting on a surface — never on cards, buttons, or text."
+    - "Use `transform: scale(0.95)` as the active/press state on every button — it's the system-wide micro-interaction."
+    - "Keep the global nav `{tokens.color.surface-black}` (true black) — it's the only place pure black appears on most pages."
   donts:
     - "introduce a second accent color; every \"click me\" signal is `{tokens.color.primary}` (Action Blue)."
-    - "add shadows to cards, buttons, or text \u2014 shadow is reserved for product imagery."
+    - "add shadows to cards, buttons, or text — shadow is reserved for product imagery."
     - use gradients as decorative backgrounds; atmosphere comes from photography.
-    - "set body copy at weight 500 \u2014 Apple's ladder is 300 / 400 / 600 / 700, with 500 deliberately absent. Body is always 400; strong inline is 600; display is 600."
+    - "set body copy at weight 500 — Apple's ladder is 300 / 400 / 600 / 700, with 500 deliberately absent. Body is always 400; strong inline is 600; display is 600."
     - round full-bleed tiles — tiles are rectangular and edge-to-edge; the color change is the divider.
     - tighten line-height below 1.47 for body copy — the editorial leading is part of the brand.
-    - "mix radii grammars \u2014 use `{tokens.radius.sm}` for compact utility, `{tokens.radius.lg}` for utility cards, `{tokens.radius.pill}` for pills, and nothing in between (except the rare `{tokens.radius.md}` Pearl Button)."
-    - "use `{tokens.color.primary-on-dark}` (Sky Link Blue) on light surfaces \u2014 it's the dark-tile-only variant. Action Blue is for light surfaces."
+    - "mix radii grammars — use `{tokens.radius.sm}` for compact utility, `{tokens.radius.lg}` for utility cards, `{tokens.radius.pill}` for pills, and nothing in between (except the rare `{tokens.radius.md}` Pearl Button)."
+    - "use `{tokens.color.primary-on-dark}` (Sky Link Blue) on light surfaces — it's the dark-tile-only variant. Action Blue is for light surfaces."
 
 omitted:
   - section: tokens.elevation
@@ -815,25 +822,25 @@ constraints:
     - read rationale.layout / rationale.elevation / rationale.shapes before inventing chrome
     - when shadcn is enabled, apply integrations.shadcn.css_vars to globals.css
     - prefer catalog components over one-off controls
-    - "Use `{tokens.color.primary}` (Action Blue #0066cc) for every interactive element \u2014 links, pill CTAs, focus signals \u2014 and nothing else. The single accent is non-negotiable."
-    - "Set headlines in `{tokens.typography.hero-display}` or `{tokens.typography.display-lg}` with negative letter-spacing (`-0.28 \u2192 -0.374px`) to get the signature \"Apple tight\" cadence."
-    - "Run body copy at `{tokens.typography.body}` (17px / 400 / 1.47 / -0.374px) \u2014 not 16px. The extra pixel defines the brand's reading pace."
+    - "Use `{tokens.color.primary}` (Action Blue #0066cc) for every interactive element — links, pill CTAs, focus signals — and nothing else. The single accent is non-negotiable."
+    - "Set headlines in `{tokens.typography.hero-display}` or `{tokens.typography.display-lg}` with negative letter-spacing (`-0.28 → -0.374px`) to get the signature \"Apple tight\" cadence."
+    - "Run body copy at `{tokens.typography.body}` (17px / 400 / 1.47 / -0.374px) — not 16px. The extra pixel defines the brand's reading pace."
     - "Alternate `{components.product-tile-light}` (or parchment) and `{components.product-tile-dark}` for full-bleed section rhythm. The color change IS the divider."
     - "Reserve `{tokens.radius.pill}` for the primary blue CTA and any other element that should read as an \"action\" (configurator chips, search input, sticky bar CTA)."
-    - "Apply the single product-shadow (`rgba(0, 0, 0, 0.22) 3px 5px 30px`) only to product renders resting on a surface \u2014 never on cards, buttons, or text."
-    - "Use `transform: scale(0.95)` as the active/press state on every button \u2014 it's the system-wide micro-interaction."
-    - "Keep the global nav `{tokens.color.surface-black}` (true black) \u2014 it's the only place pure black appears on most pages."
+    - "Apply the single product-shadow (`rgba(0, 0, 0, 0.22) 3px 5px 30px`) only to product renders resting on a surface — never on cards, buttons, or text."
+    - "Use `transform: scale(0.95)` as the active/press state on every button — it's the system-wide micro-interaction."
+    - "Keep the global nav `{tokens.color.surface-black}` (true black) — it's the only place pure black appears on most pages."
   never:
     - generic purple-on-white AI chrome unrelated to this brand
     - dropping DESIGN.md component variants or rationale during restyle
     - "introduce a second accent color; every \"click me\" signal is `{tokens.color.primary}` (Action Blue)."
-    - "add shadows to cards, buttons, or text \u2014 shadow is reserved for product imagery."
+    - "add shadows to cards, buttons, or text — shadow is reserved for product imagery."
     - use gradients as decorative backgrounds; atmosphere comes from photography.
-    - "set body copy at weight 500 \u2014 Apple's ladder is 300 / 400 / 600 / 700, with 500 deliberately absent. Body is always 400; strong inline is 600; display is 600."
+    - "set body copy at weight 500 — Apple's ladder is 300 / 400 / 600 / 700, with 500 deliberately absent. Body is always 400; strong inline is 600; display is 600."
     - round full-bleed tiles — tiles are rectangular and edge-to-edge; the color change is the divider.
     - tighten line-height below 1.47 for body copy — the editorial leading is part of the brand.
-    - "mix radii grammars \u2014 use `{tokens.radius.sm}` for compact utility, `{tokens.radius.lg}` for utility cards, `{tokens.radius.pill}` for pills, and nothing in between (except the rare `{tokens.radius.md}` Pearl Button)."
-    - "use `{tokens.color.primary-on-dark}` (Sky Link Blue) on light surfaces \u2014 it's the dark-tile-only variant. Action Blue is for light surfaces."
+    - "mix radii grammars — use `{tokens.radius.sm}` for compact utility, `{tokens.radius.lg}` for utility cards, `{tokens.radius.pill}` for pills, and nothing in between (except the rare `{tokens.radius.md}` Pearl Button)."
+    - "use `{tokens.color.primary-on-dark}` (Sky Link Blue) on light surfaces — it's the dark-tile-only variant. Action Blue is for light surfaces."
 
 examples:
   good:

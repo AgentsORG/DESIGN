@@ -2,7 +2,7 @@ schema: design.v1
 name: vercel
 version: 1.0.0
 status: refine
-description: "An inspired interpretation of Vercel's design language \u2014 a developer-platform brand whose surface is a stark black-and-ink duet on near-white canvas, broken at hero scale by a multi-color mesh gradient (cyan / blue /..."
+description: "An inspired interpretation of Vercel's design language — a developer-platform brand whose surface is a stark black-and-ink duet on near-white canvas, broken at hero scale by a multi-color mesh gradient (cyan / blue / …"
 
 $schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v1.schema.json
 
@@ -15,7 +15,7 @@ agent:
     
     READ
     - Load this file before any UI generation or restyle. Large file? Normative core first
-      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+      (intent, constraints, policy/decisions, tokens, components, themes, voice, locked); rationale on demand.
     - Order: overview/intent -> constraints -> policy/decisions -> tokens -> voice -> rationale -> components/patterns -> integrations -> locked.
     - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
     
@@ -27,8 +27,10 @@ agent:
     - Never invent raw hex/spacing/radius when a token exists.
     - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
     - Concentrate boldness in intent.signature; keep everything around it quiet.
+    - Themes: generate for the active mode (themes.default); modes are designed, never inverted.
     - Match the project's existing styling stack - do not switch stacks.
     - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - If integrations.figma is present: this file is repo-canonical unless sync.direction says otherwise; ask on conflicts.
     - Craft defaults when this file is silent: one primary CTA; nested radius = outer - padding; transform/opacity only (<300ms); 44x44 targets; focus visible; prefers-reduced-motion; no transition:all.
     
     UPDATE
@@ -36,11 +38,16 @@ agent:
     - Ask before changing any path in locked. Bump version (SemVer).
     
     VERIFY
-    - Compare tokens <-> CSS/Tailwind; components <-> imports; report drift before fixing.
+    - Compare tokens <-> CSS/Tailwind and components <-> imports; report drift per token group
+      as added/removed/modified plus a regression flag before fixing.
     
     PRECEDENCE
     1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
     
+    NEVER
+    - Invent a parallel design system beside this file
+    - Embed binaries or full page HTML trees here
+    - Claim affiliation with third-party brands used only as visual references
     DISCLAIMER
     Independent visual analysis - not affiliated with the named brand. Adapt before production use.
 
@@ -60,7 +67,7 @@ overview: |
   - An "Active CPU" pricing rhythm: `pricing-card` lays out 3-up on the pricing page with `pricing-card-featured` (Pro tier) polarity-flipped to `{tokens.color.primary}` against white-card siblings.
 
 intent:
-  reference: "Vercel marketing \u2014 black/white precision, Geist, maximal restraint"
+  reference: "Vercel marketing — black/white precision, Geist, maximal restraint"
   direction: stark monochrome engineering
   signature: The multi-stop mesh gradient at hero scale — the only color in an otherwise black-and-white system
   density: comfortable
@@ -982,7 +989,7 @@ rationale:
     
     ### Examples (illustrative)
     
-    > Auto-derived kit-mirror demonstration surfaces (`scripts/derive-examples-block.mjs`). Each `ex-*` entry references brand-native primitives so downstream consumers (`/preview-design`, `/generate-kit`) re-skin the same 10 surfaces consistently. `TO_FILL` markers indicate missing primitives — resolve in the LLM judgment pass.
+    > Demonstration surfaces derived from the component tokens above; each `ex-*` entry reuses brand-native primitives so the same surfaces re-skin consistently.
     
     **`ex-pricing-tier`** — Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
     - Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
@@ -1017,9 +1024,9 @@ rationale:
     - "Reserve `{tokens.color.primary}` (`#171717`) for primary CTAs across the page. Black ink IS the conversion target."
     - "Use `{tokens.radius.pill}` 100 px for every marketing-scale CTA and `{tokens.radius.sm}` 6 px for nav-scale buttons. The two pill scales coexist deliberately."
     - "Set every headline in `{tokens.typography.display-*}` weight 600, sentence-case, often period-terminated. Aggressive negative tracking is part of the voice."
-    - "Use the brand mesh gradient as atmospheric decoration at hero scale only \u2014 never miniaturise it to an icon, never reduce to a single colour."
+    - "Use the brand mesh gradient as atmospheric decoration at hero scale only — never miniaturise it to an icon, never reduce to a single colour."
     - Layer stacked shadows (multiple small offsets with inset hairline) rather than single heavy drops. The brand's elevation is calmer than Material.
-    - "Cycle page surfaces in `{tokens.color.canvas-soft}` \u2192 `{tokens.color.canvas}` \u2192 `{tokens.color.primary}` polarity-flipped bands; the dark band IS the depth cue."
+    - "Cycle page surfaces in `{tokens.color.canvas-soft}` → `{tokens.color.canvas}` → `{tokens.color.primary}` polarity-flipped bands; the dark band IS the depth cue."
     - "Set every code block and technical eyebrow in `{tokens.typography.code}` / `{tokens.typography.caption-mono}`. Mono is the voice of the platform."
   donts:
     - introduce a sixth accent colour. The brand operates with ink + gray + the four-pair gradient palette; new accents flatten the voice.
@@ -1112,9 +1119,9 @@ constraints:
     - "Reserve `{tokens.color.primary}` (`#171717`) for primary CTAs across the page. Black ink IS the conversion target."
     - "Use `{tokens.radius.pill}` 100 px for every marketing-scale CTA and `{tokens.radius.sm}` 6 px for nav-scale buttons. The two pill scales coexist deliberately."
     - "Set every headline in `{tokens.typography.display-*}` weight 600, sentence-case, often period-terminated. Aggressive negative tracking is part of the voice."
-    - "Use the brand mesh gradient as atmospheric decoration at hero scale only \u2014 never miniaturise it to an icon, never reduce to a single colour."
+    - "Use the brand mesh gradient as atmospheric decoration at hero scale only — never miniaturise it to an icon, never reduce to a single colour."
     - Layer stacked shadows (multiple small offsets with inset hairline) rather than single heavy drops. The brand's elevation is calmer than Material.
-    - "Cycle page surfaces in `{tokens.color.canvas-soft}` \u2192 `{tokens.color.canvas}` \u2192 `{tokens.color.primary}` polarity-flipped bands; the dark band IS the depth cue."
+    - "Cycle page surfaces in `{tokens.color.canvas-soft}` → `{tokens.color.canvas}` → `{tokens.color.primary}` polarity-flipped bands; the dark band IS the depth cue."
     - "Set every code block and technical eyebrow in `{tokens.typography.code}` / `{tokens.typography.caption-mono}`. Mono is the voice of the platform."
   never:
     - generic purple-on-white AI chrome unrelated to this brand

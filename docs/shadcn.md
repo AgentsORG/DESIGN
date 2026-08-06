@@ -34,8 +34,8 @@ flowchart TB
   end
 
   subgraph shadcn_stack ["shadcn project"]
-    CJ["components.json\nstyle, base, iconLibrary,\naliases, registries, cssVariables"]
-    CSS["globals.css\n:root / .dark + @theme inline"]
+    CJ["components.json<br/>style, base, iconLibrary,<br/>aliases, registries, cssVariables"]
+    CSS["globals.css<br/>:root / .dark + @theme inline"]
     UI["components/ui/*"]
   end
 
@@ -194,7 +194,7 @@ On Tailwind v4 (the current default for shadcn projects):
 flowchart TD
   Need[Need UI] --> En{integrations.shadcn.enabled?}
   En -->|no| Stack[Use project stack + tokens only]
-  En -->|yes| Info["npx shadcn info --json\ndetect base, style, registries"]
+  En -->|yes| Info["npx shadcn info --json<br/>detect base, style, registries"]
   Info --> Have{Already installed under aliases.ui?}
   Have -->|yes| Use[Use installed component]
   Have -->|no| Find["search -q … → docs component"]
@@ -202,9 +202,9 @@ flowchart TD
   Dry --> Add[add component]
   Add --> Use
   Use --> Vars{css_vars / map_from_tokens present?}
-  Vars -->|yes| Write["Write :root / .dark + @theme inline\ninto integrations.shadcn.css"]
+  Vars -->|yes| Write["Write :root / .dark + @theme inline<br/>into integrations.shadcn.css"]
   Vars -->|no| Derive[Derive from tokens.* then write]
-  Write --> CJSync["Keep components.json style, base, iconLibrary,\naliases, registries, cssVariables aligned"]
+  Write --> CJSync["Keep components.json style, base, iconLibrary,<br/>aliases, registries, cssVariables aligned"]
   Derive --> CJSync
   CJSync --> Policy[Still obey when / when_not / constraints]
   Stack --> Policy

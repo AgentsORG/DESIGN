@@ -40,7 +40,7 @@ Every file MUST include:
 schema: design.v1
 ```
 
-Consumers that do not recognize the schema version SHOULD warn when following and MUST be careful when writing.
+Consumers that do not recognize the schema version SHOULD warn when following and MUST NOT perform write operations they cannot safely preserve (see §23).
 
 Optional JSON Schema reference:
 
@@ -169,7 +169,7 @@ Full mapping: [docs/design-md-mapping.md](docs/design-md-mapping.md).
 
 ---
 
-## 7.1 Integrations — shadcn/ui
+### 7.1 Integrations — shadcn/ui
 
 [shadcn/ui](https://ui.shadcn.com/) is the most common agent codegen target for React/Tailwind. `.design` does **not** replace `components.json`; it **orchestrates** it.
 
@@ -280,12 +280,12 @@ Need UI?
 │   │         ensure css_vars applied to globals.css
 │   │         respect components.json aliases / style
 │   └── No → implement with project stack + tokens
-└── Always obey constraints / decisions / when_when_not
+└── Always obey constraints / decisions / when / when_not
 ```
 
 ---
 
-## 7.2 Integrations — Figma
+### 7.2 Integrations — Figma
 
 `.design` is the **repo-canonical** contract. Figma is an authoring surface. Sync direction is explicit.
 
@@ -316,7 +316,7 @@ Agents using Figma MCP MUST still **write normative decisions into `.design`** (
 
 ---
 
-## 7.3 Themes (modes)
+### 7.3 Themes (modes)
 
 Multi-mode products (light/dark, brand skins) use `themes` as overlays on base `tokens`:
 
@@ -351,7 +351,7 @@ Rules:
 
 ---
 
-## 7.4 Exports (toolchain bridges)
+### 7.4 Exports (toolchain bridges)
 
 Declare where tooling SHOULD emit derived artifacts. `.design` remains normative; exports are generated.
 
@@ -393,11 +393,11 @@ Recommended pipeline:
   → app consumes generated files
 ```
 
-v1 does not ship a CLI; agents and future `design` CLI SHOULD implement export. Until then, agents MAY hand-write CSS / shadcn vars from `tokens` + `themes`.
+Reference implementations ship in this repository: `scripts/export_design.py` (CSS with mode strategies, Tailwind v4 `@theme`, DTCG, shadcn registry item) and `scripts/diff_design.py` (§18 diff + regression flag). Agents MAY use them, reimplement them, or hand-write CSS / shadcn vars from `tokens` + `themes`.
 
 ---
 
-## 7.5 Assets (references only)
+### 7.5 Assets (references only)
 
 ```yaml
 assets:
@@ -415,7 +415,7 @@ Paths only — never embed binaries. Clear-space / misuse rules belong in `ratio
 
 ---
 
-## 7.6 Targets (environment constraints)
+### 7.6 Targets (environment constraints)
 
 `targets` entries MAY be objects that declare the constraints of the rendering environment, so agents adapt emission instead of shipping silently broken output:
 
@@ -449,7 +449,7 @@ agent:
 
     READ
     - Load this file before any UI generation or restyle. Large file? Normative core first
-      (intent, constraints, policy/decisions, tokens, components, voice, locked); rationale on demand.
+      (intent, constraints, policy/decisions, tokens, components, themes, voice, locked); rationale on demand.
     - Order: overview/intent → constraints → policy/decisions → tokens → voice → rationale → components/patterns → integrations → locked.
     - Tokens and structured rules are normative. Rationale is judgment when tokens under-specify.
 
@@ -461,8 +461,10 @@ agent:
     - Never invent raw hex/spacing/radius when a token exists.
     - Apply patterns.*; enforce constraints.always / never; apply voice.* to all UI copy.
     - Concentrate boldness in intent.signature; keep everything around it quiet.
+    - Themes: generate for the active mode (themes.default); modes are designed, never inverted.
     - Match the project's existing styling stack — do not switch stacks.
     - If integrations.shadcn.enabled: prefer shadcn UI; write css_vars into the listed CSS file; tokens win on conflict.
+    - If integrations.figma is present: this file is repo-canonical unless sync.direction says otherwise; ask on conflicts.
     - Craft defaults when this file is silent: one primary CTA; nested radius = outer − padding; transform/opacity only (<300ms); 44×44 targets; focus visible; prefers-reduced-motion; no transition:all.
 
     UPDATE
@@ -470,10 +472,16 @@ agent:
     - Ask before changing any path in locked. Bump version (SemVer).
 
     VERIFY
-    - Compare tokens ↔ CSS/Tailwind; components ↔ imports; report drift before fixing.
+    - Compare tokens ↔ CSS/Tailwind and components ↔ imports; report drift per token group
+      as added/removed/modified plus a regression flag before fixing.
 
     PRECEDENCE
     1) User prompt  2) This file  3) design skill  4) Generic taste skills  5) Model defaults
+
+    NEVER
+    - Invent a parallel design system beside this file
+    - Embed binaries or full page HTML trees here
+    - Claim affiliation with third-party brands used only as visual references
 ```
 
 | Field | Required | Description |
@@ -541,6 +549,8 @@ sources:
   - type: file
     path: "./brand/brandbook.pdf"
 ```
+
+Common `type` values: `repo`, `figma`, `url`, `file`, `components_json`, `other`. Unknown kinds are accepted (consumers treat them as `other`).
 
 Bootstrap/extract operations MUST populate `sources` when evidence exists.
 
@@ -623,7 +633,7 @@ Easing curves, durations, and spring configs SHOULD live here as shared tokens �
 | Type | Format | Example |
 | --- | --- | --- |
 | Color | Any CSS color string (hex, named, `rgb()`, `oklch()`, `color-mix()`, …) | `"#0B57D0"`, `oklch(62% 0.18 250)` |
-| Dimension | number + unit (`px`, `em`, `rem`) or bare number in spacing scales | `16px`, `1.5rem`, `4` |
+| Dimension | number + unit (`px`, `em`, `rem`), or bare number in spacing/radius scales and typography sizes (interpreted as px) | `16px`, `1.5rem`, `4` |
 | Typography | object | see below |
 | Elevation | CSS shadow / filter string or structured object | `"0 4px 24px rgba(0,0,0,0.12)"` |
 | Token reference | `{dot.path}` | `"{tokens.color.primary}"` |
@@ -825,7 +835,7 @@ When generating UI, agents MUST:
 
 ---
 
-## 13A. Rationale (DESIGN.md body)
+### 13A. Rationale (DESIGN.md body)
 
 Machine tokens are incomplete without the **why**. `rationale` holds the DESIGN.md markdown-body sections as structured prose so conversion from getdesign.md / DESIGN.md loses nothing.
 
@@ -877,7 +887,7 @@ Rules:
 
 ---
 
-## 13B. Omitted sections
+### 13B. Omitted sections
 
 Matches DESIGN.md `omitted`: intentionally absent groups so linters/agents do not invent filler.
 
@@ -894,7 +904,7 @@ Both namespaces are valid: DESIGN.md section/category names imported verbatim (`
 
 ---
 
-## 13C. Voice (UI copy contract)
+### 13C. Voice (UI copy contract)
 
 Words are design material. `voice` gives agents an enforceable home for copy rules that brand systems always carry and token files never do:
 
@@ -971,7 +981,7 @@ policy:
 
 ### 15.1.1 Craft defaults (informative)
 
-When the file is silent on a craft detail (nested radius, motion duration, tap target size, line measure, …), agents following the portable `design` skill SHOULD apply the skill’s [CRAFT.md](skills/design/references/CRAFT.md) defaults. Those defaults are **non-normative soft rules**: any explicit `tokens`, `constraints`, `rationale`, `components`, or `decisions` entry in this file **overrides** them.
+When the file is silent on a craft detail (nested radius, motion duration, tap target size, line measure, …), agents following the portable `design` skill are expected to apply the skill’s [CRAFT.md](skills/design/references/CRAFT.md) defaults. Those defaults are **non-normative soft rules**: any explicit `tokens`, `constraints`, `rationale`, `components`, or `decisions` entry in this file **overrides** them.
 
 Recommended `constraints` starters that encode common craft laws:
 
@@ -982,7 +992,7 @@ constraints:
     - use semantic tokens; never hardcode hex when a token exists
     - honor focus-visible and prefers-reduced-motion
   never:
-    - transition: all
+    - "transition: all"
     - hover-only access to core actions
     - animating layout properties when transform/opacity suffice
 ```
@@ -1222,7 +1232,7 @@ constraints:
 
 ## 23. Versioning of this specification
 
-This document defines **design.v1**. Future major schema versions (`design.v2`, …) MAY introduce breaking field changes. Tools SHOULD accept older schemas for read/follow and refuse write operations they cannot safely perform.
+This document defines **design.v1**. Future major schema versions (`design.v2`, …) MAY introduce breaking field changes. Tools SHOULD accept older schemas for read/follow and MUST NOT perform write operations they cannot safely preserve (§3).
 
 ---
 

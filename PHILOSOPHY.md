@@ -28,7 +28,7 @@ Two more things belong in the contract because agents lose them between sessions
 
 ## Process plus data
 
-A `.design` file alone is data. Agents also need a **procedure**. This repository ships an Agent Skill (`skills/design/`) that encodes how to discover, load, apply, update, and verify the file. Every valid file may also include a short `agent.instructions` stub so a bare drop-in still works when the skill is not installed.
+A `.design` file alone is data. Agents also need a **procedure**. This repository ships an Agent Skill (`skills/design/`) that encodes how to discover, load, apply, update, and verify the file. Every valid file **must** embed `agent.instructions` so a bare drop-in works even when the skill is not installed — self-containment is a conformance requirement, not a courtesy.
 
 ## Updating the contract
 

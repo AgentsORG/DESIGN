@@ -7,6 +7,28 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-08-06
+
+### Added
+
+- **Reference tooling**: `scripts/export_design.py` — emits `exports.*` artifacts (CSS variables with `mode_strategy` emission, Tailwind v4 `@theme`, DTCG JSON, shadcn `registry:theme` item); `scripts/diff_design.py` — SPEC §18 diff (added/removed/modified per token group, component/variant/locked changes, regression flag, `--fail-on-regression`)
+- CI: exporter smoke test + diff self-check on the starter template
+
+### Changed
+
+- SPEC §7.4 now points at the in-repo reference exporters instead of "no CLI ships"
+- CONTRIBUTING documents the full tooling loop
+- **One canonical `agent.instructions` template** across SPEC §8, docs/self-contained.md, the converter, and every shipped `.design` file (adds themes duty, figma line, §18 verify wording, NEVER section); brand examples alone append the DISCLAIMER; `scripts/patch_agent_instructions.py` re-stamps all files idempotently
+
+### Fixed (adversarial audit)
+
+- SPEC: invalid YAML in the §15.1.1 constraints example (`"transition: all"` now quoted), untestable §3 MUST, Dimension definition vs its own examples, `when_when_not` typo (also in skill references), subsection heading levels, undocumented `sources[].type` values
+- Schema: `version` now a real SemVer pattern (build metadata accepted, four-segment strings rejected); malformed catalog entries (`variants`/`when` as strings) no longer slip through the property-bag branch; nested `tokens.zIndex`; undocumented `intent.tone` removed; `sources[].type` open with examples
+- Converter: aborts safely when its gitignored inputs are missing (previously deleted all examples, then crashed); descriptions get ref-rewriting, uniform framing, and word-boundary truncation; readable unicode (no more `\uXXXX` escapes); YAML-quoting edge cases (leading quotes/dashes, `yes`/`no`/`~`); private-pipeline references scrubbed from one upstream analysis
+- Linter: no longer crashes on malformed input (per-file error instead); nesting-depth off-by-one; `omitted` parent-path suppression; word-boundary duty and orphan checks; `{components.*}` references now resolution-checked
+- Docs: mermaid `\n` labels rendered literally in shadcn.md (now `<br/>`); contradictory prose-ref claims between mapping and getdesign docs; stale research follow-ups; PHILOSOPHY still calling `agent.instructions` optional
+- CI leak guard no longer false-positives on future `easing.*` prose; skill load order includes `voice`/`themes`; verify reporting format propagated to SKILL/UPDATE/REVIEW
+
 ## [1.1.0] — 2026-08-06
 
 ### Added
@@ -26,7 +48,7 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 - `policy.color.accent_cycle` (ordered decorative accent rotation); `decisions.*` generalized beyond components (token-role rules such as `decisions.typography`)
 - Verify reports added/removed/modified per token group plus a regression flag
 - Canonical `agent.instructions` template covers voice, treatment, signature, and tiered reading (SPEC §8, docs, converter, examples)
-- Examples now carry `intent.direction`/`signature`, `voice`, sidebar/chart CSS variables, and `css_vars.theme`
+- Examples now carry `intent.direction`/`signature`, `voice`, sidebar CSS variables (plus `chart-1…5` where the palette provides five distinct accents, e.g. vercel), and `css_vars.theme`
 - `templates/starter.design` — annotated kitchen-sink template exercising every major section (linted in CI)
 - Linter: WCAG contrast checks (component bags + shadcn fg/bg pairs), alias-collision detection, orphan-token summary, instruction-duty coverage
 - CI: schema validation of all examples + format lint rules + banned-reference leak guard; `.gitattributes` line-ending normalization

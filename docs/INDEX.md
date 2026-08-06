@@ -34,9 +34,9 @@ Complete guide to the AgentsORG **`.design`** format (design.v1).
 | [skills-sh.md](skills-sh.md) | Agent Skill packaging |
 | [research.md](research.md) | Background decisions |
 
-## Diagrams (all docs)
+## Key diagrams
 
-Key mermaid diagrams live in:
+The largest mermaid diagrams live in:
 
 - **overview.md** — architecture, discovery, precedence, agent loop, lifecycle, token→CSS  
 - **shadcn.md** — artifact roles, agent workflow  

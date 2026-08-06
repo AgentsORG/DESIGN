@@ -97,4 +97,4 @@ When feel cannot be judged from code, run the animation at 2–5× duration (or 
 | `contrast` | fg/bg meet `policy.accessibility.contrast` when checkable |
 | `craft-scan` | No escalation triggers above; CRAFT defaults where contract is silent |
 
-On fail: report findings. Update `.design` only when the user asks to reconcile.
+On fail: report findings per token group as **added / removed / modified** with a **regression** flag (SPEC §18; `scripts/diff_design.py` implements this shape). Update `.design` only when the user asks to reconcile.

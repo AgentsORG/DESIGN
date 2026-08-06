@@ -36,7 +36,7 @@ __pycache__/
 # OS junk
 Desktop.ini
 
-# Temp DESIGN.md downloads for convert_getdesign.py
-.tmp-*-DESIGN.md
+# Temp DESIGN.md downloads for convert_getdesign.py (deliberately untracked;
+# the converter aborts safely when they are absent)
 .tmp-*
 *.log

@@ -281,6 +281,6 @@ The antidote is not banning ingredients — it is a committed direction: pick a 
 ## When `.design` speaks
 
 ```
-CRAFT rule conflicts with tokens / constraints / rationale / when_when_not?
+CRAFT rule conflicts with tokens / constraints / rationale / when / when_not?
 └── .design wins — follow the contract, note the override briefly
 ```

@@ -42,7 +42,7 @@ State check against the ecosystem as of August 2026, recorded so later readers k
 
 ## Open follow-ups (non-blocking for v1)
 
-- CLI: `diff`, `verify`, `export-dtcg`, `apply-shadcn-css` (`lint` exists as `scripts/lint_design.py`, run in CI)  
+- Shipped as reference scripts: `lint` ([scripts/lint_design.py](../scripts/lint_design.py), in CI), `diff` with regression flag ([scripts/diff_design.py](../scripts/diff_design.py)), `export` for CSS / Tailwind v4 / DTCG / shadcn registry item ([scripts/export_design.py](../scripts/export_design.py)). Remaining: `verify` (code↔contract comparison), `apply-shadcn-css`, and a packaged standalone CLI  
 - Official registry of community `*.design` files  
 - Converter coverage for the full dark-mode / chart / sidebar variable set (SPEC §7.1 now specifies it)  
 

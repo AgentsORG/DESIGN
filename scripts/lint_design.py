@@ -18,6 +18,7 @@ from jsonschema import Draft202012Validator
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 REF_RE = re.compile(r"\{(tokens\.[A-Za-z0-9_.\-]+)\}")
+ANY_REF_RE = re.compile(r"\{((?:tokens|components)\.[A-Za-z0-9_.\-]+)\}")
 MAX_REF_DEPTH = 10
 MAX_NEST_DEPTH = 20
 
@@ -103,16 +104,20 @@ def lint(path: pathlib.Path, validator: Draft202012Validator) -> tuple[list[str]
     warnings: list[str] = []
     doc = yaml.safe_load(path.read_text(encoding="utf-8"))
 
+    if not isinstance(doc, dict):
+        return [f"file does not parse as a single YAML mapping (got {type(doc).__name__})"], []
+
     for err in validator.iter_errors(doc):
         errors.append(f"schema: {'/'.join(map(str, err.absolute_path))}: {err.message[:140]}")
 
-    agent = doc.get("agent") or {}
-    instructions = (agent.get("instructions") or "").strip()
+    agent = doc.get("agent") if isinstance(doc.get("agent"), dict) else {}
+    instructions = str(agent.get("instructions") or "").strip()
     if not instructions:
         errors.append("missing agent.instructions (file must be self-contained)")
     else:
-        lower = instructions.lower()
-        missing_duties = [d for d in DUTIES if d not in lower]
+        missing_duties = [
+            d for d in DUTIES if not re.search(rf"\b{d}\b", instructions, re.IGNORECASE)
+        ]
         if missing_duties:
             warnings.append(
                 "agent.instructions may not cover duties: " + ", ".join(missing_duties)
@@ -122,7 +127,7 @@ def lint(path: pathlib.Path, validator: Draft202012Validator) -> tuple[list[str]
     if isinstance(intent, dict) and not (intent.get("reference") or "").strip():
         errors.append("intent present without intent.reference")
 
-    components = doc.get("components") or {}
+    components = doc.get("components") if isinstance(doc.get("components"), dict) else {}
 
     def check_bag(bag: dict, where: str):
         for a, b in ALIAS_PAIRS:
@@ -159,18 +164,28 @@ def lint(path: pathlib.Path, validator: Draft202012Validator) -> tuple[list[str]
                         f"integrations.shadcn.css_vars.{mode}: {fg_key}/{bg_key} contrast {ratio:.2f}:1 below 3:1"
                     )
 
-    tokens = doc.get("tokens") or {}
-    if nesting_depth(tokens) > MAX_NEST_DEPTH + 1:
+    tokens = doc.get("tokens") if isinstance(doc.get("tokens"), dict) else {}
+    if nesting_depth(tokens) > MAX_NEST_DEPTH:
         errors.append(f"tokens nesting exceeds depth {MAX_NEST_DEPTH}")
 
+    omitted_raw = doc.get("omitted") if isinstance(doc.get("omitted"), list) else []
     omitted = {
-        (o.get("section") if isinstance(o, dict) else o)
-        for o in (doc.get("omitted") or [])
+        str(o.get("section") if isinstance(o, dict) else o)
+        for o in omitted_raw
     }
-    color = tokens.get("color") or {}
-    if "primary" not in color and "tokens.color.primary" not in omitted and "colors" not in omitted:
+
+    def omitted_covers(*names: str) -> bool:
+        """True when any omitted entry names the section or a parent of it."""
+        return any(
+            entry == name or name.startswith(entry + ".")
+            for entry in omitted
+            for name in names
+        )
+
+    color = tokens.get("color") if isinstance(tokens.get("color"), dict) else {}
+    if "primary" not in color and not omitted_covers("tokens.color.primary", "colors"):
         warnings.append("no tokens.color.primary (add or declare in omitted)")
-    if not tokens.get("typography") and "tokens.typography" not in omitted and "typography" not in omitted:
+    if not tokens.get("typography") and not omitted_covers("tokens.typography", "typography"):
         warnings.append("no tokens.typography (add or declare in omitted)")
 
     # orphan color tokens: never referenced anywhere in the document (summary warning only)
@@ -178,13 +193,28 @@ def lint(path: pathlib.Path, validator: Draft202012Validator) -> tuple[list[str]
         raw = path.read_text(encoding="utf-8")
         orphans = [
             k for k, v in color.items()
-            if not isinstance(v, dict) and f"tokens.color.{k}" not in raw
+            if not isinstance(v, dict)
+            and not re.search(rf"tokens\.color\.{re.escape(str(k))}(?![\w-])", raw)
         ]
         if len(orphans) > max(3, len(color) // 2):
             warnings.append(
                 f"{len(orphans)}/{len(color)} color tokens never referenced "
                 f"(e.g. {', '.join(orphans[:5])})"
             )
+
+    # component references ({components.X}): valid when X resolves as a dot path,
+    # names a component, or names a variant inside any component's tokens map
+    component_names = set(components)
+    for comp in components.values():
+        if isinstance(comp, dict) and isinstance(comp.get("tokens"), dict):
+            component_names |= set(comp["tokens"].keys())
+    for section in ("tokens", "components", "themes", "integrations"):
+        for ref in set(ANY_REF_RE.findall(str(doc.get(section) or ""))):
+            if not ref.startswith("components."):
+                continue
+            target_name = ref.split(".", 1)[1]
+            if resolve_path(doc, ref) is None and target_name.split(".")[0] not in component_names:
+                warnings.append(f"{section}: unresolved component reference {{{ref}}}")
 
     # broken / deep token references (search normative fields)
     for section in ("tokens", "components", "themes", "integrations"):
@@ -228,7 +258,10 @@ def main() -> int:
     failed = False
     for path in files:
         rel = path.relative_to(ROOT)
-        errors, warnings = lint(path, validator)
+        try:
+            errors, warnings = lint(path, validator)
+        except Exception as exc:  # keep linting the remaining files
+            errors, warnings = [f"lint crashed: {type(exc).__name__}: {exc}"], []
         for w in warnings:
             print(f"WARN  {rel}: {w}")
         for e in errors:

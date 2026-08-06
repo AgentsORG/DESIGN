@@ -19,6 +19,12 @@ jobs:
         run: python -c "import json; json.load(open('schema/design.v1.schema.json')); print('schema ok')"
       - name: Validate examples against schema + lint rules
         run: python scripts/lint_design.py
+      - name: Exporter smoke test (starter template)
+        run: |
+          python scripts/export_design.py templates/starter.design --out-dir /tmp/design-exports
+          python -c "import json; json.load(open('/tmp/design-exports/tokens.json')); json.load(open('/tmp/design-exports/brand-theme.json')); print('export artifacts parse')"
+      - name: Diff self-check (no regression against itself)
+        run: python scripts/diff_design.py templates/starter.design templates/starter.design --fail-on-regression
       - name: Core files exist
         run: |
           test -f SPEC.md
@@ -27,7 +33,7 @@ jobs:
           echo core files ok
       - name: Guard against private-source mentions
         run: |
-          if git grep -I -i -n -E "aiforui|kowalski|animations\.dev|emilkowal|antalik|easings?\.(dev|co)|index\.how" -- ':!.github/workflows/validate.yml'; then
+          if git grep -I -i -n -E "aiforui|kowalski|animations\.dev|emilkowal|antalik|easings?\.(dev|co)($|[^a-z0-9])|index\.how" -- ':!.github/workflows/validate.yml'; then
             echo "::error::banned reference found in tracked files"
             exit 1
           fi
