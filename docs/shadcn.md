@@ -238,7 +238,7 @@ To restyle an existing app, use `npx shadcn apply <code> --only theme,font` or p
 1. Force a new styling stack if the repo is not on Tailwind/shadcn.
 2. Scatter hardcoded hex in JSX when a CSS variable / token exists.
 3. Silently overwrite `locked` token paths.
-4. Re-init or edit `tailwind.baseColor` / `tailwind.cssVariables` after initialization — they are immutable; restyle via `css_vars` or `apply`.
+4. Re-init or hand-edit `tailwind.baseColor` / `tailwind.cssVariables` after initialization. `cssVariables` is immutable; a base-color or icon-library change goes through the CLI's migrations (`npx shadcn migrate base-color`, `npx shadcn migrate icons`), a theme or font restyle through `npx shadcn apply --preset <code> --only theme,font` — then refresh `integrations.shadcn` to match.
 5. Guess registry namespaces — install only from registries declared in `integrations.shadcn.registries` / `components.json`.
 6. Mix primitive libraries — one `base` per project.
 7. Wrap `css_vars` values in `hsl()` — values are written verbatim.
@@ -285,7 +285,7 @@ Exact mappings live in each example’s `integrations.shadcn.map_from_tokens`.
 ## Init checklist (new app)
 
 1. Copy an example → `.design` and adapt brand copy/tokens.
-2. `npx shadcn@latest init` (optionally `--preset base-nova`) with `cssVariables: true`, matching `style` / `base` / `base_color` / `icon_library` / aliases. `baseColor` and `cssVariables` cannot change after this step — pick deliberately.
+2. `npx shadcn@latest init` (optionally `--preset base-nova`) with `cssVariables: true`, matching `style` / `base` / `base_color` / `icon_library` / aliases. `cssVariables` cannot change after this step; `baseColor` and the icon library can only be changed later via `npx shadcn migrate base-color` / `migrate icons` — pick deliberately. `npx shadcn preset resolve --json` reports the preset a project is on; `npx shadcn view <item>` inspects any registry item before `add`.
 3. Ask agent: *“Apply integrations.shadcn.css_vars to globals.css from .design”* (`:root` / `.dark` + `@theme inline` for custom vars).
 4. Per component: `npx shadcn info --json` → `search -q` → `docs` → `add --dry-run` → `add`.
 5. Build UI citing tokens + shadcn components used.

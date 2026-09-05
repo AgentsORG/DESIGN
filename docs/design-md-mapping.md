@@ -156,6 +156,11 @@ Agents MUST bind every listed property when implementing a component — approxi
 | `integrations.shadcn` | Theme → CSS variables / components.json |
 | `agent.instructions` | Drop-in procedure stub |
 | `when` / `when_not` | Stop inventing duplicate controls |
+| `tokens.motion`, `tokens.sound`, `assets.sounds` | Timing and audio have no DESIGN.md frontmatter; on export they become `## Motion` / `## Sound` prose sections (and round-trip back into `rationale.motion` / `rationale.sound`), while the tokens stay normative here |
+
+## Video: `frame.md`
+
+[HyperFrames](https://www.hyperframes.dev/design) reads a `frame.md` — the DESIGN.md shape with the video frame as the unit, resolved ahead of `design.md` and `DESIGN.md`. `exports.frame_md` generates it from the contract (`scripts/export_design.py --only frame_md`): `colors` / `typography` / `spacing` / `radii` / `components` carry over with refs rewritten (`{tokens.color.x}` → `{colors.x}`), and `motion` / `sound` ride along as extra frontmatter groups so pacing, dwell, and sound cues inherit the brand. Composition, beats, and layout are authored per video and never written back. See [motion-media.md](motion-media.md).
 
 ## Using the `@google/design.md` CLI alongside `.design`
 

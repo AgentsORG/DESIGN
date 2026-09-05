@@ -6,7 +6,7 @@ schema: design.v1
 name: starter
 version: 0.1.0
 status: bootstrap            # bootstrap → refine → lock → evolve
-updated_at: "2026-08-06"
+updated_at: "2026-09-05"
 description: "Annotated starter contract — every major section, ready to adapt."
 
 $schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v1.schema.json
@@ -87,6 +87,10 @@ targets:
   - name: web-artifact
     external_assets: false     # CSP-locked target: inline everything
     single_file: true
+  # - name: video               # launch film / logo reveal — sound is the medium here
+  #   aspect: "16:9"
+  #   fps: 30
+  #   loudness: -14LUFS         # delivery loudness of the rendered mix
 
 # ── Tokens (normative; groups may nest; refs use full dot paths) ───────────
 tokens:
@@ -142,6 +146,13 @@ tokens:
     content-max: 1280px
   background:
     section-wash: "linear-gradient(180deg, {tokens.color.surface.raised} 0%, {tokens.color.surface.base} 100%)"
+  sound:                       # silent by default; delete the group (or list it in omitted) for a silent product
+    enabled: false             # first-run state of the user's sound toggle — product UI ships off
+    material: "felt mallet on a small wooden block, dry, no tail"   # ONE material; prompt prefix for generation
+    peak: -3dBFS
+    loudness: { feedback: -16LUFS, notification: -12LUFS }
+    duration: { tick: 60ms, send: 200ms, error: 150ms, notification: 400ms }   # names match assets.sounds
+    sync-lag-max: 30ms         # audio may lag the visual contact frame by one frame; it never leads
 
 # ── Locked paths (agents must ask before editing) ──────────────────────────
 locked:
@@ -209,6 +220,13 @@ decisions:
       then: { role: heading }
     - if: "numeric data column"
       then: { role: mono-data }
+  sound:
+    - if: "hover, focus, scroll, or keystroke"
+      then: { sound: none }
+    - if: "daily moment — send, save, complete — and the user's toggle is on"
+      then: { sound: "{tokens.sound.duration.send}", trigger: "settle frame of the confirming animation" }
+    - if: "rare milestone"
+      then: { sound: "two- or three-note figure in the family material", max: 800ms }
 
 # ── Constraints (absolute or numeric laws — no hedged prose) ───────────────
 constraints:
@@ -220,6 +238,9 @@ constraints:
     - "transition: all"
     - hover-only access to core actions
     - gradients outside tokens.background
+    - sound on hover, focus, scroll, or keystroke
+    - sound on by default, or without a persisted mute
+    - information carried by sound alone
 
 # ── Themes (modes overlay tokens; design dark, never invert) ───────────────
 themes:
@@ -301,6 +322,9 @@ exports:
     type: registry:theme
   dtcg:
     path: "./tokens/tokens.json"
+  frame_md:
+    path: "./frame.md"         # HyperFrames video-frame companion — carries tokens + motion + sound
+    aspect: "16:9"
 
 # ── Provenance & sources ───────────────────────────────────────────────────
 sources:
@@ -308,7 +332,15 @@ sources:
     path: "src/styles"
 provenance:
   owner: design-system
-  last_reviewed: "2026-08-06"
+  last_reviewed: "2026-09-05"
+
+# ── Assets (paths only — never binaries or data: URIs) ─────────────────────
+# assets:
+#   sounds:                    # names match tokens.sound.duration
+#     tick: "./public/sfx/tick.wav"
+#     send: "./public/sfx/send.wav"
+#     error: "./public/sfx/error.wav"
+#     notification: "./public/sfx/notification.wav"
 
 # ── Omitted (intentionally absent; suppresses warnings) ────────────────────
 omitted:
@@ -323,6 +355,10 @@ rationale:
   layout: |
     Content maxes at {tokens.breakpoint.content-max}; parent gap over
     per-child margins; whitespace does the grouping, hairlines only in tables.
+  sound: |
+    Silent by default. Four sounds, one material, opt-in: a tick on toggles,
+    a rising two-note send, a low falling error, a softer two-note receive.
+    Each fires on the settle of its animation, never before it.
   dos:
     - Use tabular numbers in data columns
     - Design both themes; dark is remapped, never inverted

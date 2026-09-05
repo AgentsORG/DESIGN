@@ -113,6 +113,25 @@ Building a named surface (hero, dashboard, settings)?
 └── No pattern → compose from components + constraints only
 ```
 
+## Sound
+
+```
+Someone wants a sound?
+├── tokens.sound absent (or omitted lists it)?
+│   └── Yes → no sound; say so — silence is the contract's decision
+└── tokens.sound present
+    ├── Trigger is hover / focus / scroll / keystroke? → none (constraints.never)
+    ├── decisions.sound exists? → walk it, first match wins
+    ├── Daily moment (send / save / complete)?
+    │   └── one family member, tokens.sound.duration.<role>, fired on the settle of the
+    │       confirming animation, only when the user's toggle is on
+    ├── Rare milestone? → two- or three-note figure in tokens.sound.material, ≤ 800ms
+    └── Need the file? → assets.sounds.<role>; missing → generate with the material as the
+        prompt prefix (companion skill), add the path, keep enabled: false
+```
+
+Video target (`targets[].name: video`): skip the toggle logic — every contact frame gets a transient, holds get silence, master to the target's `loudness`. Emit `exports.frame_md` so the video tool inherits `motion` and `sound` with the brand.
+
 ## Styling system
 
 Detect the project's approach (Tailwind, CSS modules, vanilla-extract, etc.). Map `.design` values into that system. Never switch the stack mid-task.

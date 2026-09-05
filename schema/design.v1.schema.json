@@ -50,6 +50,17 @@
               "name": { "type": "string" },
               "external_assets": { "type": "boolean" },
               "single_file": { "type": "boolean" },
+              "aspect": {
+                "type": "string",
+                "examples": ["16:9", "9:16", "1:1"],
+                "description": "Video targets: primary frame aspect."
+              },
+              "fps": { "type": "number", "description": "Video targets: frame rate timing is authored in." },
+              "loudness": {
+                "type": "string",
+                "pattern": "^-?\\d+(\\.\\d+)?LUFS$",
+                "description": "Video targets: delivery loudness of the rendered mix (e.g. -14LUFS)."
+              },
               "notes": { "type": "string" }
             }
           }
@@ -258,6 +269,33 @@
           "type": "object",
           "additionalProperties": { "$ref": "#/$defs/tokenNode" },
           "description": "Atmosphere treatments: gradients, mesh, noise/grain, patterns."
+        },
+        "sound": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "First-run state of the user's sound toggle. Product UI ships false; video targets ignore it."
+            },
+            "material": {
+              "type": "string",
+              "description": "The one physical material every sound is made of; prompt prefix for generation and search."
+            },
+            "peak": { "$ref": "#/$defs/level" },
+            "loudness": {
+              "type": "object",
+              "additionalProperties": { "$ref": "#/$defs/level" },
+              "description": "Integrated loudness per class (feedback, notification, …)."
+            },
+            "duration": {
+              "type": "object",
+              "additionalProperties": { "$ref": "#/$defs/time" },
+              "description": "Length per role; keys name the family and should match assets.sounds."
+            },
+            "sync-lag-max": { "$ref": "#/$defs/time" }
+          },
+          "description": "Sound design contract: toggle default, one material, levels, durations, sync tolerance (SPEC §11.6)."
         }
       }
     },
@@ -289,6 +327,8 @@
         "elevation": { "type": "string" },
         "shapes": { "type": "string" },
         "components": { "type": "string" },
+        "motion": { "type": "string" },
+        "sound": { "type": "string" },
         "dos": {
           "type": "array",
           "items": { "type": "string" }
@@ -371,6 +411,15 @@
           },
           "description": "shadcn registry item so the brand theme installs anywhere via the shadcn CLI."
         },
+        "frame_md": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "path": { "type": "string" },
+            "aspect": { "type": "string", "examples": ["16:9", "9:16", "1:1"] }
+          },
+          "description": "HyperFrames frame.md — DESIGN.md-shaped video-frame companion carrying tokens plus motion and sound groups (SPEC §7.4)."
+        },
         "style_dictionary": { "type": "object", "additionalProperties": true },
         "ios": { "type": "object", "additionalProperties": true },
         "android": { "type": "object", "additionalProperties": true }
@@ -387,6 +436,11 @@
         "font_files": {
           "type": "array",
           "items": { "type": "string" }
+        },
+        "sounds": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "pattern": "^(?!data:).+" },
+          "description": "Sound family by name → file path (never data: URIs). Names should match tokens.sound.duration keys."
         }
       }
     },
@@ -533,6 +587,18 @@
     }
   },
   "$defs": {
+    "time": {
+      "oneOf": [
+        { "type": "string", "pattern": "^\\d+(\\.\\d+)?(ms|s)$" },
+        { "type": "number" }
+      ],
+      "description": "Time value: number + ms|s, or a bare number of milliseconds."
+    },
+    "level": {
+      "type": "string",
+      "pattern": "^-?\\d+(\\.\\d+)?(dBFS|dBTP|LUFS)$",
+      "description": "Audio level: sample peak (dBFS), true peak (dBTP), or integrated loudness (LUFS)."
+    },
     "tokenNode": {
       "oneOf": [
         { "type": "string" },

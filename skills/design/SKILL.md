@@ -12,7 +12,7 @@ description: >
 license: MIT
 metadata:
   author: AgentsORG
-  version: "1.2"
+  version: "1.3"
   spec: design.v1
 ---
 
@@ -44,7 +44,7 @@ Load order once found:
 2. `overview` / `intent` / `rationale.overview`
 3. `constraints` (+ `rationale.dos` / `rationale.donts`)
 4. `policy` / `decisions`
-5. `tokens` (including `elevation` when present) + `themes` (active mode)
+5. `tokens` (including `elevation`, `motion`, and `sound` when present) + `themes` (active mode)
 6. `voice` (applies to all UI copy)
 7. `rationale` (colors, typography, layout, elevation, shapes, components)
 8. `components` / `patterns` (bind every property in each bag)
@@ -157,6 +157,20 @@ Checklist: [references/REVIEW.md](references/REVIEW.md) (includes CRAFT escalati
 - Do not edit locked paths without asking
 - Do not replace the project's styling toolchain
 - Do not add `proposed_changes` or in-file changelog blocks
+
+## 8. Companion skills (route, don't duplicate)
+
+`.design` is the contract; other skills are procedure and taste *below* it (precedence §6). When one of these is installed, hand the matching job to it and pass the contract along — never re-derive what it already knows, and never let its output redefine a token.
+
+| Job | Hand to | The contract's role |
+| --- | --- | --- |
+| UI code review, motion timing, sound design, AI-default-tell audit, "why does this feel flat" | AgentsORG `design-engineering` (skill graph + subagents; `/design-engineering` routes) | Its craft applies only where this file is silent; `tokens.motion` / `tokens.sound` win over its duration and level tables |
+| A named polish pass — polish, critique, audit, typeset, layout, colorize, animate, distill, harden, onboard, clarify, adapt, optimize | impeccable (`/impeccable <command>`) | Point it at `.design` first; if it writes or updates a `DESIGN.md`, import per [docs/design-md-mapping.md](../../docs/design-md-mapping.md) rather than keeping two sources |
+| A launch video, logo reveal, or any rendered motion piece | HyperFrames (`hyperframes-creative` + `hyperframes-audio`) | Emit `exports.frame_md` from this file; HyperFrames reads `frame.md` ahead of `design.md` / `DESIGN.md` |
+| Generating the files `assets.sounds` points at | ElevenLabs `sound-effects` skill, or the `design-engineering` sound generator | `tokens.sound.material` is the prompt prefix; `tokens.sound.duration` / `peak` are the spec |
+| Installing or theming components | shadcn CLI / MCP (`info`, `search`, `view`, `add --dry-run`, `apply --preset`, `migrate`) | `integrations.shadcn` drives it; tokens win over `css_vars` |
+
+Detection: a skill is "installed" when its `SKILL.md` exists under the agent's skills directory (`.agents/skills/`, `.claude/skills/`, a plugin cache) or its slash command is registered. If none is installed, do the job with [CRAFT.md](references/CRAFT.md) and say which skill would have owned it.
 
 ## Quick field map
 

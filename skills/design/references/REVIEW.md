@@ -22,7 +22,7 @@ Then list **Blocking**, **Should fix**, and **Nits** (optional). Don’t bury on
 4. **Token / `.design` compliance** — no hardcoded colors/spacing/radius when tokens exist; bind component property bags  
 5. **shadcn sync** — if enabled, `globals.css` ↔ `css_vars` / tokens; `cssVariables: true`  
 6. **Component / pattern compliance** — catalog + `when`/`when_not`; one primary CTA if constrained  
-7. **Motion** — justified, <300ms product UI, transform/opacity only, matches `tokens.motion`  
+7. **Motion & sound** — justified, <300ms product UI, transform/opacity only, matches `tokens.motion`; any sound matches `tokens.sound` (off by default, one material, transient on the contact frame)  
 8. **Spacing & hierarchy** — scale, alignment, restraint ([CRAFT.md](CRAFT.md))  
 9. **Type & surfaces** — measure ~65ch, nested radii, coherent borders/shadows  
 10. **Final polish** — empty/loading/selection states  
@@ -55,6 +55,9 @@ Then list **Blocking**, **Should fix**, and **Nits** (optional). Don’t bury on
 - Unbounded list rendered without virtualization (~50+ items possible)  
 - Raster image scaled above its natural size  
 - Focus not returned to the trigger after an overlay closes  
+- Sound fired on hover / focus / keystroke, on page load, or from module scope before a user gesture  
+- Sound on by default, or with no persisted mute; information carried by sound alone  
+- Sound files with leading silence, a reverb tail, or a material that differs from `tokens.sound.material`  
 - Blanket `will-change` (or `will-change` on non-compositor properties)  
 - `position: sticky` silently dead under an ancestor's `overflow: hidden`  
 

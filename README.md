@@ -31,7 +31,7 @@ cp templates/starter.design ./.design   # annotated blank slate — every sectio
 | Skill not installed | Required `agent.instructions` — drag-drop still works |
 | shadcn / Figma / DTCG drift | `integrations` + `exports` + `themes` |
 
-Imports [Google DESIGN.md](https://github.com/google-labs-code/design.md) losslessly. Orchestrates [shadcn/ui](https://ui.shadcn.com/). Bootstraps from [getdesign.md](https://getdesign.md/). Works with every [skills.sh](https://www.skills.sh/agent/) agent.
+Imports [Google DESIGN.md](https://github.com/google-labs-code/design.md) losslessly. Orchestrates [shadcn/ui](https://ui.shadcn.com/). Bootstraps from [getdesign.md](https://getdesign.md/). Emits a [HyperFrames](https://www.hyperframes.dev/design) `frame.md` for video. Routes craft to [design-engineering](https://github.com/AgentsORG/design-engineering) and [impeccable](https://impeccable.style/). Works with every [skills.sh](https://www.skills.sh/agent/) agent.
 
 ## Ecosystem
 
@@ -122,12 +122,13 @@ See [docs/shadcn.md](docs/shadcn.md), [docs/ecosystem.md](docs/ecosystem.md), an
 | --- | --- |
 | **Agent** | `agent.instructions` (required) — self-teach on drop-in |
 | **Identity** | `name`, `version`, `status`, `overview`, `intent` (direction, signature, treatment), `themes` |
-| **System** | `tokens` (nestable groups), `components`, `patterns`, `locked`, `assets` |
+| **System** | `tokens` (nestable groups — color, type, space, radius, elevation, motion, background, **sound**), `components`, `patterns`, `locked`, `assets` (incl. `sounds`) |
 | **Voice** | UI copy contract — register, casing, terminology, error style |
 | **Rationale** | DESIGN.md body prose (`rationale.*`) |
 | **Rules** | `policy`, `decisions`, `constraints`, `examples` |
 | **Integrations** | `shadcn` (styles, bases, registries, MCP), `figma` |
-| **Exports** | DTCG, CSS, Tailwind, shadcn registry item, Style Dictionary, native |
+| **Exports** | DTCG, CSS, Tailwind, shadcn registry item, HyperFrames `frame.md`, Style Dictionary, native |
+| **Targets** | `web`, single-file artifacts, `video` (aspect, fps, delivery loudness) |
 
 Lifecycle: `bootstrap` → `refine` → `lock` → `evolve`. History lives in **git**.
 
@@ -142,6 +143,7 @@ Lifecycle: `bootstrap` → `refine` → `lock` → `evolve`. History lives in **
 | [docs/design-md-mapping.md](docs/design-md-mapping.md) | DESIGN.md field parity |
 | [docs/shadcn.md](docs/shadcn.md) | shadcn/ui integration |
 | [docs/getdesign.md](docs/getdesign.md) | getdesign.md pipeline |
+| [docs/motion-media.md](docs/motion-media.md) | Sound tokens, video targets, HyperFrames `frame.md` |
 | [SPEC.md](SPEC.md) | Normative design.v1 |
 
 ## Examples
@@ -161,7 +163,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.
 
 ## Status
 
-**design.v1** — released; current contract **1.2** ([CHANGELOG](CHANGELOG.md)): voice, committed intent (direction / signature / treatment), nested tokens, current shadcn model + registry export, annotated starter template, and reference tooling — [lint](scripts/lint_design.py), [export](scripts/export_design.py) (CSS / Tailwind v4 / DTCG / shadcn registry item), [diff](scripts/diff_design.py) with §18 regression flag — all CI-enforced. Standalone packaged CLI planned.
+**design.v1** — released; current contract **1.3** ([CHANGELOG](CHANGELOG.md)): voice, committed intent (direction / signature / treatment), nested tokens, `tokens.sound` + `assets.sounds` + video targets, current shadcn model + registry export, HyperFrames `frame.md` export, companion-skill routing (design-engineering, impeccable, HyperFrames, ElevenLabs), annotated starter template, and reference tooling — [lint](scripts/lint_design.py), [export](scripts/export_design.py) (CSS / Tailwind v4 / DTCG / shadcn registry item / frame.md), [diff](scripts/diff_design.py) with §18 regression flag — all CI-enforced. Standalone packaged CLI planned.
 
 ## License
 

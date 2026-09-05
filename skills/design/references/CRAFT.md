@@ -207,6 +207,19 @@ Rules:
 - When fixing motion, prefer remedies in order: delete → reduce (shorter, smaller, fewer properties) → fix easing → fix origin/physicality → make interruptible → move to transform/opacity → make timing asymmetric → polish (blur bridge, stagger). Deleting is often the strongest fix.
 - When feel can’t be judged from code, verify in slow motion (2–5× duration or the browser’s animation inspector) and frame-by-frame; test gestures on a real device.
 
+## Sound
+
+Use `tokens.sound` when present; otherwise the default is **silence**, and these rules decide the exceptions:
+
+- Never sound on hover, focus, scroll, or keystroke. Sound belongs to daily moments (send, save, complete) and rare milestones — the same frequency tiers as motion, one notch stricter.
+- Ship sound **off** with a persisted, keyboard-reachable toggle; never autoplay on page load; nothing plays before the first user gesture (the browser suspends audio until then — create and resume the audio context inside that gesture).
+- Sound reinforces; it never carries information alone. Every sound has a visual twin, so muted users lose nothing.
+- One physical material per product (felt on wood, fingernail on plastic, breath through paper); members differ by size and contour — small things tick high and short, big things land low and long; rising = success, falling = dismiss or error. Recognizable stock-pack sounds are a default look to avoid.
+- Numbers: ticks 40–80ms, confirmations 150–250ms, notifications 200–600ms; feedback sits around −16 LUFS, notifications ≈ −12 LUFS; peak −3 dBFS; mono, 44.1 kHz; zero leading silence; high-pass at 150 Hz.
+- The transient lands on the frame where the visual makes contact — the settle of the confirming animation — and may lag it by one frame, never lead it.
+- On iOS respect the silent switch (feedback sounds are nonessential); on the web skip sounds while the tab is hidden and never attach them to `focus` handlers, which collide with screen readers.
+- A video target inverts the default: sound is the medium, holds are placed silence, hits sit on contact frames, the mix masters to the target's `loudness` (−14 LUFS for social).
+
 ## Performance
 
 - Virtualize any list that can exceed ~50 items or grow unbounded — render only what is visible.

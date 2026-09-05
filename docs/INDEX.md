@@ -22,6 +22,7 @@ Complete guide to the AgentsORG **`.design`** format (design.v1).
 | [drop-in.md](drop-in.md) | Install `.design` in a product repo |
 | [shadcn.md](shadcn.md) | Integrate [shadcn/ui](https://ui.shadcn.com/) |
 | [getdesign.md](getdesign.md) | Convert [getdesign.md](https://getdesign.md/) analyses |
+| [motion-media.md](motion-media.md) | `tokens.sound`, video targets, and the HyperFrames `frame.md` export |
 | [human-authoring.md](human-authoring.md) | Write a strong contract |
 | [agent-consumption.md](agent-consumption.md) | Agent READ/FOLLOW/UPDATE/VERIFY |
 | [lifecycle.md](lifecycle.md) | bootstrap → refine → lock → evolve |

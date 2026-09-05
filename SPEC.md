@@ -177,7 +177,7 @@ When `integrations.shadcn.enabled` is true, agents MUST:
 
 1. Prefer installing/using shadcn components listed in the project (via CLI / registry / MCP) instead of inventing primitives.
 2. Write theme tokens into the CSS file referenced by `integrations.shadcn.css` using the [shadcn CSS variable convention](https://ui.shadcn.com/docs/theming) (`background`/`foreground`, `primary`/`primary-foreground`, …) — the **full** current variable set, including `chart-1`…`chart-5` and the `sidebar-*` group, so Chart and Sidebar components theme correctly.
-3. Keep `components.json` fields in sync when initializing a project (`style`, `base`, `iconLibrary`, aliases, `registries`, `tailwind.cssVariables`). `tailwind.baseColor` and `tailwind.cssVariables` cannot be changed after init — restyle through `css_vars`, never by re-initializing.
+3. Keep `components.json` fields in sync when initializing a project (`style`, `base`, `iconLibrary`, aliases, `registries`, `tailwind.cssVariables`). `tailwind.cssVariables` cannot be changed after init — restyle through `css_vars`, never by re-initializing. `base_color` and the icon library are changed only through the CLI's migrations (`npx shadcn migrate base-color`, `npx shadcn migrate icons`), and a preset theme/font is applied with `npx shadcn apply --preset <code>`; after any of these, refresh `integrations.shadcn` so the file matches the project.
 4. On Tailwind v4 projects, register any **custom** variable (beyond the standard set) under `@theme inline` in addition to `:root` / `.dark`, or no utility class can use it.
 5. Install brand components only from declared `registries` — never guess a registry namespace.
 6. Match the project's primitive `base` (`base` \| `radix` \| `react-aria`); never mix primitive libraries in one project.
@@ -372,6 +372,9 @@ exports:
   shadcn_registry:
     path: "./registry/brand-theme.json"
     type: registry:theme            # registry:theme | registry:style | registry:base
+  frame_md:
+    path: "./frame.md"              # HyperFrames video-frame companion (DESIGN.md-shaped: frontmatter + body)
+    aspect: "16:9"                  # primary frame; 9:16 and 1:1 documented in the body
   style_dictionary:
     config: "./sd.config.js"
   ios: { path: "./Sources/Tokens/Colors.swift" }
@@ -382,6 +385,7 @@ Notes:
 
 - `shadcn_registry` maps `css_vars.light`/`dark` → registry-item `cssVars.light`/`dark` and mode-independent vars → `cssVars.theme`, producing a [registry item](https://ui.shadcn.com/docs/registry/registry-item-json) installable in any project via the shadcn CLI.
 - `css.mode_strategy: both` emits variables under the media query **and** the `data-theme` attribute selectors so explicit toggles override OS preference.
+- `frame_md` emits a [HyperFrames](https://www.hyperframes.dev/design) `frame.md` — the same YAML-frontmatter-plus-body shape as DESIGN.md, reframed with the video frame as the unit. Colors, typography, spacing, and radii carry over verbatim; `tokens.motion` and `tokens.sound` (§11.6) are written as extra frontmatter groups so pacing, dwell, and sound cues inherit the brand's timing; composition and layout stay the frame author's. HyperFrames resolves `frame.md → design.md → DESIGN.md`, so a generated `frame.md` wins inside a video project while `.design` stays normative in the repo.
 
 Recommended pipeline:
 
@@ -409,9 +413,12 @@ assets:
   og_image: "./brand/og.png"
   font_files:
     - "./public/fonts/GeistVF.woff2"
+  sounds:                            # name → file; names match tokens.sound.duration keys
+    tick: "./public/sfx/tick.wav"
+    send: "./public/sfx/send.wav"
 ```
 
-Paths only — never embed binaries. Clear-space / misuse rules belong in `rationale` or `constraints`.
+Paths only — never embed binaries or `data:` URIs. Clear-space / misuse rules belong in `rationale` or `constraints`. `sounds` lists the product's sound family by name; the *design* of those sounds (level, length, material) lives in `tokens.sound` (§11.6).
 
 ---
 
@@ -429,9 +436,16 @@ targets:
   - name: email
     external_assets: true
     notes: "Table layout; no custom properties"
+  - name: video
+    aspect: "16:9"             # primary frame; list alternates in notes
+    fps: 30
+    loudness: -14LUFS          # delivery loudness for the rendered mix (social platforms normalize here)
+    notes: "Launch film / logo reveal — sound is the medium, silence is placed deliberately"
 ```
 
 When `external_assets: false`, agents MUST NOT emit external font/script/stylesheet URLs for that target — inline styles and assets, or fall back to system stacks.
+
+A `video` target inverts the product-UI sound default: `tokens.sound.enabled` governs the *product*; a video always carries sound, mastered to the target's `loudness`, with transients placed on the frames where motion makes contact (§11.6). Timing is authored in frames (`fps`), so `tokens.motion` durations SHOULD divide cleanly into the frame period.
 
 ---
 
@@ -576,6 +590,7 @@ Tokens are normative. Agents MUST use token values instead of inventing raw colo
 | `tokens.border` | — | Optional border widths / styles |
 | `tokens.iconography` | Iconography prose | Default set, sizes, stroke rules |
 | `tokens.background` | — | Atmosphere treatments: gradients, mesh, noise/grain, patterns — the one aesthetic dimension flat color maps cannot express |
+| `tokens.sound` | — | The product's sound design: default toggle state, one material, levels, durations by role, sync tolerance (§11.6) |
 
 Additional groups are allowed. Scale level names MAY be any descriptive string (`xs`, `sm`, `md`, `lg`, `xl`, `full`, `section`, …).
 
@@ -636,6 +651,8 @@ Easing curves, durations, and spring configs SHOULD live here as shared tokens �
 | Dimension | number + unit (`px`, `em`, `rem`), or bare number in spacing/radius scales and typography sizes (interpreted as px) | `16px`, `1.5rem`, `4` |
 | Typography | object | see below |
 | Elevation | CSS shadow / filter string or structured object | `"0 4px 24px rgba(0,0,0,0.12)"` |
+| Time | number + `ms` or `s` | `60ms`, `0.5s` |
+| Level | number + `dBFS` (sample peak), `dBTP` (true peak), or `LUFS` (integrated loudness) | `-3dBFS`, `-1dBTP`, `-16LUFS` |
 | Token reference | `{dot.path}` | `"{tokens.color.primary}"` |
 
 Color semantics:
@@ -688,6 +705,45 @@ If the brand is intentionally flat, document that in `rationale.elevation` and M
 ### 11.5 Relationship to DTCG
 
 v1 uses simple maps for agent readability. Tooling SHOULD be able to export to the [W3C Design Tokens Format Module](https://www.designtokens.org/tr/2025.10/format/). v1 does not require `$value` / `$type` graphs inside the file.
+
+### 11.6 Sound
+
+Sound is the sense most contracts forget, which is why generated products either have none or have a beep on every click. `tokens.sound` makes the decision explicit and the family coherent:
+
+```yaml
+tokens:
+  sound:
+    enabled: false               # first-run state of the user's sound toggle; product UI ships false
+    material: "felt mallet on a small wooden block, dry, no tail"   # ONE material; the prompt prefix for every generated sound
+    peak: -3dBFS                 # every file peaks here; the mixer sets the user level
+    loudness:
+      feedback: -16LUFS          # ticks, sends, confirms — below speech
+      notification: -12LUFS      # the one class allowed to be louder
+    duration:                    # by role; names match assets.sounds
+      tick: 60ms                 # toggle / select / snap — 40–80ms
+      send: 200ms                # send / save / confirm — 150–250ms
+      error: 150ms               # short, low, falling
+      notification: 400ms        # attention is being requested — 200–600ms
+    sync-lag-max: 30ms           # audio may lag the visual contact frame by this much; it never leads
+```
+
+| Field | Meaning |
+| --- | --- |
+| `enabled` | Boolean. Product UI MUST ship `false` with a persisted, discoverable toggle; a video target ignores it (§7.6) |
+| `material` | The physical thing every sound is made of. A product has one; agents generating or sourcing audio MUST prefix prompts and searches with it |
+| `peak` / `loudness.*` | Levels per class (Level type, §11.2). Interface sound stays below speech and media |
+| `duration.*` | Length per role (Time type). Keys are the family's names and SHOULD match `assets.sounds` |
+| `sync-lag-max` | Tolerance between the visual contact frame and the audio transient. Audio may lag; it MUST NOT lead |
+
+Rules:
+
+- **Silent by default.** Without `tokens.sound`, agents MUST NOT add sound to product UI. Declare `omitted: [tokens.sound]` to make the silence a decision.
+- **Sound reinforces; it never carries information alone.** Every sound has a visual twin. Never sound on hover, focus, scroll, or keystroke.
+- **One material, one family.** Members differ by size (pitch, length) and contour (rising = success, falling = dismiss or error), never by material.
+- **Transient on the contact frame.** Trigger from the settle of the confirming animation, within `sync-lag-max`, and trim leading silence from every file.
+- **Prose goes in `rationale.sound`;** rules that must hold go in `constraints` and `decisions.sound` (§15).
+
+Generation and playback procedure (which service, which prompt formula, how to unlock the browser's audio context) are procedure, not contract — they live in the portable skills, not in this file.
 
 ---
 
@@ -876,6 +932,7 @@ rationale:
 | `responsive` | Responsive Behavior (common extension) |
 | `iteration` | Iteration Guide (common extension) |
 | `known_gaps` | Known Gaps (common extension) |
+| `motion` / `sound` | Motion / Sound (common extensions; DESIGN.md has no frontmatter for either, so the prose round-trips as a `##` section) |
 
 Unknown rationale keys: preserve (e.g. `iconography`, `motion`). Agents MUST NOT drop unfamiliar `##` sections when importing DESIGN.md.
 
@@ -995,6 +1052,9 @@ constraints:
     - "transition: all"
     - hover-only access to core actions
     - animating layout properties when transform/opacity suffice
+    - sound on hover, focus, scroll, or keystroke
+    - sound on by default, or without a persisted mute
+    - information carried by sound alone
 ```
 
 ### 15.2 Decisions
@@ -1011,6 +1071,13 @@ decisions:
       then: { role: heading }
     - if: "numeric data column"
       then: { role: mono-data }
+  sound:
+    - if: "hover, focus, scroll, or keystroke"
+      then: { sound: none }
+    - if: "daily moment — send, save, complete — and tokens.sound.enabled or the user turned sound on"
+      then: { sound: "{tokens.sound.duration.send}", trigger: "settle frame of the confirming animation" }
+    - if: "rare milestone"
+      then: { sound: "two- or three-note figure in the family material", max: 800ms }
 ```
 
 Agents SHOULD walk `decisions.<key>` in order and apply the first matching rule. Keys are not limited to components: token roles (`typography`, `color`, `elevation`) MAY carry deterministic application rules, which is what lets an agent apply the brand across arbitrary surfaces without per-case judgment.
@@ -1105,6 +1172,9 @@ Consumers and linters SHOULD check:
 | `rationale` sections out of canonical order (§13A) | warning |
 | Orphan color tokens never referenced | warning |
 | Contrast failures on component fg/bg pairs | warning |
+| `assets.sounds` value that is a `data:` URI or otherwise not a path (§7.5) | error |
+| `tokens.sound` present without `enabled` (the toggle default is the decision) | warning |
+| `tokens.sound.duration` key with no matching `assets.sounds` entry, or vice versa | warning |
 
 ---
 
@@ -1145,6 +1215,9 @@ The following MUST NOT be required in a `.design` file:
 | shadcn `components.json` + CSS vars | Common React codegen path |
 | `AGENTS.md` + `skills/design` | Discovery + enriched CRAFT procedure (optional; file must still self-teach) |
 | DESIGN.md / getdesign.md | Bootstrap / analysis sources |
+| HyperFrames `frame.md` (`exports.frame_md`) | Video-frame companion generated from the contract; consumed by HyperFrames ahead of `design.md` / `DESIGN.md` |
+| Craft skills — AgentsORG `design-engineering`, impeccable | Procedure and taste *below* the contract: reviews, motion and sound craft, named polish passes. They read `.design`; they never redefine it |
+| Audio generation — ElevenLabs sound-effects, open-weight models, CC0 libraries | Produce the files `assets.sounds` points at, prompted by `tokens.sound.material` |
 
 ---
 

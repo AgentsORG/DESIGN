@@ -20,7 +20,9 @@ Normative detail: [SPEC.md](../../../SPEC.md). Schema: [schema/design.v1.schema.
 | `intent.reference` | Required if `intent` present |
 | `intent.direction` / `signature` / `treatment` | Committed aesthetic, boldness budget, register |
 | `voice` | UI copy contract: register, casing, terminology, errors |
-| `tokens` | Normative color/type/spacing/radius/motion/background (groups may nest; full dot-path refs) |
+| `tokens` | Normative color/type/spacing/radius/motion/background/sound (groups may nest; full dot-path refs) |
+| `tokens.sound` | Sound contract: `enabled` (product ships false), one `material`, `peak` / `loudness.*`, `duration.*` by role, `sync-lag-max` (§11.6) |
+| `targets` (object form) | Environment constraints; `video` targets carry `aspect`, `fps`, delivery `loudness` (§7.6) |
 | `policy.color.accent_cycle` | Ordered decorative accent rotation (multi-accent brands) |
 | `locked` | Dot-paths that require ask before edit |
 | `components` | Catalog + when/when_not + variants |
@@ -34,8 +36,8 @@ Normative detail: [SPEC.md](../../../SPEC.md). Schema: [schema/design.v1.schema.
 | `integrations.shadcn` | Optional shadcn bridge: style, aliases, css_vars, map_from_tokens |
 | `integrations.figma` | Optional Figma file/modes/sync direction |
 | `themes` | Named modes overlaying tokens (light/dark/…) |
-| `exports` | DTCG / CSS / Tailwind / Style Dictionary / native paths |
-| `assets` | Logo / font path references (no binaries) |
+| `exports` | DTCG / CSS / Tailwind / Style Dictionary / native paths; `frame_md` for a HyperFrames video-frame companion |
+| `assets` | Logo / font / `sounds` path references (no binaries, no `data:` URIs) |
 | `rationale` | DESIGN.md body prose: colors, typography, layout, elevation, shapes, components, dos/donts |
 | `omitted` | Intentionally missing sections |
 

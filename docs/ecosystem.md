@@ -25,12 +25,19 @@ flowchart TB
     REG["shadcn registry item — exports.shadcn_registry"]
   end
 
+  subgraph craft ["Craft skills — procedure below the contract"]
+    DE["design-engineering — skill graph, subagents, /design-engineering router"]
+    IMP["impeccable — 23 named passes"]
+  end
+
   subgraph runtime ["Runtime / codegen"]
     CSS[CSS custom properties]
     TW[Tailwind @theme / config]
     SH["shadcn/ui + components.json + MCP"]
     IOS[iOS / Android resources]
     APP[Product UI]
+    HF["HyperFrames frame.md — video"]
+    SFX["assets.sounds — generated audio"]
   end
 
   FIG -->|integrations.figma sync| DES
@@ -53,6 +60,12 @@ flowchart TB
   SH --> APP
   IOS --> APP
   SK --> APP
+  DES -->|exports.frame_md| HF
+  DES -->|tokens.sound.material prompts| SFX
+  SK -->|routes named jobs| DE
+  SK -->|routes named jobs| IMP
+  DE -->|craft where the file is silent| APP
+  IMP -->|polish / critique passes| APP
 ```
 
 ## What each layer owns
@@ -67,6 +80,10 @@ flowchart TB
 | Style Dictionary | Multi-platform transforms | Brand judgment |
 | shadcn | React primitives, CSS var theming, styles + `base` choice, namespaced registries, MCP server | Brand system of record |
 | shadcn registry item (`exports.shadcn_registry`) | Distributable `registry:theme` payload derived from `css_vars` | Normative tokens (those stay in `.design`) |
+| HyperFrames `frame.md` (`exports.frame_md`) | Video-frame companion: brand tokens plus `motion` and `sound` groups, read ahead of `design.md` / `DESIGN.md` inside a video project | Composition, beats, layout — the frame author's |
+| AgentsORG `design-engineering` | Craft knowledge graph (motion, sound, typography, anti-tells) and the `/design-engineering` router that hands jobs to the right skill; applies only where `.design` is silent | Brand tokens, contract precedence |
+| impeccable | Named polish / critique / audit passes (`/impeccable polish`, `critique`, `typeset`, …); may write a DESIGN.md that imports losslessly | Being the source of truth — `.design` outranks the DESIGN.md it produces |
+| Audio generation (ElevenLabs sound-effects, open-weight, CC0) | The files `assets.sounds` points at, prompted by `tokens.sound.material` | Level, length, toggle default — those are `tokens.sound` |
 | AGENTS.md | Repo pointer / install hint | Token values |
 
 ## Skill layers
@@ -112,6 +129,8 @@ A production-ready `.design` for the “entire ecosystem” typically includes:
 - [ ] `voice` — register, casing, terminology, action naming, error style
 - [ ] `tokens.color` / `typography` / `spacing` / `radius`
 - [ ] `tokens.elevation` / `motion` / `breakpoint` / `iconography` / `background` (as needed)
+- [ ] `tokens.sound` with `enabled: false` — or `omitted: [tokens.sound]` so silence is a decision
+- [ ] `targets` entry for `video` (aspect, fps, loudness) and `exports.frame_md` when launch films or reveals are produced
 - [ ] `themes.modes` for light/dark (or `themes.single` / `omitted` with reason)
 - [ ] `components` with DESIGN.md property bags + `when` / `when_not`
 - [ ] `rationale.*` for prose agents need beyond hex

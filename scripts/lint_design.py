@@ -188,6 +188,22 @@ def lint(path: pathlib.Path, validator: Draft202012Validator) -> tuple[list[str]
     if not tokens.get("typography") and not omitted_covers("tokens.typography", "typography"):
         warnings.append("no tokens.typography (add or declare in omitted)")
 
+    # sound (SPEC §11.6 / §7.5): the toggle default is the decision; family names should
+    # line up with the files; audio is referenced by path, never embedded
+    sound = tokens.get("sound") if isinstance(tokens.get("sound"), dict) else None
+    sound_files = ((doc.get("assets") or {}).get("sounds") if isinstance(doc.get("assets"), dict) else None) or {}
+    if sound is not None and "enabled" not in sound:
+        warnings.append("tokens.sound present without tokens.sound.enabled (product UI ships false)")
+    for name, ref in (sound_files.items() if isinstance(sound_files, dict) else []):
+        if isinstance(ref, str) and ref.strip().lower().startswith("data:"):
+            errors.append(f"assets.sounds.{name}: embedded data: URI — reference a file path instead")
+    if sound is not None and isinstance(sound.get("duration"), dict) and isinstance(sound_files, dict) and sound_files:
+        roles, files = set(sound["duration"]), set(sound_files)
+        for missing in sorted(roles - files):
+            warnings.append(f"tokens.sound.duration.{missing} has no assets.sounds.{missing} file")
+        for extra in sorted(files - roles):
+            warnings.append(f"assets.sounds.{extra} has no tokens.sound.duration.{extra} role")
+
     # orphan color tokens: never referenced anywhere in the document (summary warning only)
     if isinstance(color, dict) and color:
         raw = path.read_text(encoding="utf-8")

@@ -6,6 +6,7 @@ Emits the artifacts declared under `exports`:
   tailwind        Tailwind v4 @theme file (namespaced variables)
   dtcg            W3C Design Tokens (DTCG) JSON for cleanly-mappable groups
   shadcn_registry shadcn registry item (registry:theme) from integrations.shadcn
+  frame_md        HyperFrames frame.md (DESIGN.md-shaped video-frame companion + motion/sound)
 
 Usage:
   python scripts/export_design.py <file.design> [--out-dir DIR] [--only css,dtcg,...]
@@ -185,6 +186,92 @@ def export_dtcg(doc: dict, cfg: dict) -> dict:
     return out
 
 
+FRAME_REF_RE = re.compile(r"\{tokens\.(color|typography|spacing|radius|motion|sound)\.")
+FRAME_GROUPS = {"color": "colors", "typography": "typography", "spacing": "spacing",
+                "radius": "radii", "motion": "motion", "sound": "sound"}
+
+
+def export_frame_md(doc: dict, cfg: dict) -> str:
+    """HyperFrames frame.md: DESIGN.md-shaped frontmatter + body (SPEC §7.4).
+
+    Colors, typography, spacing, radii carry over verbatim; motion and sound ride
+    along as extra frontmatter groups. Composition is left to the frame author.
+    """
+    tokens = doc.get("tokens") or {}
+    name = doc.get("name", "brand")
+    aspect = cfg.get("aspect", "16:9")
+
+    def rewrite(value):
+        # {tokens.color.x} -> {colors.x}; nested groups keep their dot path
+        if isinstance(value, str):
+            return FRAME_REF_RE.sub(lambda m: "{" + FRAME_GROUPS[m.group(1)] + ".", value)
+        if isinstance(value, dict):
+            return {k: rewrite(v) for k, v in value.items()}
+        if isinstance(value, list):
+            return [rewrite(v) for v in value]
+        return value
+
+    front: dict = {
+        "version": "alpha",
+        "name": f"{name} — Frame (video / frame layer)",
+        "description": f"Video-first companion to {name}'s .design v{doc.get('version', '?')}. "
+                       f"Generated — the .design file is normative; composition is the frame author's.",
+        "unit": f"the frame — {aspect} primary",
+    }
+    for group, key in FRAME_GROUPS.items():
+        tree = tokens.get(group)
+        if isinstance(tree, dict) and tree:
+            front[key] = rewrite(tree)
+    bags: dict = {}
+    for cid, comp in (doc.get("components") or {}).items():
+        if not isinstance(comp, dict):
+            continue
+        if isinstance(comp.get("tokens"), dict):
+            for vid, bag in comp["tokens"].items():
+                if isinstance(bag, dict):
+                    bags[vid if vid.startswith(cid) else f"{cid}-{vid}"] = rewrite(bag)
+        elif any(k in comp for k in ("backgroundColor", "textColor", "background", "foreground")):
+            bags[cid] = rewrite({k: v for k, v in comp.items() if not isinstance(v, (dict, list))})
+    if bags:
+        front["components"] = bags
+
+    lines = ["---", yaml.safe_dump(front, sort_keys=False, allow_unicode=True, width=100).rstrip(), "---", ""]
+    lines += [f"# {front['name']}", ""]
+    overview = (doc.get("overview") or (doc.get("rationale") or {}).get("overview") or "").strip()
+    lines += ["## Overview", "", overview or f"Brand tokens for {name}, reframed with the {aspect} frame as the unit.", ""]
+    intent = doc.get("intent") or {}
+    if intent:
+        lines += ["## The Frame", "",
+                  f"- **Reference:** {intent.get('reference', '')}",
+                  f"- **Direction:** {intent.get('direction', '')}",
+                  f"- **Signature:** {intent.get('signature', '')}",
+                  f"- **Primary:** {aspect}. Author frame-relative sizes in `cqw`/`cqh`; never `vw`.", ""]
+    motion = tokens.get("motion")
+    if isinstance(motion, dict):
+        lines += ["## Motion", "", "Pacing and dwell inherit `motion.*` in the frontmatter — extend those tokens, never a parallel set.",
+                  (doc.get("rationale") or {}).get("motion", "").strip(), ""]
+    sound = tokens.get("sound")
+    if isinstance(sound, dict):
+        lines += ["## Sound", "",
+                  f"Material: {sound.get('material', '—')}. Transients land on the contact frame "
+                  f"(lag ≤ {sound.get('sync-lag-max', '30ms')}, never leading). Holds are silence.",
+                  (doc.get("rationale") or {}).get("sound", "").strip(), ""]
+    cons = doc.get("constraints") or {}
+    rat = doc.get("rationale") or {}
+    dos = list(cons.get("always") or []) + list(rat.get("dos") or [])
+    donts = list(cons.get("never") or []) + list(rat.get("donts") or [])
+    if dos or donts:
+        lines += ["## Composition Rules", ""]
+        if dos:
+            lines += ["### Do", ""] + [f"- {d}" for d in dos] + [""]
+        if donts:
+            lines += ["### Don't", ""] + [f"- {d}" for d in donts] + [""]
+    lines += ["## Known Gaps", "",
+              "- Layout, frame treatments, and beat structure are authored per video — this file carries brand, timing, and sound only.",
+              "- Regenerate from `.design` after token edits; do not hand-edit values here.", ""]
+    return "\n".join(lines)
+
+
 def export_shadcn_registry(doc: dict, cfg: dict) -> dict:
     shadcn = ((doc.get("integrations") or {}).get("shadcn")) or {}
     css_vars = shadcn.get("css_vars") or {}
@@ -208,7 +295,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("file", type=pathlib.Path)
     parser.add_argument("--out-dir", type=pathlib.Path, default=None)
-    parser.add_argument("--only", default=None, help="comma list: css,tailwind,dtcg,shadcn_registry")
+    parser.add_argument("--only", default=None, help="comma list: css,tailwind,dtcg,shadcn_registry,frame_md")
     args = parser.parse_args()
 
     doc = yaml.safe_load(args.file.read_text(encoding="utf-8"))
@@ -219,6 +306,7 @@ def main() -> int:
         "tailwind": (export_tailwind, "tailwind.theme.css", False),
         "dtcg": (export_dtcg, "tokens.json", True),
         "shadcn_registry": (export_shadcn_registry, "brand-theme.json", True),
+        "frame_md": (export_frame_md, "frame.md", False),
     }
 
     wrote = 0

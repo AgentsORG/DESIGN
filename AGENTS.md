@@ -52,4 +52,6 @@ Prefer clear, focused commits: spec, schema, skill, examples, or docs. Do not pu
 ## Learned Workspace Facts
 
 - Canonical public home is `github.com/AgentsORG/DESIGN` (AgentsORG / [agents.org.in](https://www.agents.org.in/))
-- Interop targets: Google `design.md`, getdesign.md, shadcn/ui, and agentskills.io / skills.sh
+- Interop targets: Google `design.md`, getdesign.md, shadcn/ui (CLI + MCP), HyperFrames `frame.md` (video), and agentskills.io / skills.sh
+- Companion craft skills the `design` skill routes to (never duplicates): AgentsORG `design-engineering` (github.com/AgentsORG/design-engineering — motion, sound, typography, anti-tells; `/design-engineering` router) and impeccable (impeccable.style — named polish / critique passes). Audio files come from ElevenLabs `sound-effects` or the design-engineering generator, prompted by `tokens.sound.material`.
+- Sound in the contract is a *decision*, not a feature: product UI ships `tokens.sound.enabled: false`; only `targets[].name: video` inverts that.

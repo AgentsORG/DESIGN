@@ -7,6 +7,25 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-09-05
+
+### Added
+
+- **`tokens.sound`** (SPEC §11.6) — the product's sound contract: `enabled` (product UI ships `false`), one `material` (the prompt prefix for any generated or sourced audio), `peak` / `loudness.*` levels, `duration.*` by role, `sync-lag-max`. New value types **Time** (`60ms`) and **Level** (`-3dBFS`, `-1dBTP`, `-16LUFS`) in §11.2. Rules: silent by default, sound reinforces and never carries information alone, one material per family, transient on the contact frame.
+- **`assets.sounds`** (§7.5) — name → file path for the sound family; `data:` URIs are an error.
+- **`targets[]` video entries** (§7.6) — `aspect`, `fps`, delivery `loudness`; a video target inverts the product-UI sound default.
+- **`exports.frame_md`** (§7.4) — a [HyperFrames](https://www.hyperframes.dev/design) `frame.md` (DESIGN.md-shaped video-frame companion) carrying `colors` / `typography` / `spacing` / `radii` / `components` plus `motion` and `sound` groups. `scripts/export_design.py` implements it (`--only frame_md`).
+- **`rationale.motion` / `rationale.sound`** as documented extension keys (§13A); `decisions.sound` example (§15.2); sound rows in the §15.1.1 constraint starters.
+- **Linter** — warns on `tokens.sound` without `enabled`, on `duration` roles with no `assets.sounds` file (and vice versa); errors on embedded `data:` audio (§19).
+- **Skill** — `SKILL.md` §8 *Companion skills*: route named jobs to AgentsORG `design-engineering` (craft graph + `/design-engineering` router), impeccable (`/impeccable <command>` passes), HyperFrames (`frame.md`), ElevenLabs `sound-effects`, and the shadcn CLI / MCP, with the contract kept normative; detection rule for "installed". `CRAFT.md` gains a **Sound** section; `APPLY.md` a sound decision tree; `REVIEW.md` sound escalation triggers; `SPEC-SUMMARY.md` the new fields. Skill version **1.3**.
+- **Docs** — `docs/motion-media.md` (sound tokens, video targets, `frame.md`); ecosystem map, comparison table, DESIGN.md mapping, README, and the field checklist updated for the new fields and companion skills.
+- **Starter template** — `tokens.sound`, `decisions.sound`, sound `constraints.never` rows, `exports.frame_md`, a commented `video` target and `assets.sounds` block, `rationale.sound`.
+
+### Changed
+
+- **shadcn** (SPEC §7.1, docs/shadcn.md) — `base_color` and the icon library are no longer described as immutable: change them through `npx shadcn migrate base-color` / `migrate icons`, restyle with `npx shadcn apply --preset <code> --only theme,font`, inspect with `npx shadcn view` / `preset resolve`; refresh `integrations.shadcn` afterwards. `cssVariables` stays immutable.
+- **§21 ecosystem position** — HyperFrames `frame.md`, craft skills (design-engineering, impeccable), and audio generation added as layers below the contract.
+
 ## [1.2.0] — 2026-08-06
 
 ### Added
