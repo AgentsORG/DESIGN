@@ -778,7 +778,7 @@ def main():
         print("No files were deleted.")
         return 1
 
-    for old in out_dir.glob("*.design"):
+    for old in out_dir.glob("*.[dD][eE][sS][iI][gG][nN]"):
         old.unlink()
         print("removed", old.name)
 
@@ -796,7 +796,7 @@ def main():
         data = parse_simple_yaml_frontmatter(fm)
         sections = parse_markdown_sections(body)
         content = emit_design(slug, cfg, data, sections)
-        dest = out_dir / f"{slug}.design"
+        dest = out_dir / f"{slug}.DESIGN"
         dest.write_text(content, encoding="utf-8")
         print(
             "wrote",

@@ -1,5 +1,5 @@
-# starter.design — annotated template exercising every major design.v1 section.
-# Copy to your repo root as `.design`, replace values, delete comments you don't need.
+# starter.DESIGN — annotated template exercising every major design.v1 section.
+# Copy into your repo as <name>.DESIGN (e.g. campusbinge.DESIGN) or a bare .design, replace values, delete comments you don't need.
 # Spec: https://github.com/AgentsORG/DESIGN/blob/main/SPEC.md
 
 schema: design.v1

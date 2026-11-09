@@ -7,7 +7,7 @@ Add `.design` to any repository in minutes.
 | Choice | When |
 | --- | --- |
 | `.design` | Default at repo or package root |
-| `product.design` / `stripe.design` | Named systems or multiple brands |
+| `product.design` / `stripe.DESIGN` | Named systems or multiple brands |
 
 Agents discover the nearest file walking up from the edited path (see [SPEC.md §4](../SPEC.md) and [overview.md](overview.md)).
 
@@ -22,13 +22,13 @@ flowchart LR
 Examples are sourced from [getdesign.md](https://getdesign.md/) analyses — adapt them; they are not official brand kits.
 
 ```bash
-cp examples/vercel.design ./.design
+cp examples/vercel.DESIGN ./<name>.DESIGN
 # or
-cp examples/stripe.design ./.design
-cp examples/notion.design ./.design
-cp examples/linear.design ./.design
-cp examples/supabase.design ./.design
-cp examples/apple.design ./.design
+cp examples/stripe.DESIGN ./<name>.DESIGN
+cp examples/notion.DESIGN ./<name>.DESIGN
+cp examples/linear.DESIGN ./<name>.DESIGN
+cp examples/supabase.DESIGN ./<name>.DESIGN
+cp examples/apple.DESIGN ./<name>.DESIGN
 ```
 
 Edit `name`, `overview`, `intent` (`reference`, `direction`, `signature`), `voice`, and `tokens` to match your product. Pipeline notes: [getdesign.md](getdesign.md).
@@ -39,7 +39,7 @@ Every valid file embeds `agent.instructions` — the canonical template ([self-c
 
 ```markdown
 ## Design
-- Before UI work: read `./.design` (or nearest `*.design`).
+- Before UI work: read `./<name>.DESIGN` (or the nearest `.design` / `*.DESIGN`).
   For large files, load the normative core first (intent, constraints,
   policy/decisions, tokens, components, voice, locked); rationale on demand.
 - Install/activate skill `design` when available.

@@ -1,0 +1,27 @@
+{
+  "name": "design-readme-stage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The README's faux-UI scenes, built on a trimmed copy of Benji Taylor's Stageshow kit (MIT).",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite playground --config playground/vite.config.ts --port 4711 --strictPort",
+    "typecheck": "tsc --noEmit -p playground"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.7.0",
+    "vite": "^6.4.5",
+    "typescript": "^5.6.3",
+    "playwright-core": "~1.48.2"
+  }
+}

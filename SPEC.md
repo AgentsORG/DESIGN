@@ -24,9 +24,11 @@ Tokens and structured rules are **normative**. Prose fields (`overview`, compone
 
 | Form | Usage |
 | --- | --- |
-| `.design` | Preferred at repository or package root |
-| `<name>.design` | Named systems (e.g. `agents.design`, `linear.design`) |
+| `<name>.DESIGN` | The usual form: one file named after the system it describes (e.g. `campusbinge.DESIGN`, `agents.DESIGN`, `linear.DESIGN`) |
+| `.design` | A bare, unnamed file at a repository or package root |
 | JSON serialization | Same object shape; useful for tooling pipelines |
+
+The extension is written in capitals by convention, so the contract stands out beside `README.md` and `AGENTS.md`. Consumers MUST match it case-insensitively: `campusbinge.design` and `campusbinge.DESIGN` are the same kind of file. In this document, `.design` names the format and `*.DESIGN` any named file.
 
 Recommended media type: `application/design+yaml` (informational; not yet IANA-registered).
 
@@ -55,7 +57,7 @@ $schema: https://raw.githubusercontent.com/AgentsORG/DESIGN/main/schema/design.v
 Agents MUST discover the active design file as follows:
 
 1. Starting from the path being edited (or the working directory), walk upward toward the repository root.
-2. At each directory, if exactly one of `.design` or a single `*.design` exists, select it. If both `.design` and other `*.design` files exist, prefer `.design`. If multiple `*.design` files exist and no `.design`, the agent MUST ask which to use (or follow an explicit user path).
+2. At each directory, match the extension case-insensitively (§2). If exactly one of `.design` or a single `*.DESIGN` exists, select it. If both `.design` and named `*.DESIGN` files exist, prefer `.design`. If multiple `*.DESIGN` files exist and no `.design`, the agent MUST ask which to use (or follow an explicit user path).
 3. If none is found at the repository root, the agent SHOULD offer to bootstrap a new file rather than inventing an untracked system.
 4. Nested package files win over parent files (**nearest wins**), matching AGENTS.md conventions.
 

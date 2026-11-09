@@ -6,12 +6,12 @@ Brand-inspired `.design` contracts for teaching and bootstrap.
 
 | File | Source analysis |
 | --- | --- |
-| [vercel.design](vercel.design) | [getdesign.md/vercel](https://getdesign.md/vercel/design-md) |
-| [stripe.design](stripe.design) | [getdesign.md/stripe](https://getdesign.md/stripe/design-md) |
-| [notion.design](notion.design) | [getdesign.md/notion](https://getdesign.md/notion/design-md) |
-| [apple.design](apple.design) | [getdesign.md/apple](https://getdesign.md/apple/design-md) |
-| [linear.design](linear.design) | [getdesign.md/linear.app](https://getdesign.md/linear.app/design-md) |
-| [supabase.design](supabase.design) | [getdesign.md/supabase](https://getdesign.md/supabase/design-md) |
+| [vercel.DESIGN](vercel.DESIGN) | [getdesign.md/vercel](https://getdesign.md/vercel/design-md) |
+| [stripe.DESIGN](stripe.DESIGN) | [getdesign.md/stripe](https://getdesign.md/stripe/design-md) |
+| [notion.DESIGN](notion.DESIGN) | [getdesign.md/notion](https://getdesign.md/notion/design-md) |
+| [apple.DESIGN](apple.DESIGN) | [getdesign.md/apple](https://getdesign.md/apple/design-md) |
+| [linear.DESIGN](linear.DESIGN) | [getdesign.md/linear.app](https://getdesign.md/linear.app/design-md) |
+| [supabase.DESIGN](supabase.DESIGN) | [getdesign.md/supabase](https://getdesign.md/supabase/design-md) |
 
 Each file includes:
 
@@ -26,7 +26,7 @@ Each file includes:
 CI validates every example against the design.v1 schema and lint rules (`scripts/lint_design.py`).
 
 ```bash
-cp examples/stripe.design ./.design
+cp examples/stripe.DESIGN ./<name>.DESIGN
 # then adapt name / intent / locked for your product
 ```
 

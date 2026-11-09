@@ -8,7 +8,7 @@ The `design` skill follows the [Agent Skills](https://agentskills.io/) / [skills
 skills/design/
   SKILL.md                 # Frontmatter + READ→FOLLOW→UPDATE→VERIFY
   README.md
-  examples/minimal.design  # Tiny valid stub
+  examples/minimal.DESIGN  # Tiny valid stub
   references/
     APPLY.md               # Decision trees
     CRAFT.md               # Design-engineering bar when contract is silent

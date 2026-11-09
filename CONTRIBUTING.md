@@ -36,7 +36,7 @@ Thanks for helping make `.design` the living visual contract for AI design.
 ```bash
 pip install pyyaml jsonschema
 python scripts/lint_design.py
-python scripts/export_design.py templates/starter.design --out-dir /tmp/exports
+python scripts/export_design.py templates/starter.DESIGN --out-dir /tmp/exports
 python scripts/diff_design.py old.design new.design --fail-on-regression
 ```
 

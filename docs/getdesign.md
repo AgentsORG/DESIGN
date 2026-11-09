@@ -19,12 +19,12 @@ flowchart LR
 
 | Example | getdesign page | Live site (provenance) |
 | --- | --- | --- |
-| `vercel.design` | [vercel/design-md](https://getdesign.md/vercel/design-md) | https://vercel.com |
-| `stripe.design` | [stripe/design-md](https://getdesign.md/stripe/design-md) | https://stripe.com |
-| `notion.design` | [notion/design-md](https://getdesign.md/notion/design-md) | https://notion.so |
-| `apple.design` | [apple/design-md](https://getdesign.md/apple/design-md) | https://apple.com |
-| `linear.design` | [linear.app/design-md](https://getdesign.md/linear.app/design-md) | https://linear.app |
-| `supabase.design` | [supabase/design-md](https://getdesign.md/supabase/design-md) | https://supabase.com |
+| `vercel.DESIGN` | [vercel/design-md](https://getdesign.md/vercel/design-md) | https://vercel.com |
+| `stripe.DESIGN` | [stripe/design-md](https://getdesign.md/stripe/design-md) | https://stripe.com |
+| `notion.DESIGN` | [notion/design-md](https://getdesign.md/notion/design-md) | https://notion.so |
+| `apple.DESIGN` | [apple/design-md](https://getdesign.md/apple/design-md) | https://apple.com |
+| `linear.DESIGN` | [linear.app/design-md](https://getdesign.md/linear.app/design-md) | https://linear.app |
+| `supabase.DESIGN` | [supabase/design-md](https://getdesign.md/supabase/design-md) | https://supabase.com |
 
 Upstream raw sources often also live in [awesome-design-md](https://github.com/voltagent/awesome-design-md).
 
@@ -107,7 +107,7 @@ The script removes previous `examples/*.design` files and writes the six brand s
 ## Using a brand as your drop-in
 
 ```bash
-cp examples/stripe.design ./.design
+cp examples/stripe.DESIGN ./<name>.DESIGN
 ```
 
 Then:
