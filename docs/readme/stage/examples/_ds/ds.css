@@ -1,0 +1,196 @@
+/* Shared look for the .design README stills (adapted from the design-engineering README stage).
+   One figure language (craft.md, A page of demos): the same well, gutter,
+   window shadow and radius on every scene; light stage, one solid accent,
+   quiet greys. Layouts follow hero-demo (corner and bottom bleed on a well). */
+.de {
+  & .ss-stage {
+    --gutter: 32px;
+    /* One solid accent: the kit's Meter fills with accent → accent-2, which
+       is the blue-to-purple tell. Pin the second stop to the first. */
+    --ss-accent-2: var(--ss-accent);
+    /* Terminal colors: one accent for paths and the prompt mark, status
+       green only for a real pass */
+    --ss-term-path: #8aa4dc;
+    --ss-term-sigil: #8aa4dc;
+    --ss-term-ok: #7fd6a4;
+    --ss-term-dim: #6c6c74;
+    overflow: hidden;
+    /* Square: GitHub shows the PNG on light and dark pages, and a rounded
+       tile would leave page-colored corners on one of them */
+    border-radius: 0;
+    background: var(--ss-well);
+  }
+
+  /* The hero window: pinned top-left by one gutter, off the right and the
+     bottom (corner bleed, framing.md). Sizes are set per scene. */
+  .de-win {
+    position: absolute;
+    top: var(--gutter);
+    left: var(--gutter);
+  }
+
+  /* ---- Terminal content (inside Window chrome="terminal") ---- */
+
+  .de-term {
+    font-size: 12px;
+  }
+
+  .de-term .w { color: #f1f1f3; }
+  .de-term .a { color: var(--ss-term-path); }
+  .de-term .gap { height: 6px; }
+
+  /* Claude Code's own marks, as its TUI draws them: a ⏺ before each
+     assistant turn, ⎿ under a tool call, > on the input */
+  .de-cc-turn { display: flex; gap: 8px; }
+  .de-cc-dot { color: #f1f1f3; flex: none; }
+  .de-cc-dot[data-tool] { color: var(--ss-term-ok); }
+  .de-cc-in {
+    margin-top: 10px;
+    padding: 3px 10px;
+    border: 1px solid #3a3a42;
+    border-radius: 6px;
+    color: #f1f1f3;
+  }
+  .de-cc-in .ss-term__caret { margin-left: 1ch; }
+  .de-cc-hint { padding-left: 11px; }
+  .de-cc-head { margin: 2px 0 6px; }
+
+  /* A markdown table as Claude Code renders it: ruled columns in the grid */
+  .de-cc-table {
+    display: grid;
+    align-self: flex-start;
+    margin: 4px 0 2px 16px;
+    border: 1px solid #34343b;
+    border-radius: 4px;
+  }
+  .de-cc-table > div {
+    display: grid;
+    border-top: 1px solid #34343b;
+  }
+  .de-cc-table > div:first-child { border-top: 0; color: #f1f1f3; }
+  .de-cc-table span { padding: 1px 1ch; white-space: pre; }
+  .de-cc-table span + span { border-left: 1px solid #34343b; }
+
+  /* ---- Light surfaces: satellites and product cards ---- */
+
+  .de-sat {
+    position: absolute;
+    right: var(--gutter);
+    bottom: var(--gutter);
+    box-shadow: var(--ss-shadow-satellite);
+  }
+
+  .de-h {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 600;
+    color: var(--ss-text-strong);
+  }
+
+  .de-sub {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ss-text);
+  }
+
+  .de-mono {
+    font-family: var(--ss-mono);
+    font-size: 11.5px;
+    line-height: 16px;
+    color: var(--ss-text-strong);
+  }
+
+  .de-num {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ss-text-strong);
+  }
+
+  .de-label {
+    font-size: 11px;
+    line-height: 14px;
+    font-weight: 500;
+    color: var(--ss-text-faint);
+  }
+
+  /* A table of rows on one grid template: fixed tracks, hairlines between */
+  .de-tr {
+    display: grid;
+    align-items: center;
+    column-gap: 16px;
+    min-height: 40px;
+    border-bottom: 1px solid var(--ss-line);
+  }
+  .de-tr[data-head] { min-height: 30px; }
+  .de-tr[data-on] { background: var(--ss-accent-soft); margin: 0 -12px; padding: 0 12px; border-radius: 8px; border-bottom-color: transparent; }
+}
+
+/* de-agents: the harness card straddling the terminal's right edge */
+.de .de-agents__card { width: 330px; top: var(--gutter); bottom: auto; }
+.de .de-agents__card .ss-row { margin: 0 -2px; }
+.de .de-agents__card .ss-row .de-h { font-size: 12.5px; font-weight: 500; }
+.de .de-agents__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 4px 4px 6px; }
+.de .de-agents__name { font-weight: 600; }
+.de .de-agents__file { font-size: 11px; color: var(--ss-text); }
+
+/* The kit's Code part inside the dark terminal: diff tints and quiet
+   syntax that read on #17171a, no purple keywords */
+.de .de-term .ss-code {
+  --ss-code-key: #c8c8ce;
+  --ss-code-str: #a7d7b8;
+  --ss-code-num: #e0b98a;
+  --ss-code-fn: #a9bde6;
+  --ss-text-strong: #ececee;
+  --ss-text-faint: #6c6c74;
+  --ss-success-soft: rgba(110, 214, 160, 0.13);
+  --ss-success-text: #7fd6a4;
+  --ss-danger-soft: rgba(248, 113, 113, 0.14);
+  --ss-danger-text: #f19999;
+  margin: 2px 0 0 14px;
+  font-size: 12px;
+  line-height: 20px;
+  white-space: normal;
+}
+.de .de-term .ss-code__line { padding-right: 0; }
+.de .de-term .ss-code__line:not([data-kind]) .ss-code__text { color: #8d8d96; }
+
+/* de-council: the by-category card over the terminal's lower right */
+.de .de-council__card { width: 260px; }
+.de .de-council__row { display: grid; grid-template-columns: 76px 1fr 28px; align-items: center; column-gap: 12px; }
+.de .de-council__row .de-num { text-align: right; }
+
+/* de-grade, de-bench: a light document window and its detail card */
+.de .de-card-win { box-shadow: var(--ss-shadow-hero); }
+.de .de-card-win .ss-window__body { background: var(--ss-surface); }
+.de .de-page { display: flex; flex-direction: column; gap: 16px; padding: 20px 24px; }
+.de .de-table { width: 428px; border-top: 1px solid var(--ss-line); }
+.de .de-stack { display: flex; flex-direction: column; gap: 4px; }
+.de .de-dim { color: var(--ss-text-faint); font-size: 11px; }
+.de .de-strong { color: var(--ss-text-strong); }
+.de .de-bench__fixtures { border-top: 0; margin-top: -4px; }
+.de .de-grade__card { width: 248px; }
+.de .de-grade__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.de .de-grade__fact { padding: 6px 8px; border-radius: var(--ss-card-inner, 6px); background: var(--ss-ink-1); font-size: 11px; }
+/* Stills: the meters are drawn settled, never caught mid-fill */
+.de .ss-meter__fill,
+.de .ss-meter__fill::after { transition: none; }
+/* The kit's ink tone is translucent and reads blue over the accent fill;
+   the baseline arm is a solid quiet grey */
+.de .ss-meter[data-tone="ink"] { --ss-meter-tone: #b4b4b8; }
+
+/* ---- .design scenes ---- */
+.de .ds-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 4px 4px 6px; }
+.de .ds-val { color: var(--ss-text); display: inline-flex; align-items: center; gap: 6px; }
+.de .ds-flag { font-family: var(--ss-font); font-size: 10.5px; font-weight: 600; line-height: 16px; padding: 0 6px; border-radius: 999px; background: var(--ss-accent-soft); color: var(--ss-accent); }
+.de .ds-drop__card { width: 300px; top: 84px; bottom: auto; }
+.de .ds-drop__card .ss-row { margin: 0 -2px; }
+
+.de .ds-editor .ss-window__body { background: var(--ss-surface); }
+.de .ds-yaml { padding: 14px 8px; font-size: 12px; line-height: 20px; }
+.de .ds-contract__card { width: 300px; top: var(--gutter); bottom: auto; }
+.de .ds-verb { display: grid; grid-template-columns: 64px 1fr; align-items: baseline; column-gap: 8px; padding: 7px 4px; border-top: 1px solid var(--ss-line); }
+
+.de .ds-exports__card { width: 300px; top: var(--gutter); bottom: auto; }
+.de .ds-css { font-size: 11.5px; line-height: 18px; padding: 8px 6px; border-radius: 6px; background: var(--ss-ink-1); }

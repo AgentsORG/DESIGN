@@ -21,10 +21,10 @@ jobs:
         run: python scripts/lint_design.py
       - name: Exporter smoke test (starter template)
         run: |
-          python scripts/export_design.py templates/starter.design --out-dir /tmp/design-exports
+          python scripts/export_design.py templates/starter.DESIGN --out-dir /tmp/design-exports
           python -c "import json; json.load(open('/tmp/design-exports/tokens.json')); json.load(open('/tmp/design-exports/brand-theme.json')); print('export artifacts parse')"
       - name: Diff self-check (no regression against itself)
-        run: python scripts/diff_design.py templates/starter.design templates/starter.design --fail-on-regression
+        run: python scripts/diff_design.py templates/starter.DESIGN templates/starter.DESIGN --fail-on-regression
       - name: Core files exist
         run: |
           test -f SPEC.md

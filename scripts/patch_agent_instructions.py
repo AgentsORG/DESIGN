@@ -44,11 +44,11 @@ def patch_file(path: pathlib.Path, with_disclaimer: bool) -> None:
 
 
 def main() -> int:
-    for p in sorted((ROOT / "examples").glob("*.design")):
+    for p in sorted((ROOT / "examples").glob("*.[dD][eE][sS][iI][gG][nN]")):
         patch_file(p, with_disclaimer=True)
-    for p in sorted((ROOT / "templates").glob("*.design")):
+    for p in sorted((ROOT / "templates").glob("*.[dD][eE][sS][iI][gG][nN]")):
         patch_file(p, with_disclaimer=False)
-    minimal = ROOT / "skills" / "design" / "examples" / "minimal.design"
+    minimal = ROOT / "skills" / "design" / "examples" / "minimal.DESIGN"
     if minimal.exists():
         patch_file(minimal, with_disclaimer=False)
     return 0

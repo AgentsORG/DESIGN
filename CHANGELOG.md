@@ -7,6 +7,11 @@ and this project uses SemVer for the **contract schema** (`design.v1`, future `d
 
 ## [Unreleased]
 
+### Changed
+
+- **Filenames (SPEC §2, §4).** A named contract is written `<name>.DESIGN` (e.g. `campusbinge.DESIGN`); the capital extension is the convention, and consumers match it case-insensitively, so existing `<name>.design` files still work. Discovery, the `design` skill and the lint, export-helper and conversion scripts follow. The examples, the starter template and the skill's minimal example are renamed to `.DESIGN`.
+- **README** rebuilt around four faux-UI stills made with Stageshow (`docs/readme/stage/`), and it now leads with the pairing: `.DESIGN` holds what the design is, [design-engineering](https://github.com/AgentsORG/design-engineering) how it is built and reviewed.
+
 ## [1.3.0] — 2026-09-05
 
 ### Added

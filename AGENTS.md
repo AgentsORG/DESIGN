@@ -15,7 +15,7 @@ This repo defines the **`.design` file format** (design.v1): a living visual con
 
 ## Design (meta)
 
-When editing format docs or examples, treat [SPEC.md](SPEC.md) as source of truth. Examples are independent brand analyses — not affiliated with those companies. Prefer [examples/vercel.design](examples/vercel.design) as the default teaching sample.
+When editing format docs or examples, treat [SPEC.md](SPEC.md) as source of truth. Examples are independent brand analyses — not affiliated with those companies. Prefer [examples/vercel.DESIGN](examples/vercel.DESIGN) as the default teaching sample.
 
 ## How to change the format
 
@@ -23,7 +23,7 @@ When editing format docs or examples, treat [SPEC.md](SPEC.md) as source of trut
 2. Keep `schema/design.v1.schema.json` in sync.
 3. Update `skills/design/` references if procedure changes.
 4. Refresh examples (`python scripts/convert_getdesign.py` or hand-edit).
-5. Validate: `python scripts/lint_design.py`; exporter/diff smoke: `python scripts/export_design.py templates/starter.design --out-dir <tmp>`.
+5. Validate: `python scripts/lint_design.py`; exporter/diff smoke: `python scripts/export_design.py templates/starter.DESIGN --out-dir <tmp>`.
 6. Keep `docs/` diagrams accurate (especially shadcn + discovery).
 7. Note breaking changes clearly; bump documented schema only with a new `design.vN` when breaking.
 

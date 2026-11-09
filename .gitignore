@@ -40,3 +40,7 @@ Desktop.ini
 # the converter aborts safely when they are absent)
 .tmp-*
 *.log
+
+# Stageshow build output for the README scenes
+docs/readme/stage/dist/
+docs/readme/stage/.vite/

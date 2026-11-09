@@ -4,7 +4,8 @@ description: >
   Discover, read, follow, update, and verify AgentsORG .design living visual
   contracts. Use when generating or reviewing UI, restyling, extracting or
   remixing a design system, fixing design drift, locking tokens, or when a
-  .design / *.design file exists. Triggers on .design, design system, brand,
+  .design / <name>.DESIGN file (e.g. campusbinge.DESIGN) exists. Triggers on
+  .design, *.DESIGN, design system, brand,
   tokens, components, DESIGN.md, restyle, visual identity, UI generation,
   design drift, remix, bootstrap design, verify design, landing page,
   dashboard, shadcn theme, design progress, UI review, polish, craft,
@@ -25,13 +26,13 @@ Project `.design` always beats generic frontend/taste skills. User chat can over
 ## When to activate
 
 - Any UI generation, restyle, design review, or brand-consistency task
-- A `.design` or `*.design` file exists in the repo
+- A `.design` or `<name>.DESIGN` file (any case, e.g. `campusbinge.DESIGN`) exists in the repo
 - User asks to bootstrap, remix, sync, lock, unlock, or verify design
 
 ## 1. Discover
 
 1. From the edited path (or cwd), walk upward.
-2. Prefer `.design`; else a single `*.design`; if multiple named files and no `.design`, ask.
+2. Match the extension case-insensitively. Prefer `.design`; else a single `*.DESIGN`; if multiple named files and no `.design`, ask.
 3. Nearest file wins (monorepo package overrides root).
 4. Resolve `extends` depth-first; child overrides parent; cycles = error — stop and report.
 5. If no file exists and UI work is requested, offer **bootstrap** (do not invent an invisible system).
